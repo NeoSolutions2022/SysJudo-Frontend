@@ -481,7 +481,7 @@ export function CadastroAgremiacao() {
                     Boolean(formik.errors["dataFiliacao"])
                   }
                   sx={{
-                    width: 150
+                    width: 165
                   }}
                                    
                 />
@@ -805,7 +805,7 @@ export function CadastroAgremiacao() {
                 </Typography>
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   type="text"
                   label="CNPJ *"
@@ -818,13 +818,13 @@ export function CadastroAgremiacao() {
                     formik.touched["cnpj"] && Boolean(formik.errors["cnpj"])
                   }
                   sx={{
-                    width: 250
+                    width: 230
                   }}
                   inputProps={{ maxLength: 14 }}
                 />
               </Grid>
 
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <TextField
                   type="date"
                   label="Data CNPJ "
@@ -834,12 +834,16 @@ export function CadastroAgremiacao() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   sx={{
-                    width: 150
+                    width: 230
                   }}
                 />
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
+
+              </Grid>
+
+              <Grid item xs={4}>
                 <TextField
                   type="text"
                   label="Inscrição Municipal "
@@ -852,13 +856,13 @@ export function CadastroAgremiacao() {
                     formik.touched["inscricaoMunicipal"] && Boolean(formik.errors["inscricaoMunicipal"])
                   }
                   sx={{
-                    width: 250
+                    width: 230
                   }}
                   inputProps={{ maxLength: 11, inputMode: 'tel', pattern: '[0-9]*' }}
                 />
               </Grid>
 
-              <Grid item xs={6}>
+              <Grid item xs={4}>
                 <TextField
                   type="text"
                   label="Inscrição Estadual "
@@ -871,7 +875,7 @@ export function CadastroAgremiacao() {
                     formik.touched["inscricaoEstadual"] && Boolean(formik.errors["inscricaoEstadual"])
                   }
                   sx={{
-                    width: 250
+                    width: 230
                   }}
                   inputProps={{ maxLength: 9 }}
                 />
@@ -887,15 +891,15 @@ export function CadastroAgremiacao() {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   sx={{
-                    width: 150
+                    width: 230
                   }}
                 />
               </Grid>
             </Grid>
           </Grid>
 
-          <Grid container spacing={2}>
-            <Grid item xs={3}>
+          <Grid container spacing={4}>
+            <Grid item xs={1.7}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -907,10 +911,13 @@ export function CadastroAgremiacao() {
                 }
                 label="Alvará de locação"
                 labelPlacement="start"
+                sx={{
+                  width: 175
+                }}
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={0.9}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -922,10 +929,13 @@ export function CadastroAgremiacao() {
                 }
                 label="Estatuto"
                 labelPlacement="start"
+                sx={{
+                  width: 100
+                }}
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={1.6}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -937,10 +947,13 @@ export function CadastroAgremiacao() {
                 }
                 label="Contrato Social"
                 labelPlacement="start"
+                sx={{
+                  width: 180
+                }}
               />
             </Grid>
 
-            <Grid item xs={3}>
+            <Grid item xs={2}>
               <FormControlLabel
                 control={
                   <Checkbox
@@ -952,6 +965,9 @@ export function CadastroAgremiacao() {
                 }
                 label="Documentação Atualizada"
                 labelPlacement="start"
+                sx={{
+                  width: 250
+                }}
               />
             </Grid>
           </Grid>
