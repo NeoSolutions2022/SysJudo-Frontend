@@ -26,25 +26,25 @@ import {
   Search,
   FilterAltOffOutlined as FilterIcon,
 } from "@mui/icons-material";
-import { TextField } from "../components/Form/TextAreaComponent/TextAreaComponent";
+import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 
-import { ModalFilterAgremiacao } from "../components/Modal/Agremiacao/modalFilterAgremiacao";
-import { ModalAnotacoesAgremiacao } from "../components/Modal/Agremiacao/Anotacoes";
-import { ModalExportarAgremiacao } from "../components/Modal/Agremiacao/Exportar";
-import { BackdropComponent } from "../components/Backdrop";
-import { useModal } from "../hooks/useModalProvider";
-import { useFormikProvider } from "../hooks/useFormikProvider";
+import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
+import { ModalAnotacoesAgremiacao } from "../../components/Modal/Agremiacao/Anotacoes";
+import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
+import { BackdropComponent } from "../../components/Backdrop";
+import { useModal } from "../../hooks/useModalProvider";
+import { useFormikProvider } from "../../hooks/useFormikProvider";
 
-import { CadastroAgremiacao } from "./CadastroAgremiacao";
-import { Home } from "./Home";
-import { StyledButton as Button } from "../components/Button";
+import { CadastroAgremiacao } from "./cadastro-atletas";
+import { Home } from "../Home";
+import { StyledButton as Button } from "../../components/Button";
 
-import api from "../providers/services/api";
-import { agremiacaoRoutes } from "../providers/services/api/agremiacao";
-import { TabsAgremiacao } from "./Agremiacao/Tabs";
+import api from "../../providers/services/api";
+import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
+import { TabsAgremiacao } from "./Tabs";
 import parse from "html-react-parser";
 import { parseISO, format } from 'date-fns';
-import { Loading } from '../components/Loading/Loading';
+import { Loading } from '../../components/Loading/Loading';
 
 
 export function Listagem() {

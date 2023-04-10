@@ -3,11 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BlockBlobClient } from "@azure/storage-blob";
-import { useDebounce } from "../utils/useDebounce";
+import { useDebounce } from "../../utils/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
-import type { IAgremiacao } from "../models/AgremiacaoModel";
+import type { IAgremiacao } from "../../models/AgremiacaoModel";
 import type { FormikErrors } from "formik";
 
 import {
@@ -28,10 +28,10 @@ import {
   StepLabel,
   Box,
 } from "@mui/material";
-import { TextField } from "../components/Form/TextAreaComponent/TextAreaComponent";
-import '../../node_modules/react-notifications/lib/notifications.css';
+import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
+import '../../../node_modules/react-notifications/lib/notifications.css';
 
-import { StyledButton as Button } from "../components/Button";
+import { StyledButton as Button } from "../../components/Button";
 
 import {
   CreateOutlined as CreateOutlinedIcon,
@@ -44,21 +44,21 @@ import {
   DeleteOutline as DeleteIcon,
 } from "@mui/icons-material";
 
-import { agremiacaoRoutes } from "../providers/services/api/agremiacao";
+import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
 
-import { ModalAnotacoesAgremiacao } from "../components/Modal/Agremiacao/Anotacoes";
-import { ModalAnexosAgremiacao } from "../components/Modal/Agremiacao/Anexar";
-import { useModal } from "../hooks/useModalProvider";
-import { useAlertContext } from "../hooks/useAlertProvider";
-import { useFormikProvider } from "../hooks/useFormikProvider";
+import { ModalAnotacoesAgremiacao } from "../../components/Modal/Agremiacao/Anotacoes";
+import { ModalAnexosAgremiacao } from "../../components/Modal/Agremiacao/Anexar";
+import { useModal } from "../../hooks/useModalProvider";
+import { useAlertContext } from "../../hooks/useAlertProvider";
+import { useFormikProvider } from "../../hooks/useFormikProvider";
 
-import { values as InitialValues } from "../components/Form/Agremiacao/values/register";
-import { validation as ValidationSchema } from "../components/Form/Agremiacao/validation/register";
+import { values as InitialValues } from "../../components/Form/Agremiacao/values/register";
+import { validation as ValidationSchema } from "../../components/Form/Agremiacao/validation/register";
 
-import AvatarDefault from "../assets/photo-user-default.png";
-import LogoCorreios from "../assets/correios.svg";
-import "../styles/cadastro-agremiacao.scss";
-import { TabsAgremiacao } from "./Agremiacao/Tabs";
+import AvatarDefault from "../../assets/photo-user-default.png";
+import LogoCorreios from "../../assets/correios.svg";
+import "../../styles/cadastro-agremiacao.scss";
+import { TabsAgremiacao } from "./Tabs";
 
 export function CadastroAgremiacao() {
   const navigate = useNavigate();

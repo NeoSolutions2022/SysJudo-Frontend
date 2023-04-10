@@ -12,7 +12,7 @@ import "../../../styles/global.scss";
 import { useFormikProvider } from "../../../hooks/useFormikProvider";
 import { useModal } from "../../../hooks/useModalProvider";
 
-import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao";
+import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
 
 import { Container, DialogActions } from "@mui/material";
 import { Close, FilterAlt } from "@mui/icons-material";

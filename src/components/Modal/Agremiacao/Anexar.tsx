@@ -30,7 +30,7 @@ import { ListDocumentsUploaded } from "../../UploadDocument/list";
 
 import { useFormikProvider } from "../../../hooks/useFormikProvider";
 
-import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao";
+import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
 import { useAlertContext } from "../../../hooks/useAlertProvider";
 import { useModal } from "../../../hooks/useModalProvider";
 import { useState, useCallback, useEffect } from "react";

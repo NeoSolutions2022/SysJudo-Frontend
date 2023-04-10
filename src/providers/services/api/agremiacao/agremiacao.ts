@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { IAgremiacao } from "../../../models/AgremiacaoModel";
-import type { Page } from "../../../types/page";
+import { IAgremiacao } from "../../../../models/AgremiacaoModel";
+import type { Page } from "../../../../types/page";
 
-import api from "../api";
+import api from "..";
 import { format, parse, parseISO } from 'date-fns';
 async function getAgremiacoes(filters?: any): Promise<Page<IAgremiacao>> {
   const response = await api.get(

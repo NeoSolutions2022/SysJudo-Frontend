@@ -44,7 +44,7 @@ interface FormikContextProps {
   setIsFilterLoading: React.Dispatch<SetStateAction<boolean>>
 }
 
-import { agremiacaoRoutes } from "../services/api/agremiacao";
+import { agremiacaoRoutes } from "../services/api/agremiacao/agremiacao";
 import { useAuthContext } from "../../hooks/useAuthProvider";
 
 interface FormikProviderProps {

@@ -5,6 +5,8 @@ import { LogoutOutlined } from '@mui/icons-material';
 
 import { useAuthContext } from '../../hooks/useAuthProvider';
 
+import HeaderItemComponent from '../components';
+
 const NAV_WIDTH = 280;
 
 const HEADER_MOBILE = 64;
@@ -41,12 +43,6 @@ Header.propTypes = {
 };
 
 const HeaderOptions = [
-  {
-    title: 'Cadastros',
-  },
-  {
-    title: 'Finanças',
-  },
   {
     title: 'Serviços',
   },
@@ -90,9 +86,20 @@ export function Header() {
   return (
     <StyledRoot>
       <StyledToolbar>
-        { HeaderOptions.map((option, index) => (
+
+      <HeaderItemComponent title='Cadastros' >
+        <button>Agremiação</button>
+        <button>Atletas</button>
+      </HeaderItemComponent>
+
+      <HeaderItemComponent title='Finanças'>
+        
+      </HeaderItemComponent>
+
+      { HeaderOptions.map((option, index) => (
           <HeaderItem title={option.title} key={index} />
-        ))}
+        ))} 
+
       </StyledToolbar>
       <LogoutOutlined
         onClick={logout}

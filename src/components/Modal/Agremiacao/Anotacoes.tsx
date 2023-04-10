@@ -27,7 +27,7 @@ import { useAlertContext } from "../../../hooks/useAlertProvider";
 
 import { useModal } from "../../../hooks/useModalProvider";
 import { useFormikProvider } from "../../../hooks/useFormikProvider";
-import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao";
+import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
 import { useParams } from "react-router";
 
 interface ModalAnotacoesAgremiacaoProps {

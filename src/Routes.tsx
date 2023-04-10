@@ -5,8 +5,8 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 
 import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
-import { Listagem } from "./pages/Listagem";
-import { CadastroAgremiacao } from "./pages/CadastroAgremiacao";
+import { Listagem } from "./pages/Agremiacao/Listagem";
+import { CadastroAgremiacao } from "./pages/Agremiacao/CadastroAgremiacao";
 
 import { useAuthContext } from "./hooks/useAuthProvider";
 import { ModalFilterAgremiacao } from "./components/Modal/Agremiacao/modalFilterAgremiacao";

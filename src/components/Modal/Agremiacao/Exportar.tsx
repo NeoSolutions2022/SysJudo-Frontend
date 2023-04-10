@@ -20,7 +20,7 @@ import { AgremiacaoOptions } from "../../../models/AgremiacaoModel";
 import { values as InitialValues } from "../../Form/Agremiacao/values/exportar";
 import { validation as ValidationSchema } from "../../Form/Agremiacao/validation/exportar";
 
-import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao";
+import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
 import { StyledButton as Button } from "../../../components/Button";
 import { CheckBox, UploadFile, Close } from "@mui/icons-material";
 import { useEffect, useState } from "react";
