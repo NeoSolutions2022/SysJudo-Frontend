@@ -30,6 +30,8 @@ import { useFormikProvider } from "../../../hooks/useFormikProvider";
 import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
 import { useParams } from "react-router";
 
+import Swal from "sweetalert2";
+
 interface ModalAnotacoesAgremiacaoProps {
   agremiacaoId: number;
   currentNotes?: any;
@@ -68,6 +70,13 @@ export function ModalAnotacoesAgremiacao({
 
   function handleSubmit() {
     
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Anotação salva com sucesso',
+      showConfirmButton: false,
+      timer: 1500,
+    })
     setNotes(content);
     handleClose();
   }
