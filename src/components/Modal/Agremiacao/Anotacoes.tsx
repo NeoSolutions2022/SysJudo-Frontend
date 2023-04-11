@@ -67,6 +67,7 @@ export function ModalAnotacoesAgremiacao({
   }, []);
 
   function handleSubmit() {
+    
     setNotes(content);
     handleClose();
   }
@@ -113,7 +114,7 @@ export function ModalAnotacoesAgremiacao({
                 size="medium"
                 sx={{ minWidth: "120px", textTransform: "none" }}
               >
-                Ok
+                Salvar
               </Button>
               <Button
                 variant="contained"
