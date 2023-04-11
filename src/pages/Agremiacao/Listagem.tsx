@@ -156,7 +156,7 @@ export function Listagem() {
         </button>
 
         <TextField
-          onBlur={handleBlurEffect}
+          onBlur={handleSearchBlur}
           placeholder="Pesquisar"
           InputProps={{ endAdornment: <Search onClick={handleSearchComponent} sx={{cursor: 'initial', color: searchedValue.length >= 1 ? '#4887C8' : '#ccc'}} /> }}
           autoFocus={isTextFieldVisible}
