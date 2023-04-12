@@ -92,11 +92,21 @@ export function FormFilterAgremiacao({
   const HandleRenderButtons = () => {
     if (values) {
       return (
-        <Box display='flex' alignItems='center' sx={{ gap: 2 }}>
+        <Box display='flex' alignItems='center' sx={{
+           gap: 2,
+           margin: '10px'
+             
+           
+        }}>
         <Edit
           sx={{ 
             color: 'transparent',// color: 'darkorange',
-            pointerEvents:'none' }}
+            pointerEvents:'cursor',
+            cursor: 'pointer',
+            fontSize: '1.45rem'
+          
+          }}
+          
           onClick={handleRemoveFilter}
         />
           <Close
