@@ -51,6 +51,14 @@ export function ModalAnexosAgremiacao() {
     },
   });
 
+  function extractFilenameFromLink(link : string) {
+    const lastSlashIndex = link.lastIndexOf("/");
+    const filenameWithExtension = link.substring(lastSlashIndex + 1);
+    const filenameWithoutExtension = filenameWithExtension.replace(/\.[^/.]+$/, "");
+    const decodedFilename = decodeURIComponent(filenameWithoutExtension.replace(/\+/g, " "));
+    return decodedFilename.slice(33);
+  }
+
   const filesUploadedList = formik.values.files?.map((file: File) => (
     <Grid
       item
@@ -173,7 +181,7 @@ export function ModalAnexosAgremiacao() {
                 display: "grid",
                 columnGap: 15,
                 marginTop: 10,
-                gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr',
               }}
             >
               {fileLinkFromGetAgremiacao.length > 0 &&
@@ -201,7 +209,7 @@ export function ModalAnexosAgremiacao() {
                     >
                       {" "}
                       <PdfIcon /> 
-                      <h5> Arquivo {index > 8 ? index + 1 : '0'+ (index+1) } </h5>{" "}
+                      <h5> {extractFilenameFromLink(item)} </h5>{" "}
                     </a>{" "}
                   </div>
                 ))}
