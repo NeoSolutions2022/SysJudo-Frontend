@@ -69,7 +69,6 @@ export function ModalAnotacoesAgremiacao({
   }, []);
 
   function handleSubmit() {
-    
     Swal.fire({
       position: 'center',
       icon: 'success',
