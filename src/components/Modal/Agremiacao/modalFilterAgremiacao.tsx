@@ -58,6 +58,7 @@ export function ModalFilterAgremiacao() {
         {filtersAgremiacao?.map((filters, index) => {
           return (
             <>
+            <p>{index}</p>
             <FormFilterAgremiacao
               key={index}
               indexValues={index}

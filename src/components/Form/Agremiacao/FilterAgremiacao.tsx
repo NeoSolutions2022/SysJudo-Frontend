@@ -89,6 +89,10 @@ export function FormFilterAgremiacao({
     setFiltersAgremiacao(newArrayFilters);
   }
 
+  const handleEditFilter = () => {
+    const newArrayFilterEdit = filtersAgremiacao.filter((_, index) => index !== indexValues);
+  }
+
   const HandleRenderButtons = () => {
     if (values) {
       return (
@@ -100,14 +104,16 @@ export function FormFilterAgremiacao({
         }}>
         <Edit
           sx={{ 
-            color: 'transparent',// color: 'darkorange',
+            color: 'darkorange',// color: 'darkorange',
             pointerEvents:'cursor',
             cursor: 'pointer',
             fontSize: '1.45rem'
+            
+
           
           }}
           
-          onClick={handleRemoveFilter}
+          onClick={handleEditFilter}
         />
           <Close
             sx={{ cursor: 'pointer' }}

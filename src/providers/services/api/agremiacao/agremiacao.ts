@@ -3,7 +3,7 @@ import { IAgremiacao } from "../../../../models/AgremiacaoModel";
 import type { Page } from "../../../../types/page";
 
 import api from "..";
-import { format, parse, parseISO } from 'date-fns';
+import { format, parse, parseISO } from "date-fns";
 async function getAgremiacoes(filters?: any): Promise<Page<IAgremiacao>> {
   const response = await api.get(
     "/gerencia/agremiacao?Pagina=1&TamanhoPagina=64",
@@ -12,17 +12,17 @@ async function getAgremiacoes(filters?: any): Promise<Page<IAgremiacao>> {
 
   return response.data;
 }
-async function postClearFilters(){
-  api.post('/gerencia/agremiacao/limpar-filtro')
+async function postClearFilters() {
+  api.post("/gerencia/agremiacao/limpar-filtro");
 }
 
 async function postAgremiacaoFilter(payload: any): Promise<IAgremiacao[]> {
   console.log(payload);
   const response = await api.post(
     "/gerencia/agremiacao/filtrar/agremiacao",
-    payload 
+    payload
   );
-  console.log(response.data)
+  console.log(response.data);
   return response.data;
 }
 
@@ -32,39 +32,35 @@ async function getAgremiacao(id: number) {
   return response.data;
 }
 
-
-
 function handleDateFormat(dateString: string) {
   if (/^[0-9]*$/.test(dateString)) {
-    console.log('aaaa')
+    console.log("aaaa");
     // Se a string contiver apenas dígitos, retorna false imediatamente
     return dateString;
-  } else{
+  } else {
+    if (/^[a-z]+$/i.test(dateString)) {
+      return dateString;
+    } else {
+      console.log(parse(dateString, "dd/MM/yyyy", new Date()));
+      const date = parse(dateString, "dd/MM/yyyy", new Date());
+      if (date.toString() == "Invalid Date")
+        return dateString.replace(/\//g, "");
+      else {
+        const formattedDate = format(date, "yyyy-MM-dd");
 
-    if (/^[a-z]+$/i.test(dateString)){
-      return dateString
-    } else{
-      console.log( parse(dateString, 'dd/MM/yyyy', new Date()))
-      const date = parse(dateString, 'dd/MM/yyyy', new Date());
-      if (date.toString() == 'Invalid Date') 
-      return dateString.replace(/\//g, '')
-      else{
-        const formattedDate = format(date, 'yyyy-MM-dd');
-        
-        return formattedDate == 'Invalid Date' ? dateString : formattedDate;
+        return formattedDate == "Invalid Date" ? dateString : formattedDate;
+      }
     }
   }
 }
 
-
-}
-
-
-async function pesquisarAgremiacao(payload : string) {
-  const searchedItem = handleDateFormat(payload)
-  const response = await api.get(`/gerencia/agremiacao/pesquisar-${searchedItem}`)
-  console.log(response.data)
-  return response.data
+async function pesquisarAgremiacao(payload: string) {
+  const searchedItem = handleDateFormat(payload);
+  const response = await api.get(
+    `/gerencia/agremiacao/pesquisar-${searchedItem}`
+  );
+  console.log(response.data);
+  return response.data;
 }
 
 async function createAgremiacao(payload: IAgremiacao): Promise<IAgremiacao> {
@@ -110,8 +106,7 @@ type AnotacaoObject = {
 async function anotacoesAgremiacao(
   id: number,
   anotacao: string
-): Promise<void> 
-{
+): Promise<void> {
   const response = await api.patch(`/gerencia/agremiacao/${id}`, anotacao);
 
   return response.data;
@@ -154,6 +149,20 @@ async function anexarArquivoAgremiacao(
   return response.data;
 }
 
+async function deleteArquivoAgremiacao(
+  id: number,
+  documentoId: number
+): Promise<void> {
+  const response = await api.patch(
+    `/gerencia/agremiacao/${id}/removerdocumentos`,
+    {id, documentoId}
+  );
+
+  console.log(response);
+
+  return response.data;
+}
+
 export const agremiacaoRoutes = {
   getAgremiacoes,
   postAgremiacaoFilter,
@@ -164,6 +173,7 @@ export const agremiacaoRoutes = {
   anotacoesAgremiacao,
   exportarAgremiacao,
   anexarArquivoAgremiacao,
+  deleteArquivoAgremiacao,
   postClearFilters,
-  pesquisarAgremiacao
+  pesquisarAgremiacao,
 };

@@ -36,6 +36,7 @@ import { useModal } from "../../../hooks/useModalProvider";
 import { useState, useCallback, useEffect } from "react";
 import Swal from "sweetalert2";
 import { AlertComponent } from "../../Alert";
+import { result } from "lodash";
 
 export function ModalAnexosAgremiacao() {
   const formik = useFormik({
@@ -51,11 +52,16 @@ export function ModalAnexosAgremiacao() {
     },
   });
 
-  function extractFilenameFromLink(link : string) {
+  function extractFilenameFromLink(link: string) {
     const lastSlashIndex = link.lastIndexOf("/");
     const filenameWithExtension = link.substring(lastSlashIndex + 1);
-    const filenameWithoutExtension = filenameWithExtension.replace(/\.[^/.]+$/, "");
-    const decodedFilename = decodeURIComponent(filenameWithoutExtension.replace(/\+/g, " "));
+    const filenameWithoutExtension = filenameWithExtension.replace(
+      /\.[^/.]+$/,
+      ""
+    );
+    const decodedFilename = decodeURIComponent(
+      filenameWithoutExtension.replace(/\+/g, " ")
+    );
     return decodedFilename.slice(33);
   }
 
@@ -86,8 +92,7 @@ export function ModalAnexosAgremiacao() {
     setCurrentFileToCreate,
     fileLinkFromGetAgremiacao,
     setReloadAgremiacao,
-    setFileLinkFromGetAgremiacao
-    
+    setFileLinkFromGetAgremiacao,
   } = useFormikProvider();
   const queryClient = useQueryClient();
   const { handleClose } = useModal();
@@ -96,7 +101,6 @@ export function ModalAnexosAgremiacao() {
 
   async function handleSubmit() {
     if (id) {
-      
       try {
         //@ts-ignore
         anexarArquivoAgremiacao(id, files);
@@ -106,16 +110,20 @@ export function ModalAnexosAgremiacao() {
       }
       setFiles([]);
       Swal.fire({
-        title:  ( files.length > 9) ? "Você anexou " + files.length + ' Arquivos' : ( files.length > 1) ? "Você anexou 0" + files.length + ' Arquivos' :  "Você anexou 0" +  files.length + ' arquivo',
+        title:
+          files.length > 9
+            ? "Você anexou " + files.length + " Arquivos"
+            : files.length > 1
+            ? "Você anexou 0" + files.length + " Arquivos"
+            : "Você anexou 0" + files.length + " arquivo",
         icon: "success",
         confirmButtonColor: "#3085d6",
       }).then((result) => {
         //@ts-ignore
-        setReloadAgremiacao(prev => !prev)
-        
+        setReloadAgremiacao((prev) => !prev);
       });
     }
-    
+
     setCurrentFileToCreate(files);
     handleClose();
   }
@@ -125,6 +133,25 @@ export function ModalAnexosAgremiacao() {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
   }, []);
+
+  const handleDeleteAnexoAgremiacao = (idAnexo: any, idAgremiacao: any) => {
+    handleClose()
+    Swal.fire({
+      title: `tem certeza que deseja excluir o arquivo em anexo`,
+      text: "você não poderá reverter esta ação",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sim, excluir!",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo, idAgremiacao)
+        emitAlertMessage("success", "Anexo excluido com sucesso");
+      }
+    });
+  };
 
   return (
     <Modal title="Anexos" modalId={3} width="md">
@@ -181,11 +208,12 @@ export function ModalAnexosAgremiacao() {
                 display: "grid",
                 columnGap: 15,
                 marginTop: 10,
-                gridTemplateColumns: '1fr 1fr 1fr 1fr',
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
               }}
             >
               {fileLinkFromGetAgremiacao.length > 0 &&
                 fileLinkFromGetAgremiacao.map((item, index) => (
+                
                   <div
                     style={{
                       paddingBottom: 4,
@@ -208,41 +236,46 @@ export function ModalAnexosAgremiacao() {
                       }}
                     >
                       {" "}
-                      <PdfIcon /> 
+                      <PdfIcon />
                       <h5> {extractFilenameFromLink(item)} </h5>{" "}
                     </a>{" "}
+                    
+                    <Close
+                      color="warning"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => handleDeleteAnexoAgremiacao(index, id)}
+                    />
                   </div>
                 ))}
             </div>
             <div
               style={{
-                display:'flex',
-                flexDirection: 'column',
+                display: "flex",
+                flexDirection: "column",
                 gap: 10,
-            }}
+              }}
             >
-            {files.map((file) => (
-              <p
-                key={file.name}
-                style={{
-                  color: "#3f6787",
-                  display: "flex",
-                  alignItems: "center",
-                  zIndex: 1000,
-                  paddingLeft: "5px",
-                }}
-              >
-                <FilePresent /> {file.name}{" "}
-                <Close
-                  color="warning"
-                  sx={{ cursor: "pointer" }}
-                  onClick={() =>
-                    setFiles(files.filter((item) => item.name !== file.name))
-                  }
-                />
-              </p>
-            ))}
-
+              {files.map((file) => (
+                <p
+                  key={file.name}
+                  style={{
+                    color: "#3f6787",
+                    display: "flex",
+                    alignItems: "center",
+                    zIndex: 1000,
+                    paddingLeft: "5px",
+                  }}
+                >
+                  <FilePresent /> {file.name}{" "}
+                  <Close
+                    color="warning"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setFiles(files.filter((item) => item.name !== file.name))
+                    }
+                  />
+                </p>
+              ))}
             </div>
             <DialogActions sx={{ display: "flex", gap: 2 }}>
               <Button onClick={handleSubmit} disabled={files.length == 0}>
