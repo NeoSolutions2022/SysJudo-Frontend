@@ -104,6 +104,7 @@ export function ModalAnexosAgremiacao() {
       try {
         //@ts-ignore
         anexarArquivoAgremiacao(id, files);
+
         handleClose();
       } catch (error) {
         handleClose();
@@ -147,8 +148,28 @@ export function ModalAnexosAgremiacao() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo, idAgremiacao)
-        emitAlertMessage("success", "Anexo excluido com sucesso");
+        try{
+          console.log(fileLinkFromGetAgremiacao.length + ' antes')
+          agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo, idAgremiacao)
+        
+          
+          handleClose()
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Arquivo excluido com sucesso',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }
+        catch(error){
+          handleClose()
+        }
+        // @ts-ignore
+        
+        setReloadAgremiacao((prev) => !prev);
+        console.log(fileLinkFromGetAgremiacao.length + ' depois')
+        
       }
     });
   };
@@ -213,7 +234,7 @@ export function ModalAnexosAgremiacao() {
             >
               {fileLinkFromGetAgremiacao.length > 0 &&
                 fileLinkFromGetAgremiacao.map((item, index) => (
-                
+                  
                   <div
                     style={{
                       paddingBottom: 4,
