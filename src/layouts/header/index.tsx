@@ -89,7 +89,7 @@ export function Header() {
 
       <HeaderItemComponent title='Cadastros' >
         <button>Agremiação</button>
-        <button>Atletas</button>
+        
       </HeaderItemComponent>
 
       <HeaderItemComponent title='Finanças'>

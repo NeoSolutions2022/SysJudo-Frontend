@@ -5,9 +5,10 @@ export const ButtonComponent = styled.button`
   height: 50px;
   font-size: 1.2rem;
   background-color: #eaeaea;
+  border-top: none;
   border-left: 1px solid #b3b3b3;
   border-right: 1px solid #b3b3b3;
-  border-bottom: 2px solid #b3b3b3;
+  border-bottom: 0px solid #b3b3b3;
 
   color: #1d9efa;
   position: relative;
