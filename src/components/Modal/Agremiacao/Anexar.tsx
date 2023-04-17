@@ -135,11 +135,11 @@ export function ModalAnexosAgremiacao() {
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
   }, []);
 
-  const handleDeleteAnexoAgremiacao = (idAnexo: any, idAgremiacao: any) => {
+  const handleDeleteAnexoAgremiacao = (idAnexo: any, idAgremiacao: any, nomeDocumento: string) => {
     handleClose()
     Swal.fire({
       title: `tem certeza que deseja excluir o arquivo em anexo`,
-      text: "você não poderá reverter esta ação",
+      text: `O arquivo ${nomeDocumento} será permanentemente excluido`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
@@ -149,8 +149,7 @@ export function ModalAnexosAgremiacao() {
     }).then((result) => {
       if (result.isConfirmed) {
         try{
-          console.log(fileLinkFromGetAgremiacao.length + ' antes')
-          agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo, idAgremiacao)
+          agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo + 1, idAgremiacao)
         
           
           handleClose()
@@ -264,7 +263,7 @@ export function ModalAnexosAgremiacao() {
                     <Close
                       color="warning"
                       sx={{ cursor: "pointer" }}
-                      onClick={() => handleDeleteAnexoAgremiacao(index, id)}
+                      onClick={() => handleDeleteAnexoAgremiacao(index, id, extractFilenameFromLink(item))}
                     />
                   </div>
                 ))}

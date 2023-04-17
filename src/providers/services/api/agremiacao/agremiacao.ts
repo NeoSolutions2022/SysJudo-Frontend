@@ -153,9 +153,9 @@ async function deleteArquivoAgremiacao(
   documentoId: number,
   id: number
   ): Promise<void> {
-  console.log(documentoId)
+    
   const response = await api.patch(
-    `/gerencia/agremiacao/${id}/removerdocumentos`,
+    `/gerencia/agremiacao/${id}/removerdocumentos?documentoId=${documentoId}`,
     {id, documentoId}
   );
 
