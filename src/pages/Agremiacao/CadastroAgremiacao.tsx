@@ -480,9 +480,11 @@ export function CadastroAgremiacao() {
                     formik.touched["dataFiliacao"] &&
                     Boolean(formik.errors["dataFiliacao"])
                   }
-                  sx={{
-                    width: 165
+                  inputProps={{ maxLength: 8 }}
+                  InputLabelProps={{
+                    shrink: true,
                   }}
+                
                                    
                 />
               </Grid>
@@ -817,9 +819,7 @@ export function CadastroAgremiacao() {
                   error={
                     formik.touched["cnpj"] && Boolean(formik.errors["cnpj"])
                   }
-                  sx={{
-                    width: 230
-                  }}
+                  
                   inputProps={{ maxLength: 14 }}
                 />
               </Grid>
@@ -833,9 +833,7 @@ export function CadastroAgremiacao() {
                   value={formik.values["dataCnpj"]}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  sx={{
-                    width: 230
-                  }}
+                  inputProps={{ maxLength: 14 }}
                 />
               </Grid>
 
@@ -855,9 +853,7 @@ export function CadastroAgremiacao() {
                   error={
                     formik.touched["inscricaoMunicipal"] && Boolean(formik.errors["inscricaoMunicipal"])
                   }
-                  sx={{
-                    width: 230
-                  }}
+                  
                   inputProps={{ maxLength: 11, inputMode: 'tel', pattern: '[0-9]*' }}
                 />
               </Grid>
@@ -874,10 +870,7 @@ export function CadastroAgremiacao() {
                   error={
                     formik.touched["inscricaoEstadual"] && Boolean(formik.errors["inscricaoEstadual"])
                   }
-                  sx={{
-                    width: 230
-                  }}
-                  inputProps={{ maxLength: 9 }}
+                  inputProps={{ maxLength: 14 }}
                 />
               </Grid>
 
@@ -890,9 +883,7 @@ export function CadastroAgremiacao() {
                   value={formik.values["dataAta"]}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  sx={{
-                    width: 230
-                  }}
+                  inputProps={{ maxLength: 14 }}
                 />
               </Grid>
             </Grid>
