@@ -70,9 +70,7 @@ export function FormFilterAgremiacao({
   
     const date = new Date(dateString);
     const day = date.getDate() + 1;
-
     const month = date.getMonth() + 1;
-
     const year = date.getFullYear();
     const text = `${day > 10 ? day : "0" + day}/${
       month > 10 ? month : "0" + month
@@ -85,12 +83,16 @@ export function FormFilterAgremiacao({
 
   const handleRemoveFilter = () => {
     const newArrayFilters = filtersAgremiacao.filter((_, index) => index !== indexValues);
+    console.log(newArrayFilters, 'aie')
 
     setFiltersAgremiacao(newArrayFilters);
   }
 
   const handleEditFilter = () => {
-    const newArrayFilterEdit = filtersAgremiacao.filter((_, index) => index !== indexValues);
+    const newArrayFilters = filtersAgremiacao.filter((_, index) => index === indexValues);
+    console.log(newArrayFilters, 'aie')
+
+    
   }
 
   const HandleRenderButtons = () => {
@@ -107,10 +109,7 @@ export function FormFilterAgremiacao({
             color: 'darkorange',// color: 'darkorange',
             pointerEvents:'cursor',
             cursor: 'pointer',
-            fontSize: '1.45rem'
-            
-
-          
+            fontSize: '1.45rem'   
           }}
           
           onClick={handleEditFilter}

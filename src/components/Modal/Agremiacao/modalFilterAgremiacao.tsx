@@ -59,6 +59,7 @@ export function ModalFilterAgremiacao() {
           return (
             <>
             <p>{index}</p>
+            {console.log(filters)}
             <FormFilterAgremiacao
               key={index}
               indexValues={index}
