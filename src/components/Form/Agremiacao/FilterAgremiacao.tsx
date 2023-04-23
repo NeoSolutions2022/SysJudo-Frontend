@@ -11,6 +11,7 @@ import { useFormikProvider } from "../../../hooks/useFormikProvider";
 import { useEffect, useState } from "react";
 import { InitialParenthesesValue } from "../../../types/Filters/Agremiacao/parentheses";
 import { beBY } from "@mui/material/locale";
+import { event } from "jquery";
 
 interface FormFilterAgremiacaoProps {
   values?: IFiltersAgremicao;
@@ -23,6 +24,12 @@ export function FormFilterAgremiacao({
   indexValues
 }: FormFilterAgremiacaoProps) {
   // verify, if operator != between, then secondValue is not required
+
+  const [column, setColumn] = useState(values?.column ?? '')
+  const [firstValue, setFirstValue] = useState(values?.firstValue ?? '')
+  const [operator, setOperator] = useState(values?.operator ?? '')
+  const [secundValue, setSecundValue] = useState(values?.secondValue ?? '')
+  const [logicOperator, setLogicOperator] = useState(values?.logicOperator ?? '')
 
   const { filtersAgremiacao, setFiltersAgremiacao } = useFormikProvider();
 
@@ -135,6 +142,16 @@ export function FormFilterAgremiacao({
     );
   }
 
+  const handleChangeOperator = (event: React.ChangeEvent<{ value: unknown }>) => {
+    const operatorValue = event.target.value as string;
+    if (['', 'CONTEM', '=', '#', '>', '<', '>=', '<=', 'ENTRE'].includes(operatorValue)) {
+      setOperator(operatorValue as "" | "CONTEM" | "=" | "#" | ">" | "<" | ">=" | "<=" | "ENTRE");
+    } else {
+      setOperator('');
+    }
+  }
+  
+
   const HandleRenderForm = () => {
     return (
       <form>
@@ -174,14 +191,14 @@ export function FormFilterAgremiacao({
             variant="outlined"
             name='column'
             id='column'
-            value={values?.column ?? formik.values['column']}
-            onChange={formik.handleChange}
+            value={column ?? formik.values['column']}
+            onChange={e => setColumn(e.target.value)}
             onBlur={formik.handleBlur}
             error={formik.touched['column'] && Boolean(formik.errors['column'])}
             helperText={formik.touched['column'] && formik.errors['column']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values !== undefined}
+            disabled={values === undefined}
             InputLabelProps={{
               shrink: true,
             }}
@@ -198,14 +215,14 @@ export function FormFilterAgremiacao({
             variant="outlined"
             name='operator'
             id='operator'
-            value={values?.operator ?? formik.values['operator']}
-            onChange={formik.handleChange}
+            value={operator ?? formik.values['operator']}
+            onChange={handleChangeOperator}
             onBlur={formik.handleBlur}
             error={formik.touched['operator'] && Boolean(formik.errors['operator'])}
             helperText={formik.touched['operator'] && formik.errors['operator']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values !== undefined}
+            disabled={values === undefined}
             InputLabelProps={{
               shrink: true,
             }}
@@ -224,14 +241,18 @@ export function FormFilterAgremiacao({
             variant="outlined"
             name='firstValue'
             id='firstValue'
-            value={!isColumnDate ?  (values?.firstValue && handleDateFormat(values?.firstValue)) ?? formik.values['firstValue'] : values?.firstValue ?? formik.values['firstValue'] }
-            onChange={formik.handleChange}
+            value={!isColumnDate ? (values?.firstValue && handleDateFormat(values?.firstValue)) ?? formik.values['firstValue'] : values?.firstValue ?? formik.values['firstValue'] }
+            onChange={(event) => {
+              const value = event.target.value;
+              const formattedValue = !isColumnDate ? handleDateFormat(value) : value;
+              formik.setFieldValue('firstValue', formattedValue);
+            }}
             onBlur={formik.handleBlur}
             error={formik.touched['firstValue'] && Boolean(formik.errors['firstValue'])}
             helperText={formik.touched['firstValue'] && formik.errors['firstValue']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values !== undefined}
+            disabled={values === undefined}
             InputLabelProps={{
               shrink: true,
             }}
@@ -400,7 +421,7 @@ export function FormFilterAgremiacao({
             }
             sx={{ width: 150 }}
             fullWidth
-            disabled={values !== undefined}
+            disabled
             InputLabelProps={{
               shrink: true,
             }}
