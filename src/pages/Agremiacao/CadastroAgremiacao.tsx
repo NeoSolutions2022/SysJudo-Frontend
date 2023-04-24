@@ -58,7 +58,6 @@ import { validation as ValidationSchema } from "../../components/Form/Agremiacao
 import AvatarDefault from "../../assets/photo-user-default.png";
 import LogoCorreios from "../../assets/correios.svg";
 import "../../styles/cadastro-agremiacao.scss";
-import { TabsAgremiacao } from "./Tabs";
 
 export function CadastroAgremiacao() {
   const navigate = useNavigate();
@@ -73,7 +72,7 @@ export function CadastroAgremiacao() {
   const { notes, setNotes, files, currentFileToCreate, setFileLinkFromGetAgremiacao, reloadAgremiacao, setIsFilterLoading, isFilterLoading } = useFormikProvider();
   const [ responsedCadastro, setResponsedCadastro ] = useState<any>([])
   const [isValid, setIsValid] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   
 
   const onBlurForm = () => {
@@ -301,13 +300,10 @@ export function CadastroAgremiacao() {
       encType="multipart/form-data"
       autoComplete="off"
     >
-      {id ? <TabsAgremiacao /> : null}
-      {/* @ts-ignore */}
       <div
         id="cadastro"
         style={{
-          marginTop: id !== undefined ? 40 : 0,
-          height: id !== undefined ? "77vh" : "80vh",
+          height: "80vh",
         }}
       >
         <>
@@ -644,7 +640,7 @@ export function CadastroAgremiacao() {
                   variant="body2"
                   target="_blank"
                 >
-                <img src={LogoCorreios} alt="a" title="Buscar CEP"/>
+                <img src={LogoCorreios} alt="a" title="Buscar CEP" style={{height: '.9rem'}}/>
                 </Link>
               </Grid>
               </Grid>
@@ -988,6 +984,8 @@ export function CadastroAgremiacao() {
             e.preventDefault();
             handleClickOpen(3);
           }}
+          disabled = {isDisabled}
+
 
           // disabled
         >
@@ -999,6 +997,8 @@ export function CadastroAgremiacao() {
             e.preventDefault();
             handleClickOpen(2);
           }}
+          disabled = {isDisabled }
+
         >
           <NoteAddOutlinedIcon />
           Anotações

@@ -23,6 +23,8 @@ import {
   FilePresent,
   Close,
   CountertopsOutlined,
+  DeleteForever,
+  Search,
 } from "@mui/icons-material";
 import { StyledButton as Button } from "../../Button";
 import { UploadDocumentComponent } from "../../UploadDocument";
@@ -37,6 +39,7 @@ import { useState, useCallback, useEffect } from "react";
 import Swal from "sweetalert2";
 import { AlertComponent } from "../../Alert";
 import { result } from "lodash";
+import { ExibirArquivo } from "../ExibirArquivo/ExibirArquivo";
 
 export function ModalAnexosAgremiacao() {
   const formik = useFormik({
@@ -95,7 +98,7 @@ export function ModalAnexosAgremiacao() {
     setFileLinkFromGetAgremiacao,
   } = useFormikProvider();
   const queryClient = useQueryClient();
-  const { handleClose } = useModal();
+  const { handleClose, handleClickOpen } = useModal();
   const { emitAlertMessage } = useAlertContext();
   const { anexarArquivoAgremiacao } = agremiacaoRoutes;
 
@@ -135,8 +138,12 @@ export function ModalAnexosAgremiacao() {
     setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
   }, []);
 
-  const handleDeleteAnexoAgremiacao = (idAnexo: any, idAgremiacao: any, nomeDocumento: string) => {
-    handleClose()
+  const handleDeleteAnexoAgremiacao = (
+    idAnexo: any,
+    idAgremiacao: any,
+    nomeDocumento: string
+  ) => {
+    handleClose();
     Swal.fire({
       title: `tem certeza que deseja excluir o arquivo em anexo`,
       text: `O arquivo ${nomeDocumento} será permanentemente excluido`,
@@ -148,27 +155,24 @@ export function ModalAnexosAgremiacao() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
-        try{
-          agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo + 1, idAgremiacao)
-        
-          
-          handleClose()
+        try {
+          agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo + 1, idAgremiacao);
+
+          handleClose();
           Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Arquivo excluido com sucesso',
+            position: "center",
+            icon: "success",
+            title: "Arquivo excluido com sucesso",
             showConfirmButton: false,
             timer: 1500,
-          })
-        }
-        catch(error){
-          handleClose()
+          });
+        } catch (error) {
+          handleClose();
         }
         // @ts-ignore
-        
+
         setReloadAgremiacao((prev) => !prev);
-        console.log(fileLinkFromGetAgremiacao.length + ' depois')
-        
+        console.log(fileLinkFromGetAgremiacao.length + " depois");
       }
     });
   };
@@ -222,52 +226,82 @@ export function ModalAnexosAgremiacao() {
                 </div>
               )}
             </Dropzone>
-            <div
-              style={{
-                width: "100%",
-                display: "grid",
-                columnGap: 15,
-                marginTop: 10,
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+            {fileLinkFromGetAgremiacao.length > 0 && 
+            <>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "flex-start",
+                justifyContent: "start",
+                flexDirection: "column",
+                mt: 3,
+                background: "#e9e3e3",
+                p: 2,
+                borderRadius: 2,
               }}
             >
-              {fileLinkFromGetAgremiacao.length > 0 &&
-                fileLinkFromGetAgremiacao.map((item, index) => (
-                  
-                  <div
+              
+              
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: "8px",
+                  fontSize: 14,
+                  mb: 1,
+                  color: "#4e4c4c",
+                  fontWeight: "bold",
+                }}
+              >
+                <p>Ver</p>
+                <p>Excluir</p>
+                <p>Nome do Arquivo</p>
+              </Box>
+              {fileLinkFromGetAgremiacao.map((item, index) => (
+                <div
+                  style={{
+                    paddingBottom: 4,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: 5,
+                    border: "none",
+                  }}
+                >
+                  {" "}
+                  <Search
+                    color="primary"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => handleClickOpen(5)}
+                  />{" "}
+                  <DeleteForever
+                    color="error"
+                    sx={{ cursor: "pointer", mx: 2 }}
+                    onClick={() =>
+                      handleDeleteAnexoAgremiacao(
+                        index,
+                        id,
+                        extractFilenameFromLink(item)
+                        )
+                    }
+                  />
+                  <a
+                    href={item}
                     style={{
-                      paddingBottom: 4,
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      borderRadius: 5,
-                      border: "none",
+                      gap: 2,
+                      color: "black",
+                      textDecoration: "none",
                     }}
                   >
-                    {" "}
-                    <a
-                      href={item}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 3,
-                        color: "black",
-                        textDecoration: "none",
-                      }}
-                    >
-                      {" "}
-                      <PdfIcon />
-                      <h5> {extractFilenameFromLink(item)} </h5>{" "}
-                    </a>{" "}
-                    
-                    <Close
-                      color="warning"
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => handleDeleteAnexoAgremiacao(index, id, extractFilenameFromLink(item))}
-                    />
-                  </div>
-                ))}
-            </div>
+                    <PdfIcon />
+                    <h5> {extractFilenameFromLink(item)} </h5>{" "}
+                  </a>{" "}
+                </div>
+              ))}
+            </Box>
+            </>}
+
             <div
               style={{
                 display: "flex",

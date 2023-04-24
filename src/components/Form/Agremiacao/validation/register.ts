@@ -29,7 +29,7 @@ export const validation = {
   cep: Yup.string().min(8, 'CEP inválido').max(8,'CEP Invalido').required('CEP é obrigatório'),
   endereco: Yup.string().max(60, 'Limite de 60 caracteres ultrapassado').required('Endereço é obrigatório'),
   bairro: Yup.string().max(30, 'Limite de 30 caracteres ultrapassado').required('Bairro é obrigatório'),
-  complemento: Yup.string().max(60, 'Limite de 60 caracteres ultrapassado').notRequired(),
+  complemento: Yup.string().max(60, 'Limite de 60 caracteres ultrapassado').notRequired().nullable(),
   cidade: Yup.string().required('Cidade é obrigatório'),
   estado: Yup.string().required('Estado é obrigatório'),
   pais: Yup.string().required('País é obrigatório'),
