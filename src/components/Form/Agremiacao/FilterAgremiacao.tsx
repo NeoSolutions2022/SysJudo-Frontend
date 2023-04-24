@@ -95,12 +95,36 @@ export function FormFilterAgremiacao({
     setFiltersAgremiacao(newArrayFilters);
   }
 
-  const handleEditFilter = () => {
-    const newArrayFilters = filtersAgremiacao.filter((_, index) => index === indexValues);
-    console.log(newArrayFilters, 'aie')
+  const [ valuess, setValues ] = useState({})
 
-    
+  const handleEditFilter = () => {
+    const editedFilters = [...filtersAgremiacao];
+    const editedFilter = editedFilters[indexValues ?? 0];
+  
+    editedFilter.initialParentheses = values?.initialParentheses || "";
+    editedFilter.column = values?.column || "";
+    editedFilter.operator = values?.operator || "";
+    editedFilter.logicOperator = values?.logicOperator || "";
+  
+    setFiltersAgremiacao(editedFilters);
   }
+
+  // const handleEditFilter = () => {
+  //   // Filtra o array para retornar apenas o elemento selecionado para edição
+  //   const editedFilter = filtersAgremiacao.filter((_, index) => index === indexValues);
+  
+  //   // Define o estado dos valores do formulário com o elemento selecionado para edição
+  //   setValues({
+  //     initialParentheses: editedFilter[0].initialParentheses,
+  //     column: editedFilter[0].column
+  //   });
+  
+  //   // Remove o elemento selecionado para edição do array original
+  //   const newArrayFilters = filtersAgremiacao.filter((_, index) => index !== indexValues);
+  
+  //   // Define o estado dos filtros com o novo array resultante
+  //   setFiltersAgremiacao(newArrayFilters);
+  // };
 
   const HandleRenderButtons = () => {
     if (values) {
@@ -150,6 +174,11 @@ export function FormFilterAgremiacao({
       setOperator('');
     }
   }
+
+  const handleChangeLogicOperator = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const newOperator = e.target.value as "" | "E" | "OU";
+    setLogicOperator(newOperator);
+  };
   
 
   const HandleRenderForm = () => {
@@ -306,14 +335,14 @@ export function FormFilterAgremiacao({
             variant="outlined"
             name='logicOperator'
             id='logicOperator'
-            value={values?.logicOperator ?? formik.values['logicOperator']}
-            onChange={formik.handleChange}
+            value={logicOperator ?? formik.values['logicOperator']}
+            onChange={handleChangeLogicOperator}
             onBlur={formik.handleBlur}
             error={formik.touched['logicOperator'] && Boolean(formik.errors['logicOperator'])}
             helperText={formik.touched['logicOperator'] && formik.errors['logicOperator']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values !== undefined}
+            disabled={values === undefined}
             InputLabelProps={{
               shrink: true,
             }}
