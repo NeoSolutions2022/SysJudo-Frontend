@@ -28,8 +28,18 @@ export function FormFilterAgremiacao({
   const [column, setColumn] = useState(values?.column ?? '')
   const [firstValue, setFirstValue] = useState(values?.firstValue ?? '')
   const [operator, setOperator] = useState(values?.operator ?? '')
-  const [secundValue, setSecundValue] = useState(values?.secondValue ?? '')
+  const [secundValue, setSecondValue] = useState(values?.secondValue ?? '')
   const [logicOperator, setLogicOperator] = useState(values?.logicOperator ?? '')
+
+  useEffect(() => {
+    if (values) {
+      setColumn(values.column || '');
+      setFirstValue(values.firstValue || '');
+      setOperator(values.operator || '');
+      setSecondValue(values.secondValue || '');
+      setLogicOperator(values.logicOperator || '');
+    }
+  }, [values]);
 
   const { filtersAgremiacao, setFiltersAgremiacao } = useFormikProvider();
 
@@ -95,18 +105,17 @@ export function FormFilterAgremiacao({
     setFiltersAgremiacao(newArrayFilters);
   }
 
-  const [ valuess, setValues ] = useState({})
 
   const handleEditFilter = () => {
     const editedFilters = [...filtersAgremiacao];
     const editedFilter = editedFilters[indexValues ?? 0];
   
-    editedFilter.initialParentheses = values?.initialParentheses || "";
-    editedFilter.column = values?.column || "";
-    editedFilter.operator = values?.operator || "";
-    editedFilter.logicOperator = values?.logicOperator || "";
+    
+    editedFilter.column = column || "";
+    editedFilter.operator = operator || "";
+    editedFilter.logicOperator = logicOperator || "";
   
-    setFiltersAgremiacao(editedFilters);
+    setFiltersAgremiacao(editedFilters)
   }
 
   // const handleEditFilter = () => {
