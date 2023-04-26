@@ -105,17 +105,48 @@ export function FormFilterAgremiacao({
     setFiltersAgremiacao(newArrayFilters);
   }
 
+  const [editedFilter, setEditedFilter] = useState(false)
+  const [buttonEditActive, setButtonEditActive] = useState(true)
+  const [buttonAddActive, setButtonAddActive] = useState(false)
+
+  useEffect(() => {
+    console.log(buttonEditActive, buttonAddActive)
+  }, [buttonAddActive, buttonEditActive])
+
+  const handleButtonEdit = () => {
+    setButtonEditActive(false)
+    setButtonAddActive(true)
+  }
+
+  const handleButtonAdd = () => {
+    setButtonEditActive(true)
+    setButtonAddActive(false)
+  }
+
+  // useEffect(() => {
+  //   console.log(editedFilter + ' filtro')
+  // }, [editedFilter])
+
+  const handleActiveFilter = () => {
+    setEditedFilter(true)
+
+    handleButtonEdit()
+
+  }
 
   const handleEditFilter = () => {
+
     const editedFilters = [...filtersAgremiacao];
     const editedFilter = editedFilters[indexValues ?? 0];
-  
-    
+
+    handleButtonAdd()
+
     editedFilter.column = column || "";
     editedFilter.operator = operator || "";
     editedFilter.logicOperator = logicOperator || "";
   
     setFiltersAgremiacao(editedFilters)
+
   }
 
   // const handleEditFilter = () => {
@@ -149,11 +180,24 @@ export function FormFilterAgremiacao({
             color: 'darkorange',// color: 'darkorange',
             pointerEvents:'cursor',
             cursor: 'pointer',
-            fontSize: '1.45rem'   
+            fontSize: '1.45rem',
+            display: buttonEditActive === true ? 'block' : 'none',
           }}
           
-          onClick={handleEditFilter}
+          onClick={() => handleActiveFilter()}
         />
+
+        <Add
+          sx={{
+            color: 'green',
+            pointerEvents: 'cursor',
+            cursor: 'pointer',
+            fontSize: '1.45rem',
+            display: buttonAddActive === true ? 'block' : 'none',
+          }}
+          onClick={() => handleEditFilter()}
+        />
+
           <Close
             sx={{ cursor: 'pointer' }}
             onClick={handleRemoveFilter}
@@ -236,7 +280,7 @@ export function FormFilterAgremiacao({
             helperText={formik.touched['column'] && formik.errors['column']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values === undefined}
+            disabled={!editedFilter}
             InputLabelProps={{
               shrink: true,
             }}
@@ -260,7 +304,7 @@ export function FormFilterAgremiacao({
             helperText={formik.touched['operator'] && formik.errors['operator']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values === undefined}
+            disabled={!editedFilter}
             InputLabelProps={{
               shrink: true,
             }}
@@ -290,7 +334,7 @@ export function FormFilterAgremiacao({
             helperText={formik.touched['firstValue'] && formik.errors['firstValue']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values === undefined}
+            disabled={!editedFilter}
             InputLabelProps={{
               shrink: true,
             }}
@@ -351,7 +395,7 @@ export function FormFilterAgremiacao({
             helperText={formik.touched['logicOperator'] && formik.errors['logicOperator']}
             sx={{ width: 150 }}
             fullWidth
-            disabled={values === undefined}
+            disabled={!editedFilter}
             InputLabelProps={{
               shrink: true,
             }}
