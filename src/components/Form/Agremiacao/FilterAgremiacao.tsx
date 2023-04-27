@@ -11,7 +11,7 @@ import { useFormikProvider } from "../../../hooks/useFormikProvider";
 import { useEffect, useState } from "react";
 import { InitialParenthesesValue } from "../../../types/Filters/Agremiacao/parentheses";
 import { beBY } from "@mui/material/locale";
-import { event } from "jquery";
+
 
 interface FormFilterAgremiacaoProps {
   values?: IFiltersAgremicao;
@@ -32,6 +32,12 @@ export function FormFilterAgremiacao({
   const [logicOperator, setLogicOperator] = useState(values?.logicOperator ?? '')
 
   useEffect(() => {
+    console.log('debug: ' + firstValue)
+  }, [firstValue])
+
+  useEffect(() => { 
+    console.log('a',values);
+    
     if (values) {
       setColumn(values.column || '');
       setFirstValue(values.firstValue || '');
@@ -143,6 +149,7 @@ export function FormFilterAgremiacao({
 
     editedFilter.column = column || "";
     editedFilter.operator = operator || "";
+    editedFilter.firstValue = firstValue || "";
     editedFilter.logicOperator = logicOperator || "";
   
     setFiltersAgremiacao(editedFilters)
@@ -232,6 +239,11 @@ export function FormFilterAgremiacao({
     const newOperator = e.target.value as "" | "E" | "OU";
     setLogicOperator(newOperator);
   };
+
+  const handleChangeFirstValue = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const newFirstValue = e.target.value as string
+    setFirstValue(newFirstValue)
+  }
   
 
   const HandleRenderForm = () => {
@@ -319,21 +331,21 @@ export function FormFilterAgremiacao({
           </TextField>
 
           <TextField
-            type='text'
+            type= {isColumnDate ? "date" : isColumnNumber ? "number" : "text"}
+            label="teste"
             variant="outlined"
             name='firstValue'
             id='firstValue'
-            value={!isColumnDate ? (values?.firstValue && handleDateFormat(values?.firstValue)) ?? formik.values['firstValue'] : values?.firstValue ?? formik.values['firstValue'] }
-            onChange={(event) => {
-              const value = event.target.value;
-              const formattedValue = !isColumnDate ? handleDateFormat(value) : value;
-              formik.setFieldValue('firstValue', formattedValue);
-            }}
-            onBlur={formik.handleBlur}
+            value={firstValue}
+            // value={!isColumnDate ? (values?.firstValue && handleDateFormat(values?.firstValue)) ?? formik.values['firstValue'] : values?.firstValue ?? formik.values['firstValue'] }
+            onChange={handleChangeFirstValue}
             error={formik.touched['firstValue'] && Boolean(formik.errors['firstValue'])}
             helperText={formik.touched['firstValue'] && formik.errors['firstValue']}
             sx={{ width: 150 }}
             fullWidth
+            InputProps={{
+              inputProps: { min: 0 }
+            }}
             disabled={!editedFilter}
             InputLabelProps={{
               shrink: true,
