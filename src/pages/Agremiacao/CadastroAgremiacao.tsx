@@ -640,7 +640,7 @@ export function CadastroAgremiacao() {
                   variant="body2"
                   target="_blank"
                 >
-                <img src={LogoCorreios} alt="a" title="Buscar CEP" style={{height: '.9rem'}}/>
+                <img src={LogoCorreios} alt="LogoCorreios" title="Buscar CEP" style={{height: '.9rem'}}/>
                 </Link>
               </Grid>
               </Grid>

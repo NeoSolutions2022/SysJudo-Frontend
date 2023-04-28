@@ -40,6 +40,19 @@ import Swal from "sweetalert2";
 import { AlertComponent } from "../../Alert";
 import { result } from "lodash";
 import { ExibirArquivo } from "../ExibirArquivo/ExibirArquivo";
+import { SecondaryModal } from '../SecondaryModal/secondaryModal';
+import PDFViewer from '../../PDFViewer/PdfViewer';
+import { BlockBlobClient  } from '@azure/storage-blob';
+import { Loading } from '../../Loading/Loading';
+
+
+async function handlePhotoAzure(data : string, fileName : string) {
+  const client = new BlockBlobClient(data);
+  const blob = await client.download();
+  const blobResponse = await blob.blobBody;
+  return(blobResponse)
+}
+
 
 export function ModalAnexosAgremiacao() {
   const formik = useFormik({
@@ -177,6 +190,20 @@ export function ModalAnexosAgremiacao() {
     });
   };
 
+  const [isFileModalVisible, setIsFileModalVisible] = useState(false)
+  const [fileToBeViewed, SetfileToBeViewed] = useState<Blob>()
+
+
+  const downloadPdf = async (blobName : string) => {
+   
+    const file = await handlePhotoAzure(blobName, 'example.pdf');
+    
+    if(file)
+      SetfileToBeViewed(file)
+    return file
+  }
+  
+
   return (
     <Modal title="Anexos" modalId={3} width="md">
       <form>
@@ -271,7 +298,10 @@ export function ModalAnexosAgremiacao() {
                   <Search
                     color="primary"
                     sx={{ cursor: "pointer" }}
-                    onClick={() => handleClickOpen(5)}
+                    onClick={() => {
+                      setIsFileModalVisible(true)
+                      downloadPdf(item)
+                    }}
                   />{" "}
                   <DeleteForever
                     color="error"
@@ -350,6 +380,19 @@ export function ModalAnexosAgremiacao() {
           </Grid>
         </Container>
       </form>
+      <SecondaryModal title='Visualizando Arquivo' isOpen={isFileModalVisible} onClose={() =>{ 
+        setIsFileModalVisible(false)
+        SetfileToBeViewed(undefined)
+      }} width='xl'>
+       
+        {
+          fileToBeViewed ? 
+          <PDFViewer fileItem={fileToBeViewed} />
+          :
+          <div style={{paddingBottom:20}}><Loading width={100} /></div>
+        }
+        
+      </SecondaryModal>
     </Modal>
   );
 }

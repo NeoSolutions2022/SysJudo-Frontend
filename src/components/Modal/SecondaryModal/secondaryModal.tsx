@@ -1,24 +1,21 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Dialog, Typography, IconButton, DialogTitle, DialogContent } from "@mui/material";
 import { Close } from "@mui/icons-material";
 
-import { useModal } from "../../hooks/useModalProvider";
 
 interface ModalProps {
   title?: string;
   children: ReactNode;
   width?: "xs" | "sm" | "md" | "lg" | "xl" | false;
-  modalId?: number;
+  isOpen?: boolean;
+  onClose?: (() => void);
 }
 
-export function Modal({ title, children, width, modalId }: ModalProps) {
-  const { openModalId, handleClose } = useModal();
-
+export function SecondaryModal({ title, children, width, isOpen, onClose }: ModalProps) {
   return (
     <Dialog
-      open={openModalId === modalId}
-      {...() => console.log(openModalId,modalId)}
-      onClose={handleClose}
+      open={isOpen == true}
+      onClose={onClose}
       aria-labelledby="form-dialog-title"
       fullWidth={true}
       maxWidth={width}
@@ -31,9 +28,10 @@ export function Modal({ title, children, width, modalId }: ModalProps) {
         "& .MuiDialogContent-root": {
           p: 0,
         },
+        
       }}
     >
-      <DialogTitle sx={{ m: 0, mb: 0, ml: 1, p: 2, pb: 0 }}>
+      <DialogTitle sx={{ m: 0, mb: 0, ml: 1, p: 2, pb: 2 }}>
         {title && (
           <Typography
             color="#4887C8"
@@ -47,12 +45,12 @@ export function Modal({ title, children, width, modalId }: ModalProps) {
           type="button"
           sx={{ position: "absolute", top: 8, right: 8 }}
           aria-label="close"
-          onClick={handleClose}
+          onClick={onClose}
         >
           <Close />
         </IconButton>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent sx={{}}>
         {children}
       </DialogContent>
     </Dialog>
