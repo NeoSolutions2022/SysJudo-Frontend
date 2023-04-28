@@ -41,7 +41,6 @@ import { StyledButton as Button } from "../../components/Button";
 
 import api from "../../providers/services/api";
 import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
-import { TabsAgremiacao } from "./Tabs";
 import parse from "html-react-parser";
 import { parseISO, format } from 'date-fns';
 import { Loading } from '../../components/Loading/Loading';
@@ -127,13 +126,14 @@ export function Listagem() {
           flexDirection: "row-reverse",
           gap: 2,
           pr: 2,
-          right: 5,
-          top: "7.5vh",
+          right: 40,
+          top: "1.2vh",
+          zIndex: 1100,
         }}
       >
         <button
           style={{
-            color: valuesFiltered.length > 0 ? "#4887C8" : "#ccc",
+            color: valuesFiltered.length > 0 ? "#4887C8" : "#797878",
             fontSize: ".9rem",
             display: "flex",
             justifyContent: "space-between",
@@ -174,7 +174,7 @@ export function Listagem() {
             }
           }}
           onClick={handleSearchBlur}
-          sx={{ maxWidth: 240 }}
+          sx={{ maxWidth: 240, background: '#ffffff' }}
         />
       </Box>
     );
@@ -324,12 +324,10 @@ export function Listagem() {
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
-        paddingTop: "4vh",
       }}
     >
       <Container maxWidth={false}>
         <Grid container spacing={1}>
-          <TabsAgremiacao />
           <QuickSearchToolbar />
           <Grid item xs={12}>
             <TabPanel value={valueTab} index={2}>
@@ -345,7 +343,7 @@ export function Listagem() {
                     sm: "50vh",
                     md: "70vh",
                     lg: "65vh",
-                    xl: "79vh",
+                    xl: "83vh",
                   },
                   flexGrow: 2,
                   position: "relative",
@@ -422,12 +420,9 @@ export function Listagem() {
                   <p>
                     Total de linhas:{" "}
                     {valuesFiltered.length == 0
-                      ? data?.paginacao.total == undefined ? '...' : data.paginacao.total && data?.paginacao.total > 9
-                        ? data?.paginacao.total
-                        : "0" + data?.paginacao.total
-                      : valuesFiltered.length > 9
-                      ? valuesFiltered.length
-                      : "0" + valuesFiltered.length}
+                      ? data?.paginacao.total == undefined ? '...' : data.paginacao.total && data.paginacao.total
+                      : valuesFiltered.length && valuesFiltered.length + ' / ' + data?.paginacao.total
+                    }
                   </p>
                   <p
                     style={{
@@ -441,13 +436,9 @@ export function Listagem() {
                   >
                     {selectedRowsAgremiacao.length > 0
                       ? selectedRowsAgremiacao.length == 1
-                        ? "0" +
-                          selectedRowsAgremiacao.length +
+                        ? selectedRowsAgremiacao.length +
                           " linha selecionada"
-                        : selectedRowsAgremiacao.length > 9
-                        ? selectedRowsAgremiacao.length + " linhas selecionadas"
-                        : "0" +
-                          selectedRowsAgremiacao.length +
+                        :selectedRowsAgremiacao.length +
                           " linhas selecionadas"
                       : ""}
                   </p>
