@@ -127,7 +127,7 @@ export function Listagem() {
           gap: 2,
           pr: 2,
           right: 40,
-          top: "1.2vh",
+          top: "0.7vh",
           zIndex: 1100,
         }}
       >
