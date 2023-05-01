@@ -44,13 +44,6 @@ export function ModalFilterAgremiacao() {
     setTimeout(() => handleClose(), 300);
   }
 
-  
-  useEffect(()=>{
-    console.log('filtersAgremiacao',filtersAgremiacao)
-
-  },[
-    filtersAgremiacao
-  ])
   return (
     <Modal title="Filtro" width="xl" modalId={1}>
       <Container maxWidth={false} sx={{ p: 5 }}>
@@ -58,8 +51,6 @@ export function ModalFilterAgremiacao() {
         {filtersAgremiacao?.map((filters, index) => {
           return (
             <>
-            <p>{index}</p>
-            {console.log(filters)}
             <FormFilterAgremiacao
               key={index}
               indexValues={index}
