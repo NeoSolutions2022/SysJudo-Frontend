@@ -69,13 +69,16 @@ export function ModalAnotacoesAgremiacao({
   }, []);
 
   function handleSubmit() {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Anotação salva com sucesso',
-      showConfirmButton: false,
-      timer: 1500,
-    })
+    if (id != undefined){
+      agremiacaoRoutes.anotacoesAgremiacao(id, content)
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Anotação salva com sucesso',
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
     setNotes(content);
     handleClose();
   }

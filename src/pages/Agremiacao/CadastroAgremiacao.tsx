@@ -611,7 +611,7 @@ export function CadastroAgremiacao() {
                 </Typography>
               </Grid>
 
-              <Grid item xs={3} 
+              <Grid item xs={3.5} 
                   sx={{
                     display: "flex",
                     flexDirection:'row',

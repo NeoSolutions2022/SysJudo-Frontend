@@ -104,10 +104,10 @@ type AnotacaoObject = {
 };
 
 async function anotacoesAgremiacao(
-  id: number,
+  id: string,
   anotacao: string
 ): Promise<void> {
-  const response = await api.patch(`/gerencia/agremiacao/${id}`, anotacao);
+  const response = await api.patch(`/gerencia/agremiacao/${id}`, {anotacoes : anotacao});
 
   return response.data;
 }
