@@ -25,7 +25,11 @@ import {
   CountertopsOutlined,
   DeleteForever,
   Search,
+  Brightness1,
+  Brightness1Outlined,
+
 } from "@mui/icons-material";
+import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
 import { StyledButton as Button } from "../../Button";
 import { UploadDocumentComponent } from "../../UploadDocument";
 import { ListDocumentsUploaded } from "../../UploadDocument/list";
@@ -185,7 +189,7 @@ export function ModalAnexosAgremiacao() {
         // @ts-ignore
 
         setReloadAgremiacao((prev) => !prev);
-        console.log(fileLinkFromGetAgremiacao.length + " depois");
+
       }
     });
   };
@@ -326,7 +330,16 @@ export function ModalAnexosAgremiacao() {
                   >
                     <PdfIcon />
                     <h5> {extractFilenameFromLink(item)} </h5>{" "}
+
+                  <FileDownloadRoundedIcon sx={{
+                    color: "green",
+                    margin: '0px 3px',
+                    filter: "brightness(0.9)"
+                  }}
+                  
+                    />
                   </a>{" "}
+                   
                 </div>
               ))}
             </Box>
