@@ -60,10 +60,12 @@ export function Listagem() {
     isFilterLoading,
     setIsFilterLoading
   } = useFormikProvider();
-  const { data, isError, isLoading } = useQuery(
+  const { data } = useQuery(
     ["agremiacao-list"],
     agremiacaoRoutes.getAgremiacoes
   );
+
+  
 
   const [valueTab, setValueTab] = useState(0);
 
