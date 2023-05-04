@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 import { AppBar, Toolbar, Typography, Divider } from '@mui/material';
 import { LogoutOutlined } from '@mui/icons-material';
-
+import * as S from '../components/index'
 import { useAuthContext } from '../../hooks/useAuthProvider';
+import { useNavigate } from 'react-router';
 
 // import HeaderItemComponent from '../components';
 
@@ -41,6 +42,8 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 Header.propTypes = {
   onOpenNav: PropTypes.func,
 };
+
+
 
 const HeaderOptions = [
   {
@@ -86,22 +89,25 @@ const HeaderItem = ({ title } : HeaderItemProps)  => {
 //{ onOpenNav }
 export function Header() {
   const { logout } = useAuthContext();
+  const navigate = useNavigate()
   return (
     <StyledRoot>
       <StyledToolbar>
-{/* 
-      <HeaderItemComponent title='Cadastros' >
-        <button>Agremiação</button>
-        
-      </HeaderItemComponent>
 
-      <HeaderItemComponent title='Finanças'>
-        
-      </HeaderItemComponent> */}
+    <S.HeaderItemComponent title='Cadastro'>
+    </S.HeaderItemComponent>
+    <S.HeaderItemComponent title='Serviço'>
+    </S.HeaderItemComponent>   
+    <S.HeaderItemComponent title='Competição'>
+    </S.HeaderItemComponent>    
 
-      { HeaderOptions.map((option, index) => (
+    <S.HeaderItemComponent title='Segurança'>
+      <button onClick={() => navigate('/listagem-eventos')}>Eventos</button>
+    </S.HeaderItemComponent>
+
+      {/* { HeaderOptions.map((option, index) => (
           <HeaderItem title={option.title} key={index} />
-        ))} 
+        ))}  */}
 
       </StyledToolbar>
       <LogoutOutlined
