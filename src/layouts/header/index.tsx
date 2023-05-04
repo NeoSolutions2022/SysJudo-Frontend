@@ -31,6 +31,7 @@ const StyledRoot = styled(AppBar)(({ theme }) => ({
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   minHeight: HEADER_MOBILE,
   display: 'flex',
+  height: '3.125rem'
   // [theme.breakpoints.up('lg')]: {
   //   minHeight: HEADER_DESKTOP,
   //   padding: theme.spacing(0, 5),
@@ -94,12 +95,12 @@ export function Header() {
     <StyledRoot>
       <StyledToolbar>
 
-    <S.HeaderItemComponent title='Cadastro'>
-    </S.HeaderItemComponent>
-    <S.HeaderItemComponent title='Serviço'>
-    </S.HeaderItemComponent>   
-    <S.HeaderItemComponent title='Competição'>
-    </S.HeaderItemComponent>    
+        <S.HeaderItemComponent title='Cadastro'>
+        </S.HeaderItemComponent>
+        <S.HeaderItemComponent title='Serviço'>
+        </S.HeaderItemComponent>   
+        <S.HeaderItemComponent title='Competição'>
+        </S.HeaderItemComponent>    
 
     <S.HeaderItemComponent title='Segurança'>
       <button onClick={() => navigate('/listagem-eventos')}>Eventos</button>
