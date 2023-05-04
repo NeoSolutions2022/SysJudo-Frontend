@@ -7,7 +7,7 @@ import { Login } from "./pages/Login";
 import { Home } from "./pages/Home";
 import { Listagem } from "./pages/Agremiacao/Listagem";
 import { CadastroAgremiacao } from "./pages/Agremiacao/CadastroAgremiacao";
-
+import { ListagemEventos } from "./pages/listagem-eventos/listagem-eventos";
 import { useAuthContext } from "./hooks/useAuthProvider";
 import { ModalFilterAgremiacao } from "./components/Modal/Agremiacao/modalFilterAgremiacao";
 
@@ -33,6 +33,7 @@ export default function Router() {
         { element: <Navigate to="/agremiacao" />, index: true },
         { path: "/", element: <Home /> },
         { path: "/agremiacao", element: <Listagem /> },
+        { path: "/listagem-eventos", element: <ListagemEventos /> },
         { path: "/agremiacao/cadastro", element: <CadastroAgremiacao /> },
         { path: "/agremiacao/editar/:id", element: <CadastroAgremiacao /> }
       ],
