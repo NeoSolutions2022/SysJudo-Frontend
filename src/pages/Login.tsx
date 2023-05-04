@@ -17,6 +17,24 @@ import {
 import { useAuthContext } from '../hooks/useAuthProvider';
 import { useAlertContext } from '../hooks/useAlertProvider';
 import { Loading } from '../components/Loading/Loading';
+import axios from 'axios';
+
+interface valuesToPostProps {
+  email : string, 
+  senha : string, 
+  ip? : string | null
+}
+async function getIpAddress(): Promise<string | null> {
+  try {
+    const response = await axios.get<{ ip: string }>('https://api.ipify.org?format=json');
+    console.log(response.data.ip)
+    return response.data.ip;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 
 export function Login() {
   const navigate = useNavigate();
@@ -24,6 +42,9 @@ export function Login() {
   const { signIn } = useAuthContext();
   const { emitAlertMessage } = useAlertContext();
   const [isLoading, setisLoading] = useState(false)
+  useEffect(() => {
+    getIpAddress()
+  },[])
   const formik = useFormik({
     initialValues: {
       email: 'ivo@email.com',
@@ -38,7 +59,15 @@ export function Login() {
     }),
     onSubmit: async (values) => {
       setisLoading(true)
-      const isSuccess = await signIn(values);
+      const ipAdress = await getIpAddress()
+      
+      const valuesToPost : valuesToPostProps = 
+      {
+        ip: ipAdress && ipAdress,
+        email: values.email,
+        senha: values.senha
+      }
+      const isSuccess = await signIn(valuesToPost);
       if (!isSuccess) {
         setisLoading(false)
         return emitAlertMessage('error', 'Usuário ou senha inválidos, tente novamente.');
@@ -46,6 +75,7 @@ export function Login() {
       navigate('/', { replace: true });
     }
   });
+  
   return (
     <Box
       component="main"

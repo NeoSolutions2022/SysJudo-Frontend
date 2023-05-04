@@ -6,6 +6,7 @@ import api from "../services/api";
 interface SignInProps {
   email: string;
   senha: string;
+  ip?: string | null
 }
 
 interface AuthContextData {
@@ -52,11 +53,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // 
   }, []);
 
-  async function signIn({ email, senha }: SignInProps) {
+  async function signIn({ email, senha, ip }: SignInProps) {
     try {
+      console.log(ip)
       const response = await api.post("administrador/usuario-auth/login", {
         email,
         senha,
+        ip
       });
 
       const { token, id } = response.data;
