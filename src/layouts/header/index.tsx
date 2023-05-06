@@ -15,7 +15,7 @@ const HEADER_MOBILE = 64;
 const HEADER_DESKTOP = 92;
 
 const StyledRoot = styled(AppBar)(({ theme }) => ({
-  maxHeight: '6.5vh',
+  maxHeight: '8.5vh',
   boxShadow: '0px 2px 5px 1px rgba(0,0,0,0.54)',
   backgroundColor: "#EAEAEA",
   color: "#1d93ff",
