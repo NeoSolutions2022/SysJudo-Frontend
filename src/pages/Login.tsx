@@ -39,7 +39,7 @@ async function getIpAddress(): Promise<string | null> {
 export function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { signIn } = useAuthContext();
+  const { signIn, signInAdmin } = useAuthContext();
   const { emitAlertMessage } = useAlertContext();
   const [isLoading, setisLoading] = useState(false)
   useEffect(() => {
@@ -67,7 +67,7 @@ export function Login() {
         email: values.email,
         senha: values.senha
       }
-      const isSuccess = await signIn(valuesToPost);
+      const isSuccess = await signInAdmin(valuesToPost);
       if (!isSuccess) {
         setisLoading(false)
         return emitAlertMessage('error', 'Usuário ou senha inválidos, tente novamente.');

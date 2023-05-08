@@ -10,6 +10,7 @@ export type HeaderItemProps = {
 export const HeaderItemComponent: React.FC<HeaderItemProps> = ({
   children,
   title,
+  
 }) => {
   return (
     <S.ButtonComponent>
