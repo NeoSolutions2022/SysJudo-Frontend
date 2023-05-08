@@ -336,8 +336,6 @@ export function FormFilterAgremiacao({
             value={column ?? formik.values["column"]}
             onChange={(e) => setColumn(e.target.value)}
             onBlur={formik.handleBlur}
-            error={formik.touched["column"] && Boolean(formik.errors["column"])}
-            helperText={formik.touched["column"] && formik.errors["column"]}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
@@ -358,10 +356,6 @@ export function FormFilterAgremiacao({
             value={operator ?? formik.values["operator"]}
             onChange={handleChangeOperator}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched["operator"] && Boolean(formik.errors["operator"])
-            }
-            helperText={formik.touched["operator"] && formik.errors["operator"]}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
@@ -386,13 +380,6 @@ export function FormFilterAgremiacao({
             value={firstValue}
             // value={!isColumnDate ? (values?.firstValue && handleDateFormat(values?.firstValue)) ?? formik.values['firstValue'] : values?.firstValue ?? formik.values['firstValue'] }
             onChange={handleChangeFirstValue}
-            error={
-              formik.touched["firstValue"] &&
-              Boolean(formik.errors["firstValue"])
-            }
-            helperText={
-              formik.touched["firstValue"] && formik.errors["firstValue"]
-            }
             sx={{ width: 150 }}
             fullWidth
             InputProps={{
