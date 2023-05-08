@@ -14,7 +14,7 @@ export const ButtonComponent = styled.button`
   position: relative;
 
   &:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.95);
     div {
       display: flex;
     }

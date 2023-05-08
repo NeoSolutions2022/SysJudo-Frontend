@@ -94,8 +94,8 @@ export function Header() {
   return (
     <StyledRoot>
       <StyledToolbar>
-
         <S.HeaderItemComponent title='Cadastro'>
+        <button onClick={() => navigate('/agremiacao')}>Agremiação</button>
         </S.HeaderItemComponent>
         <S.HeaderItemComponent title='Serviço'>
         </S.HeaderItemComponent>   
