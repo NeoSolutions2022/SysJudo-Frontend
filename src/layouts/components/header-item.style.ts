@@ -8,6 +8,7 @@ export const ButtonComponent = styled.button`
   border-left: 0.0625rem solid #b3b3b3;
   border-right: 0.0625rem solid #b3b3b3;
   border-bottom: 0.125rem solid #b3b3b3;
+  border-top: none;
   cursor: pointer;
 
   color: #1d9efa;
@@ -48,7 +49,7 @@ export const ButtonComponent = styled.button`
       text-decoration: none;
 
       &:hover {
-        filter: brightness(0.9);
+        filter: brightness(1.1);
       }
     }
   }
