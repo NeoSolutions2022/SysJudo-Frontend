@@ -10,6 +10,7 @@ import {
 } from "@mui/x-data-grid";
 import {
   AddOutlined,
+  DisabledByDefault,
   CreateOutlined as EditIcon,
   FilterAlt,
   UploadFile,
@@ -64,13 +65,14 @@ export function ListagemEventos() {
       width: 62,
       //@ts-ignore
       renderCell: (params: GridValueGetterParams) => (
-        <Button
+        <Button disabled
           onClick={async (e: any) => {
             e.stopPropagation();
             //@ts-ignore
             setAgremiacaoId(params.id);
             setValueTab(1);
             navigate(`editar/${params.id}`, { replace: true });
+          
           }}
           sx={{
             transform: "scale(.7)",
