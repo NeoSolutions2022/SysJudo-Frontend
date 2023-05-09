@@ -59,42 +59,18 @@ export function ListagemEventos() {
   }
 
   const columns: GridColDef[] = [
-    {
-      field: "edit-action",
-      headerName: "Editar",
-      width: 62,
-      //@ts-ignore
-      renderCell: (params: GridValueGetterParams) => (
-        <Button disabled
-          onClick={async (e: any) => {
-            e.stopPropagation();
-            //@ts-ignore
-            setAgremiacaoId(params.id);
-            setValueTab(1);
-            navigate(`editar/${params.id}`, { replace: true });
-          
-          }}
-          sx={{
-            transform: "scale(.7)",
-            ml: -1.4,
-          }}
-        >
-          <EditIcon />
-        </Button>
-      ),
-      disableColumnMenu: true,
-      hideSortIcons: true,
-    },
-    { field: "descricao", headerName: "Descrição", width: 200 },
+    
+    { field: "descricao", headerName: "Descrição", width: 125, minWidth: 200, maxWidth: 300, flex: 1 },
     {
       field: "dataHoraEvento",
+      resizable: true,
       headerName: "Data",
       width: 200,
       valueFormatter: (item) =>
         item.value ? handleDateFormat(item?.value) : "",
     },
-    { field: "computadorId", headerName: "Computador ID", width: 200 },
-    { field: "clienteId", headerName: "Cliente ID", width: 150 },
+    { field: "computadorId", headerName: "Computador ID", width: 200, resizable: true },
+    { field: "clienteId", headerName: "Cliente ID", resizable: true, width: 150 },
     { field: "tipoOperacaoId", headerName: "Tipo de Operação", width: 150 },
     { field: "usuarioId", headerName: "Usuario ID", width: 150 },
     { field: "funcaoMenuId", headerName: "Função Menu ID", width: 150 },
@@ -155,7 +131,7 @@ export function ListagemEventos() {
                     }}
                     componentsProps={{
                       toolbar: {
-                        disableMultipleActions: true,
+                        disableMultipleActions: false,
                       },
                       baseTooltip: {
                         style: { color: "#4887C8", fontWeight: "bold" },
