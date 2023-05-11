@@ -163,16 +163,16 @@ export function CadastroGrupoAcesso() {
       //@ts-ignore
       queryClient.invalidateQueries("agremiacao-list");
       const successMsg = id
-        ? "Agremiação editada com sucesso!"
-        : "Agremiação cadastrada com sucesso!";
+        ? "Grupo de acesso editado com sucesso!"
+        : "Grupo de acesso cadastrado com sucesso!";
       emitAlertMessage("success", successMsg);
       navigate("/agremiacao");
     },
     onError: () => {
       console.log(data);
       const errorMsg = id
-        ? "Erro ao editar agremiação"
-        : "Erro ao cadastrar agremiação";
+        ? "Erro ao editar grupo de acesso"
+        : "Erro ao cadastrar grupo de acesso";
       emitAlertMessage("error", errorMsg);
     },
   });
@@ -288,7 +288,7 @@ export function CadastroGrupoAcesso() {
         //@ts-ignore
         queryClient.invalidateQueries("agremiacao-list");
         formik.setValues(initialValues);
-        emitAlertMessage("success", "Agremiação excluída com sucesso!");
+        emitAlertMessage("success", "Grupo de acesso excluída com sucesso!");
 
         navigate("/grupo-de-acessos");
       }
