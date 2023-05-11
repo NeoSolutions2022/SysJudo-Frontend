@@ -58,19 +58,58 @@ export function ListagemEventos() {
     return format(date, "dd/MM/yyyy");
   }
 
+  function extrairHorario(data: string) {
+    const dateTime = new Date(data);
+    const horario = dateTime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    console.log(horario);
+    return horario;
+  }
+
+  function formatarDataHora(dataHora: string) {
+    const data = new Date(dataHora);
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const ano = data.getFullYear();
+    const horas = String(data.getHours()).padStart(2, "0");
+    const minutos = String(data.getMinutes()).padStart(2, "0");
+    const segundos = String(data.getSeconds()).padStart(2, "0");
+    return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+  }
+
   const columns: GridColDef[] = [
-    
-    { field: "descricao", headerName: "Descrição", width: 125, minWidth: 200, maxWidth: 300, flex: 1 },
+    {
+      field: "descricao",
+      headerName: "Descrição",
+      width: 125,
+      minWidth: 200,
+      maxWidth: 300,
+      flex: 1,
+    },
     {
       field: "dataHoraEvento",
       resizable: true,
-      headerName: "Data",
-      width: 200,
+      headerName: "Data/Hora",
+      width: 250,
       valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
+        item.value ? formatarDataHora(item?.value) : "",
     },
-    { field: "computadorId", headerName: "Computador ID", width: 200, resizable: true },
-    { field: "clienteId", headerName: "Cliente ID", resizable: true, width: 150 },
+
+    {
+      field: "computadorId",
+      headerName: "Computador ID",
+      width: 200,
+      resizable: true,
+    },
+    {
+      field: "clienteId",
+      headerName: "Cliente ID",
+      resizable: true,
+      width: 150,
+    },
     { field: "tipoOperacaoId", headerName: "Tipo de Operação", width: 150 },
     { field: "usuarioId", headerName: "Usuario ID", width: 150 },
     { field: "funcaoMenuId", headerName: "Função Menu ID", width: 150 },
@@ -182,7 +221,7 @@ export function ListagemEventos() {
                   }}
                 >
                   <p>
-                    Total de linhas: {data == undefined ? "..." : data.length}
+                    Total de ações: {data == undefined ? "..." : data.length}
                   </p>
                   <p
                     style={{
