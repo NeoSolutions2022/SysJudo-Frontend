@@ -1,0 +1,99 @@
+import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Modal } from "../index";
+import { FormFilterAgremiacao } from "../../Form/Agremiacao/FilterAgremiacao";
+
+import type {
+  IAgremiacao,
+  IFiltersAgremicao,
+} from "../../../models/AgremiacaoModel";
+
+import "../../../styles/global.scss";
+import { useFormikProvider } from "../../../hooks/useFormikProvider";
+import { useModal } from "../../../hooks/useModalProvider";
+
+import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agremiacao";
+
+import { Container, DialogActions } from "@mui/material";
+import { Close, FilterAlt } from "@mui/icons-material";
+import { StyledButton as Button } from "../../Button";
+import { useGrupoAcessoProvider } from '../../../hooks/useGrupoAcessoProvider';
+import { FormFilterGrupoAcesso } from '../../Form/GrupoAcesso/FilterGrupoAcesso';
+
+export function ModalGrupoAcesso() {
+  const {
+    filtersAgremiacao,
+    filtersToPost,
+    handleFilterChange,
+    setValuesFiltered,
+    setFiltersToPost,
+    setFiltersAgremiacao,
+    setIsFilterLoading
+  } = useGrupoAcessoProvider();
+  const { handleClose, openModalId } = useModal();
+
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSubmit() {
+    setIsFilterLoading(true)
+    setFiltersToPost([]);
+    await handleFilterChange(
+      filtersAgremiacao.filter(
+        (value, index, self) => self.indexOf(value) === index
+      )
+    );
+
+    setTimeout(() => handleClose(), 300);
+  }
+
+  return (
+    <Modal title="Filtro" width="xl" modalId={1}>
+      <Container maxWidth={false} sx={{ p: 5 }}>
+        <FormFilterGrupoAcesso />
+        {filtersAgremiacao?.map((filters, index) => {
+          return (
+            <>
+            <FormFilterGrupoAcesso
+              key={index}
+              indexValues={index}
+              values={filters}
+              />
+            </>
+          );
+        })}
+        <DialogActions
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            width: "100%",
+            gap: 2,
+            mt: 2,
+          }}
+        >
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            size="large"
+            disabled={filtersAgremiacao.length == 0 || isLoading}
+            sx={{ minWidth: "6vw", textTransform: "none" }}
+            onClick={() => handleSubmit()}
+          >
+          <FilterAlt/>  {isLoading ? "Filtrando..." : "Aplicar"} 
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            type="button"
+            onClick={handleClose}
+            size="large"
+            sx={{ minWidth: "6vw", textTransform: "none" }}
+          >
+          <Close/>  Cancelar
+          </Button>
+        </DialogActions>
+      </Container>
+    </Modal>
+  );
+}

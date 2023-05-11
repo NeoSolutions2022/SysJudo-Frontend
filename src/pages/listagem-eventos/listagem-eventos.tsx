@@ -19,7 +19,7 @@ import {
   FilterAltOffOutlined as FilterIcon,
 } from "@mui/icons-material";
 import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
-import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
+import { ModalFilterAgremiacao } from "../../components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
 import { useModal } from "../../hooks/useModalProvider";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
@@ -441,8 +441,6 @@ export function ListagemEventos() {
                   </Button>
                 </Box>
               </Box>
-              <ModalFilterAgremiacao />
-              <ModalExportarAgremiacao />
               {/* <BackdropComponent open={isLoading} /> */}
             </TabPanel>
             <TabPanel value={valueTab} index={1}></TabPanel>

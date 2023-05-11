@@ -4,39 +4,31 @@ import * as Yup from "yup";
 
 import type { ReactNode } from "react";
 import type {
-  IAgremiacao,
-  IFiltersAgremicao,
-} from "../../models/AgremiacaoModel";
+  IGrupoAcesso,
+  IFiltersGrupoAcesso,
+  GrupoAcessoOptions
+} from "../../models/GrupoAcessoModel";
 
-import { values as InitialValues } from "../../components/Form/Agremiacao/values/register";
 import { validation as ValidationSchema } from "../../components/Form/Agremiacao/validation/register";
 
-export type FilesTypes = {
-  alvaraLocacao?: File;
-  estatuto?: File;
-  contratoSocial?: File;
-  documentacaoAtualizada?: File;
+const InitialValues = {
+  nome: "",
+  descricao: "",
+  permissoes: [],
 };
+
+
 interface FormikContextProps {
   AgremiacaoFilterFormik: any;
-  AgremiacaoRegisterFormik: any;
-  filtersAgremiacao: IFiltersAgremicao[];
-  setFiltersAgremiacao: (filtersAgremiacao: IFiltersAgremicao[]) => void;
+  filtersAgremiacao: IFiltersGrupoAcesso[];
+  setFiltersAgremiacao: (filtersAgremiacao: IFiltersGrupoAcesso[]) => void;
   filtersToPost: any;
   setFiltersToPost: React.Dispatch<SetStateAction<NewFilterFormattedProps[]>>;
-  handleFilterChange: (newFilter: IFiltersAgremicao[]) => void;
-  valuesFiltered: IAgremiacao[];
-  setValuesFiltered: (valuesFiltered: IAgremiacao[]) => void;
-  notes: string;
-  setNotes: (notes: string) => void;
-  files: FilesTypes;
-  handleChangeFile: (file: FilesTypes) => void;
-  currentFileToCreate: File[];
-  setCurrentFileToCreate: React.Dispatch<SetStateAction<File[]>>;
+  handleFilterChange: (newFilter: IFiltersGrupoAcesso[]) => void;
+  valuesFiltered: IGrupoAcesso[];
+  setValuesFiltered: (valuesFiltered: IGrupoAcesso[]) => void;
   selectedRowsAgremiacao: never[],
   setSelectedRowsAgremiacao :React.Dispatch<SetStateAction<never[]>>,
-  fileLinkFromGetAgremiacao: string[],
-  setFileLinkFromGetAgremiacao :   React.Dispatch<SetStateAction<string[]>>,
   reloadAgremiacao: boolean,
   setReloadAgremiacao : React.Dispatch<SetStateAction<boolean>>
   filterWithZeroReturn: any,
@@ -44,14 +36,14 @@ interface FormikContextProps {
   setIsFilterLoading: React.Dispatch<SetStateAction<boolean>>
 }
 
-import { agremiacaoRoutes } from "../services/api/agremiacao/agremiacao";
+import { GrupoAcessoRoutes } from "../services/api/grupo-acesso/grupo-acesso";
 import { useAuthContext } from "../../hooks/useAuthProvider";
 
 interface FormikProviderProps {
   children: ReactNode;
 }
 
-export const FormikContext = createContext({} as FormikContextProps);
+export const GrupoAcessoContext = createContext({} as FormikContextProps);
 
 interface NewFilterFormattedProps {
   nomeParametro: string;
@@ -65,9 +57,9 @@ interface NewFilterFormattedProps {
   operacoesMatematicas: boolean;
 }
 
-export function FormikProvider({ children }: FormikProviderProps) {
+export function GrupoAcessoProvider({ children }: FormikProviderProps) {
   const [filtersAgremiacao, setFiltersAgremiacao] = useState<
-    IFiltersAgremicao[]
+    IFiltersGrupoAcesso[]
   >([]);
   const [filtersToPost, setFiltersToPost] = useState<NewFilterFormattedProps[]>(
     []
@@ -77,49 +69,13 @@ export function FormikProvider({ children }: FormikProviderProps) {
         id: 1, 
         sigla: 'Sem Correspondencia',
         nome: 'Sem Correspondencia',
-        fantasia: 'Sem Correspondencia',
-        responsavel: 'Sem Correspondencia',
-        representante: 'Sem Correspondencia',
-        dataFiliacao: new Date(),
-        dataNascimento:  new Date(),
-        cep:  'Sem Correspondencia',
-        endereco:  'Sem Correspondencia',
-        bairro:  'Sem Correspondencia',
-        complemento:  'Sem Correspondencia',
-        cidade: 'Sem Correspondencia',
-        estado: 'Sem Correspondencia',
-        pais: 'Sem Correspondencia',
-        telefone:  'Sem Correspondencia',
-        email:  'Sem Correspondencia',
-        cnpj:  'Sem Correspondencia',
-        inscricaoMunicipal: 'Sem Correspondencia',
-        inscricaoEstadual:  'Sem Correspondencia',
-        dataCnpj:  new Date(),
-        dataAta:  new Date(),
-        foto:  'Sem Correspondencia',
-        alvaraLocacao:  'Sem Correspondencia',
-        estatuto:  'Sem Correspondencia',
-        contratoSocial:  'Sem Correspondencia',
-        documentacaoAtualizada:  'Sem Correspondencia',
-        regiao:  'Sem Correspondencia',
-        Documentos: []
+        descricao: 'Sem Correspondencia',
+        administrador: 'Sem Correspondencia',
+        desativado: 'Sem Correspondencia',     
       
     }
   const [currentFileToCreate, setCurrentFileToCreate] = useState<File[]>([]);
-  const [newFilterFormatted, setNewFilterFormatted] = useState<
-    NewFilterFormattedProps[]
-  >([
-    {
-      nomeParametro: "Nome",
-      operacaoId: 1,
-      valorString: "",
-      operacoesMatematicas: false,
-      operadorLogico: 2,
-    },
-  ]);
-  const [valuesFiltered, setValuesFiltered] = useState<IAgremiacao[]>([]);
-  const [notes, setNotes] = useState<string>("");
-  const [files, setFiles] = useState<FilesTypes>({});
+  const [valuesFiltered, setValuesFiltered] = useState<IGrupoAcesso[]>([]);
   const [fileLinkFromGetAgremiacao, setFileLinkFromGetAgremiacao] = useState<string[]>([])
   const [reloadAgremiacao, setReloadAgremiacao] = useState<boolean>(false)
   const [selectedRowsAgremiacao, setSelectedRowsAgremiacao] = useState([])
@@ -151,7 +107,7 @@ export function FormikProvider({ children }: FormikProviderProps) {
       finalParentheses: Yup.string().required("Campo obrigatório"),
       logicOperator: Yup.string().notRequired(), //.required('Campo obrigatório')
     }),
-    onSubmit: (values: IFiltersAgremicao) => {
+    onSubmit: (values: IFiltersGrupoAcesso) => {
       const newArrayFiltersWithoutSort = [...filtersAgremiacao, values];
 
       const newArrayFilters = newArrayFiltersWithoutSort.sort((a, b) => {
@@ -194,41 +150,11 @@ export function FormikProvider({ children }: FormikProviderProps) {
     },
   });
 
-  const AgremiacaoRegisterFormik = useFormik({
-    validateOnChange: false,
-    initialValues: InitialValues,
-    validationSchema: Yup.object().shape(ValidationSchema),
-    onSubmit: async (values) => {
-      const idForUpdate = values?.id;
-      for (const [key, value] of Object.entries(values)) {
-        if (key === "id") {
-          delete values[key];
-        }
-      }
-      //@ts-ignore
-      const routeSelected = idForUpdate
-      //@ts-ignore
-        ? agremiacaoRoutes.updateAgremiacao(values, idForUpdate)
-        //@ts-ignore
-        : agremiacaoRoutes.createAgremiacao(values);
-      const response = await routeSelected;
-      AgremiacaoRegisterFormik.resetForm();
-      console.log("response", response);
-    },
-  });
-
-  const handleChangeFile = (newFile: FilesTypes) => {
-    setFiles((currentFiles: FilesTypes) => ({
-      ...currentFiles,
-      ...newFile,
-    }));
-  };
-
-  const handleFilterChange = (filters: IFiltersAgremicao[]) => {
+  const handleFilterChange = (filters: IFiltersGrupoAcesso[]) => {
     const operatorsOptions = ["", "CONTEM", "=", "#", "<", "<=", ">", ">=", 'ENTRE'];
     const logicOperatorsOptions = ["", "E", "OU"];
 
-    function handleFormatFilter(filter: IFiltersAgremicao) {
+    function handleFormatFilter(filter: IFiltersGrupoAcesso) {
       if (
         filter.column == "DataCnpj" ||
         filter.column == "DataAta" ||
@@ -270,7 +196,7 @@ export function FormikProvider({ children }: FormikProviderProps) {
     }else{
 
       async function atribuittingApiValue() {
-        const response = await agremiacaoRoutes.postAgremiacaoFilter(
+        const response = await GrupoAcessoRoutes.postGrupoAcessoFilter(
           filtersToPost
         );
         console.log('r',response)
@@ -293,10 +219,9 @@ export function FormikProvider({ children }: FormikProviderProps) {
   }, [filtersToPost]);
 
   return (
-    <FormikContext.Provider
+    <GrupoAcessoContext.Provider
       value={{
         AgremiacaoFilterFormik,
-        AgremiacaoRegisterFormik,
         filtersAgremiacao,
         setFiltersAgremiacao,
         filtersToPost,
@@ -304,27 +229,17 @@ export function FormikProvider({ children }: FormikProviderProps) {
         handleFilterChange,
         valuesFiltered,
         setValuesFiltered,
-        notes,
-        setNotes,
-        files,
-        handleChangeFile,
-        currentFileToCreate,
-        setCurrentFileToCreate,
         selectedRowsAgremiacao,
         setSelectedRowsAgremiacao,
-        fileLinkFromGetAgremiacao,
-        setFileLinkFromGetAgremiacao,
         reloadAgremiacao,
         setReloadAgremiacao,
         filterWithZeroReturn,
         isFilterLoading, 
         setIsFilterLoading
         
-
-
       }}
     >
       {children}
-    </FormikContext.Provider>
+    </GrupoAcessoContext.Provider>
   );
 }

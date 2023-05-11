@@ -9,7 +9,9 @@ import { Listagem } from "./pages/Agremiacao/Listagem";
 import { CadastroAgremiacao } from "./pages/Agremiacao/CadastroAgremiacao";
 import { ListagemEventos } from "./pages/listagem-eventos/listagem-eventos";
 import { useAuthContext } from "./hooks/useAuthProvider";
-import { ModalFilterAgremiacao } from "./components/Modal/Agremiacao/modalFilterAgremiacao";
+import { ModalFilterAgremiacao } from "./components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
+import { ListagemGrupoAcessos } from './pages/grupo-de-acessos/listagem-grupo-acessos';
+import { CadastroGrupoAcesso } from './pages/grupo-de-acessos/CadastroGrupoAcesso';
 
 // interface ProtectedRoutePageProps {
 //   Page: JSXElementConstructor<any>;
@@ -34,6 +36,9 @@ export default function Router() {
         { path: "/", element: <Home /> },
         { path: "/agremiacao", element: <Listagem /> },
         { path: "/listagem-eventos", element: <ListagemEventos /> },
+        { path: "/grupo-de-acessos", element: <ListagemGrupoAcessos /> },
+        { path: "/grupo-de-acessos/cadastro", element: <CadastroGrupoAcesso /> },
+        { path: "/grupo-de-acessos/editar/:id", element: <CadastroGrupoAcesso /> },
         { path: "/agremiacao/cadastro", element: <CadastroAgremiacao /> },
         { path: "/agremiacao/editar/:id", element: <CadastroAgremiacao /> }
       ],
