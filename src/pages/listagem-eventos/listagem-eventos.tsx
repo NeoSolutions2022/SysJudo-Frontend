@@ -44,6 +44,10 @@ export function ListagemEventos() {
     listagemEventosRoutes.getListagemEventos
   );
 
+  //@ts-ignore
+  const last100Eventos = data.slice(-100);
+
+
   const [valueTab, setValueTab] = useState(0);
 
   const TabPanel = (props: any) => {
@@ -84,9 +88,9 @@ export function ListagemEventos() {
     {
       field: "descricao",
       headerName: "Descrição",
-      width: 125,
-      minWidth: 200,
-      maxWidth: 300,
+    
+      minWidth: 50,
+      maxWidth: 450,
       flex: 1,
     },
     {
@@ -101,7 +105,7 @@ export function ListagemEventos() {
     {
       field: "computadorId",
       headerName: "Computador ID",
-      width: 200,
+      width: 150,
       resizable: true,
     },
     {
@@ -111,7 +115,7 @@ export function ListagemEventos() {
       width: 150,
     },
     { field: "tipoOperacaoId", headerName: "Tipo de Operação", width: 150 },
-    { field: "usuarioId", headerName: "Usuario ID", width: 150 },
+    { field: "usuarioId", headerName: "Usuário ID", width: 150 },
     { field: "funcaoMenuId", headerName: "Função Menu ID", width: 150 },
   ];
 
@@ -156,9 +160,8 @@ export function ListagemEventos() {
                   <Loading />
                 ) : data ? (
                   <DataGrid
-                    rows={valuesFiltered.length == 0 ? data : valuesFiltered}
+                    rows={valuesFiltered.length == 0 ? last100Eventos : valuesFiltered}
                     columns={columns}
-                    checkboxSelection
                     disableSelectionOnClick
                     disableColumnMenu
                     hideFooterPagination
