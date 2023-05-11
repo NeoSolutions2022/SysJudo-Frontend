@@ -5,30 +5,17 @@ import { Box, Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
-  GridValueGetterParams,
   ptBR,
 } from "@mui/x-data-grid";
-import {
-  AddOutlined,
-  DisabledByDefault,
-  CreateOutlined as EditIcon,
-  FilterAlt,
-  UploadFile,
-} from "@mui/icons-material";
-import {
-  Search,
-  FilterAltOffOutlined as FilterIcon,
-} from "@mui/icons-material";
-import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
-import { useModal } from "../../hooks/useModalProvider";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
 import { Home } from "../Home";
 import { StyledButton as Button } from "../../components/Button";
 import { parseISO, format } from "date-fns";
 import { Loading } from "../../components/Loading/Loading";
 import { listagemEventosRoutes } from "../../providers/services/api/listagem-eventos/listagem-eventos";
+
 
 export function ListagemEventos() {
   document.title = "Listagem de Agremiação";
@@ -44,9 +31,7 @@ export function ListagemEventos() {
     listagemEventosRoutes.getListagemEventos
   );
 
-  //@ts-ignore
-  const last100Eventos = data.slice(-100);
-
+  const last100Eventos = data ? data.slice(-100) : [];
 
   const [valueTab, setValueTab] = useState(0);
 
@@ -81,7 +66,7 @@ export function ListagemEventos() {
     const horas = String(data.getHours()).padStart(2, "0");
     const minutos = String(data.getMinutes()).padStart(2, "0");
     const segundos = String(data.getSeconds()).padStart(2, "0");
-    return `${dia}/${mes}/${ano} ${horas}:${minutos}:${segundos}`;
+    return `${dia}/${mes}/${ano} \u00A0 ${horas}:${minutos}:${segundos}`;
   }
 
   const columns: GridColDef[] = [
@@ -160,7 +145,7 @@ export function ListagemEventos() {
                   <Loading />
                 ) : data ? (
                   <DataGrid
-                    rows={valuesFiltered.length == 0 ? last100Eventos : valuesFiltered}
+                    rows={last100Eventos}
                     columns={columns}
                     disableSelectionOnClick
                     disableColumnMenu
