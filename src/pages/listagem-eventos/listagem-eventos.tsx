@@ -7,7 +7,9 @@ import {
   GridColDef,
   ptBR,
 } from "@mui/x-data-grid";
+
 import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
+
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
 import { Home } from "../Home";
@@ -242,8 +244,6 @@ export function ListagemEventos() {
                   </Button>
                 </Box>
               </Box>
-              <ModalFilterAgremiacao />
-              <ModalExportarAgremiacao />
               {/* <BackdropComponent open={isLoading} /> */}
             </TabPanel>
             <TabPanel value={valueTab} index={1}></TabPanel>

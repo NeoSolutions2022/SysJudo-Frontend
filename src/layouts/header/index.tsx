@@ -104,6 +104,7 @@ export function Header() {
 
     <S.HeaderItemComponent title='Segurança'>
       <button onClick={() => navigate('/listagem-eventos')}>Eventos</button>
+      <button onClick={() => navigate('/grupo-de-acessos')}>Grupos de Acesso</button>
     </S.HeaderItemComponent>
 
       {/* { HeaderOptions.map((option, index) => (

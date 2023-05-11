@@ -23,7 +23,7 @@ export const ButtonComponent = styled.button`
 
   div {
     width: 8.75rem;
-    background-color: #eaeaea;
+    background-color: #000;
     position: absolute;
     top: 3.8rem;
 
@@ -38,7 +38,7 @@ export const ButtonComponent = styled.button`
       font-weight: 400;
       width: 100%;
       height: 3.75rem;
-      background-color: #eaeaea;
+      background-color: #fff !important;
       display: block;
       border: none;
       font-size: 16px;
@@ -47,7 +47,6 @@ export const ButtonComponent = styled.button`
       transition: 0.2s;
       cursor: pointer;
       text-decoration: none;
-
       &:hover {
         filter: brightness(1.1);
       }

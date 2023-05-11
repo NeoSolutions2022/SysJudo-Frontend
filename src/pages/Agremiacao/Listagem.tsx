@@ -28,7 +28,6 @@ import {
 } from "@mui/icons-material";
 import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 
-import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
 import { ModalAnotacoesAgremiacao } from "../../components/Modal/Agremiacao/Anotacoes";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
 import { BackdropComponent } from "../../components/Backdrop";
@@ -42,9 +41,9 @@ import { StyledButton as Button } from "../../components/Button";
 import api from "../../providers/services/api";
 import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
 import parse from "html-react-parser";
-import { parseISO, format } from 'date-fns';
-import { Loading } from '../../components/Loading/Loading';
-
+import { parseISO, format } from "date-fns";
+import { Loading } from "../../components/Loading/Loading";
+import { ModalFilterAgremiacao } from '../../components/Modal/Agremiacao/modalFilterAgremiacao';
 
 export function Listagem() {
   document.title = "Listagem de Agremiação";
@@ -58,19 +57,16 @@ export function Listagem() {
     setFiltersAgremiacao,
     filterWithZeroReturn,
     isFilterLoading,
-    setIsFilterLoading
+    setIsFilterLoading,
   } = useFormikProvider();
   const { data } = useQuery(
     ["agremiacao-list"],
     agremiacaoRoutes.getAgremiacoes
   );
-
-  
-
   const [valueTab, setValueTab] = useState(0);
 
   const [agremiacaoId, setAgremiacaoId] = useState(0);
-
+    
   const handleChange = (e: SyntheticEvent, newValue: number) => {
     setAgremiacaoId(0);
     setValueTab(newValue);
@@ -92,30 +88,32 @@ export function Listagem() {
     setIsTextFieldVisible(false);
   }
   async function handleSearchComponent() {
-    setIsFilterLoading(true)
-    if (searchedValue.length == 0){
+    setIsFilterLoading(true);
+    if (searchedValue.length == 0) {
       setValuesFiltered([]);
       agremiacaoRoutes.postClearFilters();
       setFiltersAgremiacao([]);
-      setSearchedValue('')
-      handleSearchBlurToFalse()
-    } 
-    if (searchedValue.length > 0){
-      const response = await agremiacaoRoutes.pesquisarAgremiacao(searchedValue)
-      response.length == 0 ? setValuesFiltered([{...filterWithZeroReturn}]) :  setValuesFiltered(response)
-      handleSearchBlurToFalse()
-    } 
-    setIsFilterLoading(false)
-
+      setSearchedValue("");
+      handleSearchBlurToFalse();
+    }
+    if (searchedValue.length > 0) {
+      const response = await agremiacaoRoutes.pesquisarAgremiacao(
+        searchedValue
+      );
+      response.length == 0
+        ? setValuesFiltered([{ ...filterWithZeroReturn }])
+        : setValuesFiltered(response);
+      handleSearchBlurToFalse();
+    }
+    setIsFilterLoading(false);
   }
   function QuickSearchToolbar() {
     const inputRef = useRef(null);
     const handleBlurEffect = () => {
       if (inputRef.current !== document.activeElement) {
-        handleSearchBlurToFalse()
-        return false
-
-      }else return true
+        handleSearchBlurToFalse();
+        return false;
+      } else return true;
     };
     return (
       <Box
@@ -148,7 +146,7 @@ export function Listagem() {
             setValuesFiltered([]);
             agremiacaoRoutes.postClearFilters();
             setFiltersAgremiacao([]);
-            setSearchedValue('')
+            setSearchedValue("");
             //Limpar o filtro no backend
           }}
           disabled={!(valuesFiltered.length > 0)}
@@ -160,7 +158,17 @@ export function Listagem() {
         <TextField
           onBlur={handleSearchBlur}
           placeholder="Pesquisar"
-          InputProps={{ endAdornment: <Search onClick={handleSearchComponent} sx={{cursor: 'initial', color: searchedValue.length >= 1 ? '#4887C8' : '#ccc'}} /> }}
+          InputProps={{
+            endAdornment: (
+              <Search
+                onClick={handleSearchComponent}
+                sx={{
+                  cursor: "initial",
+                  color: searchedValue.length >= 1 ? "#4887C8" : "#ccc",
+                }}
+              />
+            ),
+          }}
           autoFocus={isTextFieldVisible}
           value={searchedValue}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -169,25 +177,24 @@ export function Listagem() {
           onKeyUp={(
             event: React.KeyboardEventHandler<HTMLDivElement> | any
           ) => {
-            const timeoutId = setTimeout(() => handleSearchBlurToFalse ,300)
+            const timeoutId = setTimeout(() => handleSearchBlurToFalse, 300);
             if (event.key === "Enter") {
               handleSearchComponent();
               handleSearchBlurToFalse();
             }
           }}
           onClick={handleSearchBlur}
-          sx={{ maxWidth: 240, background: '#ffffff' }}
+          sx={{ maxWidth: 240, background: "#ffffff" }}
         />
       </Box>
     );
   }
   function handleDateFormat(dateString: string) {
     const date = parseISO(dateString);
-    if(date.toString() == 'Invalid Date')
-      return '' 
-    return format(date, 'dd/MM/yyyy');
+    if (date.toString() == "Invalid Date") return "";
+    return format(date, "dd/MM/yyyy");
   }
-
+  const [majorColumn, setMajorColumn] = useState(0);
   const columns: GridColDef[] = [
     {
       field: "edit-action",
@@ -244,12 +251,12 @@ export function Listagem() {
       width: 200,
     },
     {
-      field:  "estado",
+      field: "estado",
       headerName: "Estado",
       width: 150,
     },
     {
-      field:  "pais",
+      field: "pais",
       headerName: "Pais",
       width: 100,
     },
@@ -294,9 +301,22 @@ export function Listagem() {
     {
       field: "anotacoes",
       headerName: "Anotações",
-      width: 500,
+      minWidth: 350,
       valueFormatter: (item) => (item.value != null ? item.value : ""),
-      renderCell: (params) => (params ? parse(params.formattedValue) : ""),
+      renderCell: (params) => {
+        if (params) {
+          return (
+            <div
+              style={{
+                display: "flex",
+                
+              }}
+            >
+              {parse(params.formattedValue)}{" "}
+            </div>
+          );
+        } else return "";
+      },
     },
   ];
 
@@ -352,7 +372,9 @@ export function Listagem() {
                   zIndex: 2,
                 }}
               >
-                {isFilterLoading ? <Loading/> : data?.itens ? (
+                {isFilterLoading ? (
+                  <Loading />
+                ) : data?.itens ? (
                   <DataGrid
                     rows={
                       valuesFiltered.length == 0 ? data.itens : valuesFiltered
@@ -392,7 +414,9 @@ export function Listagem() {
                     onSelectionModelChange={handleSelectionModelChange}
                     selectionModel={selectedRowsAgremiacao}
                   />
-                ) : <Loading/>}
+                ) : (
+                  <Loading />
+                )}
               </Box>
               <Box
                 sx={{
@@ -422,9 +446,11 @@ export function Listagem() {
                   <p>
                     Total de linhas:{" "}
                     {valuesFiltered.length == 0
-                      ? data?.paginacao.total == undefined ? '...' : data.paginacao.total && data.paginacao.total
-                      : valuesFiltered.length && valuesFiltered.length + ' / ' + data?.paginacao.total
-                    }
+                      ? data?.paginacao.total == undefined
+                        ? "..."
+                        : data.paginacao.total && data.paginacao.total
+                      : valuesFiltered.length &&
+                        valuesFiltered.length + " / " + data?.paginacao.total}
                   </p>
                   <p
                     style={{
@@ -438,10 +464,8 @@ export function Listagem() {
                   >
                     {selectedRowsAgremiacao.length > 0
                       ? selectedRowsAgremiacao.length == 1
-                        ? selectedRowsAgremiacao.length +
-                          " linha selecionada"
-                        :selectedRowsAgremiacao.length +
-                          " linhas selecionadas"
+                        ? selectedRowsAgremiacao.length + " linha selecionada"
+                        : selectedRowsAgremiacao.length + " linhas selecionadas"
                       : ""}
                   </p>
                 </Box>

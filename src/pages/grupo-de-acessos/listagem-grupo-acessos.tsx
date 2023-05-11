@@ -1,54 +1,39 @@
-import { useState, useMemo, SyntheticEvent, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Box, CircularProgress, Container, Grid } from "@mui/material";
+import { Box, Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
-  GridToolbarQuickFilter,
-  GridToolbar,
   GridValueGetterParams,
-  useGridApiRef,
   ptBR,
 } from "@mui/x-data-grid";
 import {
   AddOutlined,
   CreateOutlined as EditIcon,
-  Filter,
   FilterAlt,
-  FilterAltOff,
-  NoteAddOutlined,
-  PlusOneOutlined,
   UploadFile,
 } from "@mui/icons-material";
-
 import {
   Search,
   FilterAltOffOutlined as FilterIcon,
 } from "@mui/icons-material";
 import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
-
-import { ModalFilterAgremiacao } from "../../components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
-import { ModalAnotacoesAgremiacao } from "../../components/Modal/Agremiacao/Anotacoes";
+import { ModalGrupoAcesso } from "../../components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
-import { BackdropComponent } from "../../components/Backdrop";
 import { useModal } from "../../hooks/useModalProvider";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
-
-import { CadastroAgremiacao } from "./cadastro-atletas";
 import { Home } from "../Home";
 import { StyledButton as Button } from "../../components/Button";
-
-import api from "../../providers/services/api";
-import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
-import { TabsAgremiacao } from "./Tabs";
 import parse from "html-react-parser";
-import { parseISO, format } from 'date-fns';
-import { Loading } from '../../components/Loading/Loading';
+import { parseISO, format } from "date-fns";
+import { Loading } from "../../components/Loading/Loading";
+import { useGrupoAcessoProvider } from '../../hooks/useGrupoAcessoProvider';
+import { GrupoAcessoRoutes } from '../../providers/services/api/grupo-acesso/grupo-acesso';
+import { ModalExportarGrupoAcesso } from '../../components/Modal/GrupoAcesso/ExportarGrupoAcesso';
 
-
-export function Listagem() {
-  document.title = "Listagem de Agremiação";
+export function ListagemGrupoAcessos() {
+  document.title = "Grupo de Acessos";
   const navigate = useNavigate();
   const { handleClickOpen } = useModal();
   const {
@@ -59,21 +44,14 @@ export function Listagem() {
     setFiltersAgremiacao,
     filterWithZeroReturn,
     isFilterLoading,
-    setIsFilterLoading
-  } = useFormikProvider();
-  const { data, isError, isLoading } = useQuery(
-    ["agremiacao-list"],
-    agremiacaoRoutes.getAgremiacoes
+    setIsFilterLoading,
+  } = useGrupoAcessoProvider();
+  const { data } = useQuery(
+    ["grupo-acesso-list"],
+    GrupoAcessoRoutes.getAllGrupoAcesso
   );
 
   const [valueTab, setValueTab] = useState(0);
-
-  const [agremiacaoId, setAgremiacaoId] = useState(0);
-
-  const handleChange = (e: SyntheticEvent, newValue: number) => {
-    setAgremiacaoId(0);
-    setValueTab(newValue);
-  };
 
   const TabPanel = (props: any) => {
     const { children, value, index, ...other } = props;
@@ -91,31 +69,26 @@ export function Listagem() {
     setIsTextFieldVisible(false);
   }
   async function handleSearchComponent() {
-    setIsFilterLoading(true)
-    if (searchedValue.length == 0){
+    setIsFilterLoading(true);
+    if (searchedValue.length == 0) {
       setValuesFiltered([]);
-      agremiacaoRoutes.postClearFilters();
+      GrupoAcessoRoutes.postClearFilters();
       setFiltersAgremiacao([]);
-      setSearchedValue('')
-      handleSearchBlurToFalse()
-    } 
-    if (searchedValue.length > 0){
-      const response = await agremiacaoRoutes.pesquisarAgremiacao(searchedValue)
-      response.length == 0 ? setValuesFiltered([{...filterWithZeroReturn}]) :  setValuesFiltered(response)
-      handleSearchBlurToFalse()
-    } 
-    setIsFilterLoading(false)
-
+      setSearchedValue("");
+      handleSearchBlurToFalse();
+    }
+    if (searchedValue.length > 0) {
+      const response = await GrupoAcessoRoutes.pesquisarGrupoAcesso(
+        searchedValue
+      );
+      response.length == 0
+        ? setValuesFiltered([{ ...filterWithZeroReturn }])
+        : setValuesFiltered(response);
+      handleSearchBlurToFalse();
+    }
+    setIsFilterLoading(false);
   }
   function QuickSearchToolbar() {
-    const inputRef = useRef(null);
-    const handleBlurEffect = () => {
-      if (inputRef.current !== document.activeElement) {
-        handleSearchBlurToFalse()
-        return false
-
-      }else return true
-    };
     return (
       <Box
         sx={{
@@ -127,13 +100,14 @@ export function Listagem() {
           flexDirection: "row-reverse",
           gap: 2,
           pr: 2,
-          right: 5,
-          top: "7.5vh",
+          right: 40,
+          top: "1vh",
+          zIndex: 1100,
         }}
       >
         <button
           style={{
-            color: valuesFiltered.length > 0 ? "#4887C8" : "#ccc",
+            color: valuesFiltered.length > 0 ? "#4887C8" : "#797878",
             fontSize: ".9rem",
             display: "flex",
             justifyContent: "space-between",
@@ -144,9 +118,9 @@ export function Listagem() {
           }}
           onClick={() => {
             setValuesFiltered([]);
-            agremiacaoRoutes.postClearFilters();
+            GrupoAcessoRoutes.postClearFilters();
             setFiltersAgremiacao([]);
-            setSearchedValue('')
+            setSearchedValue("");
             //Limpar o filtro no backend
           }}
           disabled={!(valuesFiltered.length > 0)}
@@ -156,9 +130,19 @@ export function Listagem() {
         </button>
 
         <TextField
-          onBlur={handleBlurEffect}
+          onBlur={handleSearchBlur}
           placeholder="Pesquisar"
-          InputProps={{ endAdornment: <Search onClick={handleSearchComponent} sx={{cursor: 'initial', color: searchedValue.length >= 1 ? '#4887C8' : '#ccc'}} /> }}
+          InputProps={{
+            endAdornment: (
+              <Search
+                onClick={handleSearchComponent}
+                sx={{
+                  cursor: "initial",
+                  color: searchedValue.length >= 1 ? "#4887C8" : "#ccc",
+                }}
+              />
+            ),
+          }}
           autoFocus={isTextFieldVisible}
           value={searchedValue}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -167,23 +151,22 @@ export function Listagem() {
           onKeyUp={(
             event: React.KeyboardEventHandler<HTMLDivElement> | any
           ) => {
-            const timeoutId = setTimeout(() => handleSearchBlurToFalse ,300)
+            const timeoutId = setTimeout(() => handleSearchBlurToFalse, 300);
             if (event.key === "Enter") {
               handleSearchComponent();
               handleSearchBlurToFalse();
             }
           }}
           onClick={handleSearchBlur}
-          sx={{ maxWidth: 240 }}
+          sx={{ maxWidth: 240, background: "#ffffff" }}
         />
       </Box>
     );
   }
   function handleDateFormat(dateString: string) {
     const date = parseISO(dateString);
-    if(date.toString() == 'Invalid Date')
-      return '' 
-    return format(date, 'dd/MM/yyyy');
+    if (date.toString() == "Invalid Date") return "";
+    return format(date, "dd/MM/yyyy");
   }
 
   const columns: GridColDef[] = [
@@ -197,7 +180,6 @@ export function Listagem() {
           onClick={async (e: any) => {
             e.stopPropagation();
             //@ts-ignore
-            setAgremiacaoId(params.id);
             setValueTab(1);
             navigate(`editar/${params.id}`, { replace: true });
           }}
@@ -212,90 +194,11 @@ export function Listagem() {
       disableColumnMenu: true,
       hideSortIcons: true,
     },
-    { field: "sigla", headerName: "Sigla", width: 120 },
     { field: "nome", headerName: "Nome", width: 300 },
-    { field: "fantasia", headerName: "Fantasia", width: 300 },
-    { field: "responsavel", headerName: "Responsável", width: 300 },
-    { field: "representante", headerName: "Representante", width: 300 },
-    {
-      field: "dataFiliacao",
-      headerName: "Data de Filiacao",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    {
-      field: "dataNascimento",
-      headerName: "Data de Nascimento",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    { field: "cep", headerName: "CEP", width: 90 },
-    { field: "endereco", headerName: "Endereço", width: 300 },
-    { field: "bairro", headerName: "Bairro", width: 300 },
-    { field: "complemento", headerName: "Complemento", width: 150 },
-
-    {
-      field: "cidade",
-      headerName: "Cidade",
-      width: 200,
-    },
-    {
-      field:  "estado",
-      headerName: "Estado",
-      width: 150,
-    },
-    {
-      field:  "pais",
-      headerName: "Pais",
-      width: 100,
-    },
-    { field: "telefone", headerName: "Telefone", width: 150 },
-    { field: "email", headerName: "Email", width: 300 },
-    { field: "cnpj", headerName: "CNPJ", width: 150 },
-    {
-      field: "inscricaoMunicipal",
-      headerName: "Inscrição Municipal",
-      width: 150,
-    },
-    {
-      field: "inscricaoEstadual",
-      headerName: "Inscrição Estadual",
-      width: 150,
-    },
-    {
-      field: "dataCnpj",
-      headerName: "Data CNPJ",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    {
-      field: "dataAta",
-      headerName: "Data Ata",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    // { field: 'alvaraLocacao', headerName: 'Alvará Locação', width: 150 },
-    // { field: 'estatuto', headerName: 'Estatuto', width: 150 },
-    // { field: 'contratoSocial', headerName: 'Contrato Social', width: 150 },
-    // { field: 'documentacaoAtualizada', headerName: 'Documentação Atualizada', width: 200 },
-    {
-      field: `${valuesFiltered.length == 0 ? "regiao" : "regiaoNome"}`,
-      headerName: "Região",
-      width: 90,
-      valueGetter: ({ value }) =>
-        valuesFiltered.length == 0 ? value?.descricao : value,
-    },
-    {
-      field: "anotacoes",
-      headerName: "Anotações",
-      width: 500,
-      valueFormatter: (item) => (item.value != null ? item.value : ""),
-      renderCell: (params) => (params ? parse(params.formattedValue) : ""),
-    },
+    { field: "descricao", headerName: "Descrição", width: 300 },
+    { field: "administrador", headerName: "Tipo Administrador", width: 200, valueFormatter: item=> item.value == false ? 'Não' : 'Sim' },
+    { field: "desativado", headerName: "Desativado", width: 200, valueFormatter: item=> item.value == false ? 'Não' : 'Sim' }
+    
   ];
 
   function handleSelectionModelChange(selection: any) {
@@ -303,12 +206,9 @@ export function Listagem() {
   }
 
   useEffect(() => {
-    agremiacaoRoutes.postClearFilters();
+    GrupoAcessoRoutes.postClearFilters();
   }, []);
 
-  const customLocaleText = {
-    footerTotalRows: `total de ${data?.itens.length} linhas`,
-  };
   useEffect(() => {
     console.log(valuesFiltered);
   }, [valuesFiltered]);
@@ -324,12 +224,10 @@ export function Listagem() {
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
-        paddingTop: "4vh",
       }}
     >
       <Container maxWidth={false}>
         <Grid container spacing={1}>
-          <TabsAgremiacao />
           <QuickSearchToolbar />
           <Grid item xs={12}>
             <TabPanel value={valueTab} index={2}>
@@ -345,14 +243,16 @@ export function Listagem() {
                     sm: "50vh",
                     md: "70vh",
                     lg: "65vh",
-                    xl: "79vh",
+                    xl: "83vh",
                   },
                   flexGrow: 2,
                   position: "relative",
                   zIndex: 2,
                 }}
               >
-                {isFilterLoading ? <Loading/> : data?.itens ? (
+                {isFilterLoading ? (
+                  <Loading />
+                ) : data?.itens ? (
                   <DataGrid
                     rows={
                       valuesFiltered.length == 0 ? data.itens : valuesFiltered
@@ -364,7 +264,6 @@ export function Listagem() {
                     hideFooterPagination
                     hideFooterSelectedRowCount
                     density="compact"
-                    // components={{ Toolbar: QuickSearchToolbar }}
                     rowsPerPageOptions={[25]}
                     localeText={{
                       ...ptBR.components.MuiDataGrid.defaultProps.localeText,
@@ -392,7 +291,9 @@ export function Listagem() {
                     onSelectionModelChange={handleSelectionModelChange}
                     selectionModel={selectedRowsAgremiacao}
                   />
-                ) : <Loading/>}
+                ) : (
+                  <Loading />
+                )}
               </Box>
               <Box
                 sx={{
@@ -422,12 +323,11 @@ export function Listagem() {
                   <p>
                     Total de linhas:{" "}
                     {valuesFiltered.length == 0
-                      ? data?.paginacao.total == undefined ? '...' : data.paginacao.total && data?.paginacao.total > 9
-                        ? data?.paginacao.total
-                        : "0" + data?.paginacao.total
-                      : valuesFiltered.length > 9
-                      ? valuesFiltered.length
-                      : "0" + valuesFiltered.length}
+                      ? data?.paginacao.total == undefined
+                        ? "..."
+                        : data.paginacao.total && data.paginacao.total
+                      : valuesFiltered.length &&
+                        valuesFiltered.length + " / " + data?.paginacao.total}
                   </p>
                   <p
                     style={{
@@ -441,14 +341,8 @@ export function Listagem() {
                   >
                     {selectedRowsAgremiacao.length > 0
                       ? selectedRowsAgremiacao.length == 1
-                        ? "0" +
-                          selectedRowsAgremiacao.length +
-                          " linha selecionada"
-                        : selectedRowsAgremiacao.length > 9
-                        ? selectedRowsAgremiacao.length + " linhas selecionadas"
-                        : "0" +
-                          selectedRowsAgremiacao.length +
-                          " linhas selecionadas"
+                        ? selectedRowsAgremiacao.length + " linha selecionada"
+                        : selectedRowsAgremiacao.length + " linhas selecionadas"
                       : ""}
                   </p>
                 </Box>
@@ -464,7 +358,7 @@ export function Listagem() {
                     fontWeight: "bold",
                   }}
                 >
-                  <Button
+                 <Button
                     // disabled
 
                     onClick={() => navigate("cadastro", { replace: true })}
@@ -472,7 +366,6 @@ export function Listagem() {
                     <AddOutlined /> Novo
                   </Button>
                   <Button
-                    // disabled
                     onClick={() => handleClickOpen(4)}
                   >
                     <UploadFile /> Exportar
@@ -483,18 +376,16 @@ export function Listagem() {
                   >
                     <FilterAlt /> Filtrar
                   </Button>
-                  <Button disabled sx={{ marginRight: 3 }}>
+                  <Button sx={{ marginRight: 3 }} onClick={() => navigate('/agremiacao')}>
                     Voltar
                   </Button>
                 </Box>
               </Box>
-              <ModalFilterAgremiacao />
-              <ModalExportarAgremiacao />
+              <ModalGrupoAcesso />
+              <ModalExportarGrupoAcesso />
               {/* <BackdropComponent open={isLoading} /> */}
             </TabPanel>
-            <TabPanel value={valueTab} index={1}>
-              <CadastroAgremiacao />
-            </TabPanel>
+            <TabPanel value={valueTab} index={1}></TabPanel>
           </Grid>
         </Grid>
       </Container>
