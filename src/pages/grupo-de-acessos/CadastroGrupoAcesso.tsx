@@ -429,6 +429,7 @@ export function CadastroGrupoAcesso() {
                 <MenuItem value={'R'}>Leitura</MenuItem>
                 <MenuItem value={'W'}>Escrita</MenuItem>
                 <MenuItem value={'D'}>Remoção</MenuItem>
+                <MenuItem value={'RWD'}>Controle Total</MenuItem>
               </TextField>
             </Box>
               )}

@@ -294,10 +294,6 @@ export function FormFilterGrupoAcesso({
             }
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched["initialParentheses"] &&
-              Boolean(formik.errors["initialParentheses"])
-            }
             helperText={
               formik.touched["initialParentheses"] &&
               formik.errors["initialParentheses"]
@@ -323,8 +319,6 @@ export function FormFilterGrupoAcesso({
             value={column ?? formik.values["column"]}
             onChange={(e) => setColumn(e.target.value)}
             onBlur={formik.handleBlur}
-            error={formik.touched["column"] && Boolean(formik.errors["column"])}
-            helperText={formik.touched["column"] && formik.errors["column"]}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
@@ -345,10 +339,6 @@ export function FormFilterGrupoAcesso({
             value={operator ?? formik.values["operator"]}
             onChange={handleChangeOperator}
             onBlur={formik.handleBlur}
-            error={
-              formik.touched["operator"] && Boolean(formik.errors["operator"])
-            }
-            helperText={formik.touched["operator"] && formik.errors["operator"]}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
