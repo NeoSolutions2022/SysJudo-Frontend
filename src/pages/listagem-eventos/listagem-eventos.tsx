@@ -21,7 +21,6 @@ export function ListagemEventos() {
   document.title = "Listagem de Agremiação";
   const navigate = useNavigate();
   const {
-    valuesFiltered,
     setSelectedRowsAgremiacao,
     selectedRowsAgremiacao,
     isFilterLoading,
