@@ -72,14 +72,11 @@ export function ListagemEventos() {
     {
       field: "descricao",
       headerName: "Descrição",
-    
-      minWidth: 50,
-      maxWidth: 450,
-      flex: 1,
+      minWidth: 450,
+      maxWidth: 600,
     },
     {
       field: "dataHoraEvento",
-      resizable: true,
       headerName: "Data/Hora",
       width: 250,
       valueFormatter: (item) =>
@@ -90,12 +87,10 @@ export function ListagemEventos() {
       field: "computadorId",
       headerName: "Computador ID",
       width: 150,
-      resizable: true,
     },
     {
       field: "clienteId",
       headerName: "Cliente ID",
-      resizable: true,
       width: 150,
     },
     { field: "tipoOperacaoId", headerName: "Tipo de Operação", width: 150 },
