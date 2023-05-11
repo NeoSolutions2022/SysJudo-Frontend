@@ -5,49 +5,34 @@ import { Box, Container, Grid } from "@mui/material";
 import {
   DataGrid,
   GridColDef,
-  GridValueGetterParams,
   ptBR,
 } from "@mui/x-data-grid";
-import {
-  AddOutlined,
-  CreateOutlined as EditIcon,
-  FilterAlt,
-  UploadFile,
-} from "@mui/icons-material";
-import {
-  Search,
-  FilterAltOffOutlined as FilterIcon,
-} from "@mui/icons-material";
-import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
-import { ModalFilterAgremiacao } from "../../components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
+
+import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
+
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
-import { useModal } from "../../hooks/useModalProvider";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
 import { Home } from "../Home";
 import { StyledButton as Button } from "../../components/Button";
-import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremiacao";
-import parse from "html-react-parser";
 import { parseISO, format } from "date-fns";
 import { Loading } from "../../components/Loading/Loading";
+import { listagemEventosRoutes } from "../../providers/services/api/listagem-eventos/listagem-eventos";
+
 
 export function ListagemEventos() {
   document.title = "Listagem de Agremiação";
   const navigate = useNavigate();
-  const { handleClickOpen } = useModal();
   const {
-    valuesFiltered,
-    setValuesFiltered,
     setSelectedRowsAgremiacao,
     selectedRowsAgremiacao,
-    setFiltersAgremiacao,
-    filterWithZeroReturn,
     isFilterLoading,
-    setIsFilterLoading,
   } = useFormikProvider();
   const { data } = useQuery(
-    ["agremiacao-list"],
-    agremiacaoRoutes.getAgremiacoes
+    ["eventos-list"],
+    listagemEventosRoutes.getListagemEventos
   );
+
+  const last100Eventos = data ? data.slice(-100) : [];
 
   const [valueTab, setValueTab] = useState(0);
 
@@ -57,241 +42,67 @@ export function ListagemEventos() {
     return value === index ? <Box>{children}</Box> : null;
   };
 
-  const [searchedValue, setSearchedValue] = useState("");
-  const [isTextFieldVisible, setIsTextFieldVisible] = useState(false);
-
-  function handleSearchBlur() {
-    setIsTextFieldVisible(true);
-  }
-  function handleSearchBlurToFalse() {
-    setIsTextFieldVisible(false);
-  }
-  async function handleSearchComponent() {
-    setIsFilterLoading(true);
-    if (searchedValue.length == 0) {
-      setValuesFiltered([]);
-      agremiacaoRoutes.postClearFilters();
-      setFiltersAgremiacao([]);
-      setSearchedValue("");
-      handleSearchBlurToFalse();
-    }
-    if (searchedValue.length > 0) {
-      const response = await agremiacaoRoutes.pesquisarAgremiacao(
-        searchedValue
-      );
-      response.length == 0
-        ? setValuesFiltered([{ ...filterWithZeroReturn }])
-        : setValuesFiltered(response);
-      handleSearchBlurToFalse();
-    }
-    setIsFilterLoading(false);
-  }
-  function QuickSearchToolbar() {
-    return (
-      <Box
-        sx={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "flex-end",
-          alignItems: "center",
-          position: "fixed",
-          flexDirection: "row-reverse",
-          gap: 2,
-          pr: 2,
-          right: 40,
-          top: "1vh",
-          zIndex: 1100,
-        }}
-      >
-        <button
-          style={{
-            color: valuesFiltered.length > 0 ? "#4887C8" : "#797878",
-            fontSize: ".9rem",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            background: "transparent",
-            border: "none",
-            cursor: valuesFiltered.length > 0 ? "pointer" : "default",
-          }}
-          onClick={() => {
-            setValuesFiltered([]);
-            agremiacaoRoutes.postClearFilters();
-            setFiltersAgremiacao([]);
-            setSearchedValue("");
-            //Limpar o filtro no backend
-          }}
-          disabled={!(valuesFiltered.length > 0)}
-        >
-          <h4>Limpar Filtros</h4>
-          <FilterIcon />
-        </button>
-
-        <TextField
-          onBlur={handleSearchBlur}
-          placeholder="Pesquisar"
-          InputProps={{
-            endAdornment: (
-              <Search
-                onClick={handleSearchComponent}
-                sx={{
-                  cursor: "initial",
-                  color: searchedValue.length >= 1 ? "#4887C8" : "#ccc",
-                }}
-              />
-            ),
-          }}
-          autoFocus={isTextFieldVisible}
-          value={searchedValue}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            setSearchedValue(event.target.value);
-          }}
-          onKeyUp={(
-            event: React.KeyboardEventHandler<HTMLDivElement> | any
-          ) => {
-            const timeoutId = setTimeout(() => handleSearchBlurToFalse, 300);
-            if (event.key === "Enter") {
-              handleSearchComponent();
-              handleSearchBlurToFalse();
-            }
-          }}
-          onClick={handleSearchBlur}
-          sx={{ maxWidth: 240, background: "#ffffff" }}
-        />
-      </Box>
-    );
-  }
   function handleDateFormat(dateString: string) {
     const date = parseISO(dateString);
     if (date.toString() == "Invalid Date") return "";
     return format(date, "dd/MM/yyyy");
   }
 
+  function extrairHorario(data: string) {
+    const dateTime = new Date(data);
+    const horario = dateTime.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    console.log(horario);
+    return horario;
+  }
+
+  function formatarDataHora(dataHora: string) {
+    const data = new Date(dataHora);
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const ano = data.getFullYear();
+    const horas = String(data.getHours()).padStart(2, "0");
+    const minutos = String(data.getMinutes()).padStart(2, "0");
+    const segundos = String(data.getSeconds()).padStart(2, "0");
+    return `${dia}/${mes}/${ano} \u00A0 ${horas}:${minutos}:${segundos}`;
+  }
+
   const columns: GridColDef[] = [
     {
-      field: "edit-action",
-      headerName: "Editar",
-      width: 62,
-      //@ts-ignore
-      renderCell: (params: GridValueGetterParams) => (
-        <Button
-          onClick={async (e: any) => {
-            e.stopPropagation();
-            //@ts-ignore
-            setAgremiacaoId(params.id);
-            setValueTab(1);
-            navigate(`editar/${params.id}`, { replace: true });
-          }}
-          sx={{
-            transform: "scale(.7)",
-            ml: -1.4,
-          }}
-        >
-          <EditIcon />
-        </Button>
-      ),
-      disableColumnMenu: true,
-      hideSortIcons: true,
-    },
-    { field: "sigla", headerName: "Sigla", width: 120 },
-    { field: "nome", headerName: "Nome", width: 300 },
-    { field: "fantasia", headerName: "Fantasia", width: 300 },
-    { field: "responsavel", headerName: "Responsável", width: 300 },
-    { field: "representante", headerName: "Representante", width: 300 },
-    {
-      field: "dataFiliacao",
-      headerName: "Data de Filiacao",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
+      field: "descricao",
+      headerName: "Descrição",
+      minWidth: 450,
+      maxWidth: 600,
     },
     {
-      field: "dataNascimento",
-      headerName: "Data de Nascimento",
-      width: 150,
+      field: "dataHoraEvento",
+      headerName: "Data/Hora",
+      width: 250,
       valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
+        item.value ? formatarDataHora(item?.value) : "",
     },
-    { field: "cep", headerName: "CEP", width: 90 },
-    { field: "endereco", headerName: "Endereço", width: 300 },
-    { field: "bairro", headerName: "Bairro", width: 300 },
-    { field: "complemento", headerName: "Complemento", width: 150 },
 
     {
-      field: "cidade",
-      headerName: "Cidade",
-      width: 200,
-    },
-    {
-      field: "estado",
-      headerName: "Estado",
+      field: "computadorId",
+      headerName: "Computador ID",
       width: 150,
     },
     {
-      field: "pais",
-      headerName: "Pais",
-      width: 100,
-    },
-    { field: "telefone", headerName: "Telefone", width: 150 },
-    { field: "email", headerName: "Email", width: 300 },
-    { field: "cnpj", headerName: "CNPJ", width: 150 },
-    {
-      field: "inscricaoMunicipal",
-      headerName: "Inscrição Municipal",
+      field: "clienteId",
+      headerName: "Cliente ID",
       width: 150,
     },
-    {
-      field: "inscricaoEstadual",
-      headerName: "Inscrição Estadual",
-      width: 150,
-    },
-    {
-      field: "dataCnpj",
-      headerName: "Data CNPJ",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    {
-      field: "dataAta",
-      headerName: "Data Ata",
-      width: 150,
-      valueFormatter: (item) =>
-        item.value ? handleDateFormat(item?.value) : "",
-    },
-    {
-      field: `${valuesFiltered.length == 0 ? "regiao" : "regiaoNome"}`,
-      headerName: "Região",
-      width: 90,
-      valueGetter: ({ value }) =>
-        valuesFiltered.length == 0 ? value?.descricao : value,
-    },
-    {
-      field: "anotacoes",
-      headerName: "Anotações",
-      width: 500,
-      valueFormatter: (item) => (item.value != null ? item.value : ""),
-      renderCell: (params) => (params ? parse(params.formattedValue) : ""),
-    },
+    { field: "tipoOperacaoId", headerName: "Tipo de Operação", width: 150 },
+    { field: "usuarioId", headerName: "Usuário ID", width: 150 },
+    { field: "funcaoMenuId", headerName: "Função Menu ID", width: 150 },
   ];
 
   function handleSelectionModelChange(selection: any) {
     setSelectedRowsAgremiacao(selection);
   }
-
-  useEffect(() => {
-    agremiacaoRoutes.postClearFilters();
-  }, []);
-
-  const customLocaleText = {
-    footerTotalRows: `total de ${data?.itens.length} linhas`,
-  };
-  useEffect(() => {
-    console.log(valuesFiltered);
-  }, [valuesFiltered]);
-  const handleSearchChange = () => {
-    console.log("event.target.value");
-  };
 
   return (
     <Box
@@ -305,7 +116,6 @@ export function ListagemEventos() {
     >
       <Container maxWidth={false}>
         <Grid container spacing={1}>
-          <QuickSearchToolbar />
           <Grid item xs={12}>
             <TabPanel value={valueTab} index={2}>
               <Home />
@@ -329,13 +139,10 @@ export function ListagemEventos() {
               >
                 {isFilterLoading ? (
                   <Loading />
-                ) : data?.itens ? (
+                ) : data ? (
                   <DataGrid
-                    rows={
-                      valuesFiltered.length == 0 ? data.itens : valuesFiltered
-                    }
+                    rows={last100Eventos}
                     columns={columns}
-                    checkboxSelection
                     disableSelectionOnClick
                     disableColumnMenu
                     hideFooterPagination
@@ -347,7 +154,7 @@ export function ListagemEventos() {
                     }}
                     componentsProps={{
                       toolbar: {
-                        disableMultipleActions: true,
+                        disableMultipleActions: false,
                       },
                       baseTooltip: {
                         style: { color: "#4887C8", fontWeight: "bold" },
@@ -398,13 +205,7 @@ export function ListagemEventos() {
                   }}
                 >
                   <p>
-                    Total de linhas:{" "}
-                    {valuesFiltered.length == 0
-                      ? data?.paginacao.total == undefined
-                        ? "..."
-                        : data.paginacao.total && data.paginacao.total
-                      : valuesFiltered.length &&
-                        valuesFiltered.length + " / " + data?.paginacao.total}
+                    Total de ações: {data == undefined ? "..." : data.length}
                   </p>
                   <p
                     style={{
@@ -435,8 +236,10 @@ export function ListagemEventos() {
                     fontWeight: "bold",
                   }}
                 >
-                
-                  <Button sx={{ marginRight: 3 }} onClick={() => navigate('/agremiacao')}>
+                  <Button
+                    sx={{ marginRight: 3 }}
+                    onClick={() => navigate("/agremiacao")}
+                  >
                     Voltar
                   </Button>
                 </Box>

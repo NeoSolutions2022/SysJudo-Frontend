@@ -13,6 +13,7 @@ interface AuthContextData {
   user: string | null;
   isAuthenticated: boolean;
   signIn: ({ email, senha }: SignInProps) => Promise<any>;
+  signInAdmin:  ({ email, senha }: SignInProps) => Promise<any>;
   logout: () => void;
   registerAgremiacao?: (values: any) => Promise<any>;
   verifyToken: () => void;
@@ -84,6 +85,37 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return false;
   }
 
+  async function signInAdmin({ email, senha, ip }: SignInProps) {
+    try {
+      console.log(ip)
+      const response = await api.post("administrador/auth", {
+        email,
+        senha,
+        ip
+      });
+
+      const { token, id } = response.data;
+
+      const currentTime = new Date();
+      currentTime.setHours(currentTime.getHours() + 3);
+      const expireDate = currentTime;
+
+      setCookie(undefined, "judo-auth-token", token, {
+        maxAge: 60 * 60 * 2, // 2 hour
+      });
+
+      setUser(response.data);
+
+      api.defaults.headers.Authorization = `Bearer ${token}`;
+
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+
+    return false;
+  }
+
   async function registerAgremiacao(values: any) {
     const config = {
       headers: {
@@ -114,7 +146,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, signIn, logout, user, verifyToken }}
+      value={{ isAuthenticated, signIn, signInAdmin, logout, user, verifyToken }}
     >
       {children}
     </AuthContext.Provider>

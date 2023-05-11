@@ -39,7 +39,7 @@ async function getIpAddress(): Promise<string | null> {
 export function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { signIn } = useAuthContext();
+  const { signIn, signInAdmin } = useAuthContext();
   const { emitAlertMessage } = useAlertContext();
   const [isLoading, setisLoading] = useState(false)
   useEffect(() => {

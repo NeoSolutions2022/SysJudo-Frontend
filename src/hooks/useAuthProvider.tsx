@@ -8,6 +8,7 @@ export function useAuthContext() {
     isAuthenticated,
     user,
     signIn,
+    signInAdmin,
     logout,
     registerAgremiacao,
     verifyToken
@@ -17,6 +18,7 @@ export function useAuthContext() {
     isAuthenticated,
     user,
     signIn,
+    signInAdmin,
     logout,
     registerAgremiacao,
     verifyToken
