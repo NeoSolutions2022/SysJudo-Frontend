@@ -67,7 +67,7 @@ export function Login() {
         email: values.email,
         senha: values.senha
       }
-      const isSuccess = await signInAdmin(valuesToPost);
+      const isSuccess = await signIn(valuesToPost);
       if (!isSuccess) {
         setisLoading(false)
         return emitAlertMessage('error', 'Usuário ou senha inválidos, tente novamente.');
