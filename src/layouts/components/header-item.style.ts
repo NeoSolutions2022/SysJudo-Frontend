@@ -15,7 +15,7 @@ export const ButtonComponent = styled.button`
   position: relative;
 
   &:hover {
-    filter: brightness(0.95);
+    filter: brightness(0.96);
     div {
       display: flex;
     }
@@ -33,12 +33,13 @@ export const ButtonComponent = styled.button`
 
     display: none;
     flex-direction: column;
+    border-radius: 0rem 0rem 0.4375rem 0.4375rem;
 
     button {
       font-weight: 400;
       width: 100%;
       height: 3.75rem;
-      background-color: #fff !important;
+      background-color: #eaeaea;
       display: block;
       border: none;
       font-size: 16px;
@@ -49,6 +50,10 @@ export const ButtonComponent = styled.button`
       text-decoration: none;
       &:hover {
         filter: brightness(1.1);
+      }
+
+      &:last-child {
+        border-radius: 0rem 0rem 0.3125rem 0.3125rem;
       }
     }
   }
