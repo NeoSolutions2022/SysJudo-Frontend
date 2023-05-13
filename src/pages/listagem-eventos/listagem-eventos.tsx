@@ -65,9 +65,15 @@ export function ListagemEventos() {
     const mes = String(data.getMonth() + 1).padStart(2, "0");
     const ano = data.getFullYear();
     const horas = String(data.getHours()).padStart(2, "0");
+    let horasBR = Number(horas) - 3;
+    
+    if (horasBR < 0) {
+      horasBR += 24; // Adiciona 24 horas para ajustar para o dia anterior
+    }
+  
     const minutos = String(data.getMinutes()).padStart(2, "0");
     const segundos = String(data.getSeconds()).padStart(2, "0");
-    return `${dia}/${mes}/${ano} \u00A0 ${horas}:${minutos}:${segundos}`;
+    return `${dia}/${mes}/${ano} \u00A0 ${horasBR}:${minutos}:${segundos}`;
   }
 
   const columns: GridColDef[] = [
