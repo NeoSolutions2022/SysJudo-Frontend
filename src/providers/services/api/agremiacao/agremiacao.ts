@@ -17,12 +17,10 @@ async function postClearFilters() {
 }
 
 async function postAgremiacaoFilter(payload: any): Promise<IAgremiacao[]> {
-  console.log(payload);
   const response = await api.post(
     "/gerencia/agremiacao/filtrar/agremiacao",
     payload
   );
-  console.log(response.data);
   return response.data;
 }
 
@@ -34,14 +32,12 @@ async function getAgremiacao(id: number) {
 
 function handleDateFormat(dateString: string) {
   if (/^[0-9]*$/.test(dateString)) {
-    console.log("aaaa");
     // Se a string contiver apenas dígitos, retorna false imediatamente
     return dateString;
   } else {
     if (/^[a-z]+$/i.test(dateString)) {
       return dateString;
     } else {
-      console.log(parse(dateString, "dd/MM/yyyy", new Date()));
       const date = parse(dateString, "dd/MM/yyyy", new Date());
       if (date.toString() == "Invalid Date")
         return dateString.replace(/\//g, "");
@@ -59,7 +55,6 @@ async function pesquisarAgremiacao(payload: string) {
   const response = await api.get(
     `/gerencia/agremiacao/pesquisar-${searchedItem}`
   );
-  console.log(response.data);
   return response.data;
 }
 
@@ -145,7 +140,6 @@ async function anexarArquivoAgremiacao(
     config
   );
 
-  console.log(response);
   return response.data;
 }
 
@@ -158,9 +152,6 @@ async function deleteArquivoAgremiacao(
     `/gerencia/agremiacao/${id}/removerdocumentos?documentoId=${documentoId}`,
     {id, documentoId}
   );
-
-
-  console.log(response);
 
   return response.data;
 }

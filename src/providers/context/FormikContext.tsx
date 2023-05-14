@@ -189,7 +189,6 @@ export function FormikProvider({ children }: FormikProviderProps) {
       });
 
       setFiltersAgremiacao(newArrayFilters);
-      console.log("array filters in context", newArrayFilters);
       AgremiacaoFilterFormik.resetForm();
     },
   });
@@ -213,7 +212,6 @@ export function FormikProvider({ children }: FormikProviderProps) {
         : agremiacaoRoutes.createAgremiacao(values);
       const response = await routeSelected;
       AgremiacaoRegisterFormik.resetForm();
-      console.log("response", response);
     },
   });
 
@@ -254,7 +252,6 @@ export function FormikProvider({ children }: FormikProviderProps) {
         };
       }
     }
-    console.log('filters', filters)
     filters.map((filter) => {
       setFiltersToPost((old) =>
         old.length == 0
@@ -273,7 +270,6 @@ export function FormikProvider({ children }: FormikProviderProps) {
         const response = await agremiacaoRoutes.postAgremiacaoFilter(
           filtersToPost
         );
-        console.log('r',response)
         if(response.length ==0){
           setIsFilterLoading(false)
           // @ts-ignore

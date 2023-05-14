@@ -14,12 +14,10 @@ async function getAllGrupoAcesso(filters?: any): Promise<Page<IGrupoAcesso>> {
 }
 
 async function postGrupoAcessoFilter(payload: any): Promise<IGrupoAcesso[]> {
-  console.log(payload);
   const response = await api.post(
     "/grupos-acesso/filtrar/grupo-acesso",
     payload
   );
-  console.log(response.data);
   return response.data;
 }
 
@@ -37,7 +35,6 @@ function handleDateFormat(dateString: string) {
     if (/^[a-z]+$/i.test(dateString)) {
       return dateString;
     } else {
-      console.log(parse(dateString, "dd/MM/yyyy", new Date()));
       const date = parse(dateString, "dd/MM/yyyy", new Date());
       if (date.toString() == "Invalid Date")
         return dateString.replace(/\//g, "");
@@ -55,7 +52,6 @@ async function pesquisarGrupoAcesso(payload: string) {
   const response = await api.get(
     `/grupos-acesso/pesquisar-${searchedItem}`
   );
-  console.log(response.data);
   return response.data;
 }
 
@@ -92,11 +88,9 @@ async function postClearFilters() {
 }
 
 async function getPermissoes() : Promise<Ipermissao[]> {
-  console.log('oi')
   const response = await api.get(
-    "permissao",
+    "permissao?TamanhoPagina=164",
   );
-    console.log(response)
   return response.data.itens;
 }
 

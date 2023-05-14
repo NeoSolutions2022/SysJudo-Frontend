@@ -27,7 +27,6 @@ interface valuesToPostProps {
 async function getIpAddress(): Promise<string | null> {
   try {
     const response = await axios.get<{ ip: string }>('https://api.ipify.org?format=json');
-    console.log(response.data.ip)
     return response.data.ip;
   } catch (error) {
     console.error(error);
@@ -47,8 +46,8 @@ export function Login() {
   },[])
   const formik = useFormik({
     initialValues: {
-      email: 'ivo@email.com',
-      senha: '29042001',
+      email: 'Filipe@email.com',
+      senha: 'Filipe',
     },
     validationSchema: yup.object().shape({
       email: yup.string()

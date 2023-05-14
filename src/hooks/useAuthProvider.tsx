@@ -11,7 +11,8 @@ export function useAuthContext() {
     signInAdmin,
     logout,
     registerAgremiacao,
-    verifyToken
+    verifyToken,
+    allows
   } = context;
 
   return {
@@ -21,6 +22,7 @@ export function useAuthContext() {
     signInAdmin,
     logout,
     registerAgremiacao,
-    verifyToken
+    verifyToken,
+    allows
   };
 };

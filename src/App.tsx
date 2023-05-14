@@ -8,12 +8,14 @@ import { FormikProvider } from "./providers/context/FormikContext";
 
 import { AlertComponent } from "./components/Alert";
 import { GrupoAcessoProvider } from "./providers/context/GrupoAcessoContext";
+import { getPermissions } from './core/adapters';
 
 const queryClient = new QueryClient();
 
+
 export default function App() {
   return (
-    <AuthProvider>
+    <AuthProvider getPermissions={getPermissions}>
       <QueryClientProvider client={queryClient}>
         <GrupoAcessoProvider>
           <FormikProvider>

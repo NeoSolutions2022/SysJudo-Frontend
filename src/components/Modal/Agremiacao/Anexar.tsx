@@ -48,6 +48,8 @@ import { SecondaryModal } from '../SecondaryModal/secondaryModal';
 import PDFViewer from '../../PDFViewer/PdfViewer';
 import { BlockBlobClient  } from '@azure/storage-blob';
 import { Loading } from '../../Loading/Loading';
+import { Permissions } from '../../../core/adapters';
+import { useAuthContext } from '../../../hooks/useAuthProvider';
 
 
 async function handlePhotoAzure(data : string, fileName : string) {
@@ -64,11 +66,7 @@ export function ModalAnexosAgremiacao() {
       files: [],
     },
     onSubmit: (values) => {
-      // try {
-      //   const response = await anexarArquivoAgremiacao(id, values)
-      // } catch (error) {
-      //   console.log('error', error)
-      // }
+      
     },
   });
 
@@ -196,7 +194,7 @@ export function ModalAnexosAgremiacao() {
 
   const [isFileModalVisible, setIsFileModalVisible] = useState(false)
   const [fileToBeViewed, SetfileToBeViewed] = useState<Blob>()
-
+  const { allows } = useAuthContext()
 
   const downloadPdf = async (blobName : string) => {
    
@@ -206,7 +204,8 @@ export function ModalAnexosAgremiacao() {
       SetfileToBeViewed(file)
     return file
   }
-  
+    const hasRemoverAnexosAgremiacaoPermission = allows(Permissions.RemoverDocumentoAgremiacao);
+    const hasAnexarAgremiacaoPermission = allows(Permissions.EnviarDocumentoAgremiacao)
 
   return (
     <Modal title="Anexos" modalId={3} width="md">
@@ -221,7 +220,7 @@ export function ModalAnexosAgremiacao() {
               justifyContent: "center",
             }}
           >
-            <Dropzone onDrop={onDrop}>
+            <Dropzone onDrop={onDrop} disabled={ hasAnexarAgremiacaoPermission == false }>
               {({ getRootProps, getInputProps, isDragActive, isFocused }) => (
                 <div
                   {...getRootProps<DropzoneRootProps>()}
@@ -231,7 +230,7 @@ export function ModalAnexosAgremiacao() {
                     justifyContent: "center",
                     alignItems: "center",
                     height: "200px",
-                    cursor: "pointer",
+                    cursor: hasAnexarAgremiacaoPermission ? "pointer" : 'inherit',
                     width: "100%",
                     gap: 10,
                     backgroundColor:
@@ -307,11 +306,11 @@ export function ModalAnexosAgremiacao() {
                       downloadPdf(item)
                     }}
                   />{" "}
-                  <DeleteForever
-                    color="error"
-                    sx={{ cursor: "pointer", mx: 2 }}
+                   <DeleteForever
+                    color= { hasRemoverAnexosAgremiacaoPermission == true ? "error" : 'disabled'}
+                    sx={{ cursor: hasRemoverAnexosAgremiacaoPermission ? "pointer" : 'inherit', mx: 2 }}
                     onClick={() =>
-                      handleDeleteAnexoAgremiacao(
+                      hasRemoverAnexosAgremiacaoPermission == true && handleDeleteAnexoAgremiacao(
                         index,
                         id,
                         extractFilenameFromLink(item)

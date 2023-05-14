@@ -28,7 +28,6 @@ import {
 } from "@mui/icons-material";
 import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 
-import { ModalFilterAgremiacao } from "../../components/Modal/GrupoAcesso/modalFilterGrupoAcesso";
 import { ModalAnotacoesAgremiacao } from "../../components/Modal/Agremiacao/Anotacoes";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
 import { BackdropComponent } from "../../components/Backdrop";
@@ -45,6 +44,7 @@ import { TabsAgremiacao } from "./Tabs";
 import parse from "html-react-parser";
 import { parseISO, format } from 'date-fns';
 import { Loading } from '../../components/Loading/Loading';
+import { ModalFilterAgremiacao } from '../../components/Modal/Agremiacao/modalFilterAgremiacao';
 
 
 export function Listagem() {
@@ -308,12 +308,6 @@ export function Listagem() {
 
   const customLocaleText = {
     footerTotalRows: `total de ${data?.itens.length} linhas`,
-  };
-  useEffect(() => {
-    console.log(valuesFiltered);
-  }, [valuesFiltered]);
-  const handleSearchChange = () => {
-    console.log("event.target.value");
   };
 
   return (
