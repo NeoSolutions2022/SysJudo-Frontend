@@ -145,7 +145,6 @@ export function GrupoAcessoProvider({ children }: FormikProviderProps) {
       });
 
       setFiltersAgremiacao(newArrayFilters);
-      console.log("array filters in context", newArrayFilters);
       AgremiacaoFilterFormik.resetForm();
     },
   });
@@ -180,7 +179,6 @@ export function GrupoAcessoProvider({ children }: FormikProviderProps) {
         };
       }
     }
-    console.log('filters', filters)
     filters.map((filter) => {
       setFiltersToPost((old) =>
         old.length == 0
@@ -199,7 +197,6 @@ export function GrupoAcessoProvider({ children }: FormikProviderProps) {
         const response = await GrupoAcessoRoutes.postGrupoAcessoFilter(
           filtersToPost
         );
-        console.log('r',response)
         if(response.length ==0){
           setIsFilterLoading(false)
           // @ts-ignore

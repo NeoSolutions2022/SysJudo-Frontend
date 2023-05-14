@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BlockBlobClient } from "@azure/storage-blob";
-import { useDebounce } from "../../utils/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
@@ -88,8 +87,7 @@ export function CadastroAgremiacao() {
     initialValues: InitialValues,
     validationSchema: Yup.object().shape(ValidationSchema),
     onSubmit: () => {
-      // const valuesToPost = { ...formik.values, anotacoes: notes };
-      // console.log('val post', valuesToPost)
+      
       mutate();
     },
   });
@@ -101,7 +99,6 @@ export function CadastroAgremiacao() {
       .then((res) => res.json())
       .then((data) => {
         if (!("erro" in data)) {
-          console.log(data)
           formik.setFieldValue("endereco", data.logradouro);
           formik.setFieldValue("bairro", data.bairro);
           formik.setFieldValue("cidade", data.localidade);
@@ -125,8 +122,6 @@ export function CadastroAgremiacao() {
   useEffect(()=>{
     if(formik.values['anotacoes']!= notes){
     let errorList = Object.keys(formik.errors);
-    console.log("error list", errorList);
-    console.log(notes)
     if (errorList.length > 0 ) {
       return emitAlertMessage("error", "Preencha os campos obrigatórios!");
       //   document.getElementsByName(errorList[0])[0].scrollIntoView();
@@ -159,8 +154,6 @@ export function CadastroAgremiacao() {
       anotacoes: notes,
     };
 
-    console.log("formik values", formik.values);
-    console.log("values to post", valuesToPost);
     //@ts-ignore
     return await agremiacaoRoutes.createAgremiacao(valuesToPost)
   };
@@ -177,7 +170,6 @@ export function CadastroAgremiacao() {
       navigate("/agremiacao");
     },
     onError: () => {
-      console.log(data)
       const errorMsg = id
         ? "Erro ao editar agremiação"
         : "Erro ao cadastrar agremiação";
@@ -191,8 +183,6 @@ export function CadastroAgremiacao() {
   const handleUpdateFormikRegisterValues = async () => {
     if (id === undefined) return;
     const response = await agremiacaoRoutes.getAgremiacao(id);
-    console.log(response)
-    // console.log('response edit', response)
     formik.setValues(response);
     if (response.foto) {
       
@@ -201,7 +191,6 @@ export function CadastroAgremiacao() {
       const blobResponse = await blob.blobBody;
       if (blobResponse) {
         setAvatarPreview(URL.createObjectURL(blobResponse));
-        console.log("######", avatarPreview);
         formik.setFieldValue('foto', blobResponse)
         setPrevValue(formik.values)
       }
@@ -224,12 +213,10 @@ export function CadastroAgremiacao() {
     async function reloadFieldValues(){
       // @ts-ignore
       const response = await agremiacaoRoutes.getAgremiacao(id)
-      console.log(response)
       setResponsedCadastro(response)
       formik.setValues(response);
     }
     reloadFieldValues()
-    console.log(responsedCadastro)
   },[ reloadAgremiacao ])
   
   const initialErrors = {
@@ -250,7 +237,6 @@ export function CadastroAgremiacao() {
       if(formik.values['nome']!='' ){
         if (Object.keys(prevValue).length < 31) {
           setPrevValue(formik.values)
-          console.log(prevValue)
         }else{
           if(JSON.stringify(formik.values) !== JSON.stringify(prevValue)){
             setIsNotEditted(false)
@@ -267,7 +253,6 @@ export function CadastroAgremiacao() {
   ])
   
   useEffect(() => {
-    console.log(formik.errors)
     setIsDisabled(Object.keys(formik.errors).length > 0);
   }, [formik.errors]);
 

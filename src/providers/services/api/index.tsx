@@ -17,7 +17,6 @@ if (token) {
 api.interceptors.response.use(
   (successRes) => successRes,
   (error) => {
-    console.log("error", error);
     if (error.response.status === 401) {
       <Navigate to="/login" />;
     }

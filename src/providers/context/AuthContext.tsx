@@ -2,11 +2,12 @@ import { useState, useEffect, createContext, ReactNode } from "react";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { Permissions } from '../../core/adapters/permissions/permissions';
 
 interface SignInProps {
   email: string;
   senha: string;
-  ip?: string | null
+  ip?: string | null;
 }
 
 interface AuthContextData {
@@ -17,15 +18,17 @@ interface AuthContextData {
   logout: () => void;
   registerAgremiacao?: (values: any) => Promise<any>;
   verifyToken: () => void;
+  allows: (perms: Permissions | Permissions[]) => boolean;
 }
 
 interface AuthProviderProps {
+  getPermissions: () => string[]
   children: ReactNode;
 }
 
 export const AuthContext = createContext({} as AuthContextData);
 
-export function AuthProvider({ children }: AuthProviderProps) {
+export function AuthProvider({ children, getPermissions }: AuthProviderProps) {
   const { "judo-auth-token": authToken } = parseCookies();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
@@ -56,7 +59,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function signIn({ email, senha, ip }: SignInProps) {
     try {
-      console.log(ip)
       const response = await api.post("administrador/usuario-auth/login", {
         email,
         senha,
@@ -85,9 +87,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return false;
   }
 
+  const permissions = getPermissions()
+  const allows = (perms: Permissions | Permissions[]) => {
+    if (Array.isArray(perms)) {
+      return perms.every(perm => permissions.includes(perm))
+    }
+
+    return permissions.includes(perms)
+  }
+  
+
   async function signInAdmin({ email, senha, ip }: SignInProps) {
     try {
-      console.log(ip)
       const response = await api.post("administrador/auth", {
         email,
         senha,
@@ -146,7 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, signIn, signInAdmin, logout, user, verifyToken }}
+      value={{ isAuthenticated, signIn, signInAdmin, logout, user, verifyToken, allows }}
     >
       {children}
     </AuthContext.Provider>

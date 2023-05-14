@@ -5,17 +5,11 @@ import "../../../../node_modules/react-quill/dist/quill.snow.css";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useFormik, useFormikContext } from "formik";
 import * as Yup from "yup";
-import { useDebounce } from "../../../utils/useDebounce";
 
 import "../../../styles/global.scss";
 
 import { Modal } from "../index";
-import {
-  Container,
-  Stack,
-  TextField,
-  DialogActions,
-} from "@mui/material";
+import { Container, Stack, TextField, DialogActions } from "@mui/material";
 import {
   ClearOutlined as ClearIcon,
   CheckOutlined as CheckIcon,
@@ -31,6 +25,8 @@ import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agr
 import { useParams } from "react-router";
 
 import Swal from "sweetalert2";
+import { Permissions } from "../../../core/adapters";
+import { useAuthContext } from "../../../hooks/useAuthProvider";
 
 interface ModalAnotacoesAgremiacaoProps {
   agremiacaoId: number;
@@ -47,11 +43,12 @@ export function ModalAnotacoesAgremiacao({
   const { handleClose } = useModal();
   const { emitAlertMessage } = useAlertContext();
   const { setNotes } = useFormikProvider();
-
+  const { allows } = useAuthContext();
   useEffect(() => {}, [currentNotes]);
 
   const [content, setContent] = useState("");
 
+  const hasAnotarAgremiacaoPermission = allows(Permissions.AnotarAgremiacao);
   function handleChange(value: string) {
     setContent(value);
   }
@@ -69,15 +66,15 @@ export function ModalAnotacoesAgremiacao({
   }, []);
 
   function handleSubmit() {
-    if (id != undefined){
-      agremiacaoRoutes.anotacoesAgremiacao(id, content)
+    if (id != undefined) {
+      agremiacaoRoutes.anotacoesAgremiacao(id, content);
       Swal.fire({
-        position: 'center',
-        icon: 'success',
-        title: 'Anotação salva com sucesso',
+        position: "center",
+        icon: "success",
+        title: "Anotação salva com sucesso",
         showConfirmButton: false,
         timer: 1500,
-      })
+      });
     }
     setNotes(content);
     handleClose();
@@ -103,6 +100,8 @@ export function ModalAnotacoesAgremiacao({
               //onBlur={formik.handleBlur}
               style={{
                 width: "100%",
+                pointerEvents:
+                  hasAnotarAgremiacaoPermission == false ? "none" : "inherit",
               }}
             />
 
@@ -124,6 +123,7 @@ export function ModalAnotacoesAgremiacao({
                 startIcon={<CheckIcon />}
                 size="medium"
                 sx={{ minWidth: "120px", textTransform: "none" }}
+                disabled={hasAnotarAgremiacaoPermission == false}
               >
                 Salvar
               </Button>
