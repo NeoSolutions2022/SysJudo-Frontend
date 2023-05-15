@@ -55,7 +55,6 @@ export function ListagemEventos() {
       minute: "2-digit",
       second: "2-digit",
     });
-    console.log(horario);
     return horario;
   }
 

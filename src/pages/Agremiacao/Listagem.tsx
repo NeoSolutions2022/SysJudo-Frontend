@@ -18,7 +18,9 @@ import {
   FilterAlt,
   FilterAltOff,
   NoteAddOutlined,
+  PanoramaFishEyeOutlined,
   PlusOneOutlined,
+  RemoveRedEyeOutlined,
   UploadFile,
 } from "@mui/icons-material";
 
@@ -43,7 +45,9 @@ import { agremiacaoRoutes } from "../../providers/services/api/agremiacao/agremi
 import parse from "html-react-parser";
 import { parseISO, format } from "date-fns";
 import { Loading } from "../../components/Loading/Loading";
-import { ModalFilterAgremiacao } from '../../components/Modal/Agremiacao/modalFilterAgremiacao';
+import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
+import { Permissions, getCurrentAccount } from "../../core/adapters";
+import { useAuthContext } from "../../hooks/useAuthProvider";
 
 export function Listagem() {
   document.title = "Listagem de Agremiação";
@@ -66,7 +70,7 @@ export function Listagem() {
   const [valueTab, setValueTab] = useState(0);
 
   const [agremiacaoId, setAgremiacaoId] = useState(0);
-    
+
   const handleChange = (e: SyntheticEvent, newValue: number) => {
     setAgremiacaoId(0);
     setValueTab(newValue);
@@ -77,7 +81,9 @@ export function Listagem() {
 
     return value === index ? <Box>{children}</Box> : null;
   };
-
+  useEffect(() => {
+    getCurrentAccount();
+  }, []);
   const [searchedValue, setSearchedValue] = useState("");
   const [isTextFieldVisible, setIsTextFieldVisible] = useState(false);
 
@@ -107,6 +113,21 @@ export function Listagem() {
     }
     setIsFilterLoading(false);
   }
+
+  
+  const { allows } = useAuthContext();
+  const hasReadListAgremiacaoPermission = allows(Permissions.ListAgremiacao);
+  const hasPesquisarAgremiacaoPermission = allows(
+    Permissions.PesquisarAgremiacao
+  );
+  const hasExportarAgremiacaoPermission = allows(Permissions.ExportAgremiacao);
+  const hasReadAgremiacaoPermission = allows(Permissions.ReadAgremiacao);
+  const hasFiltrarAgremiacaoPermission = allows(Permissions.FiltrarAgremiacao);
+  const hasAddAgremiacaoPermission = allows(Permissions.WriteAgremiacao);
+  const hasPutAgremiacaoPermission = allows(Permissions.PutAgremiacao)
+
+
+
   function QuickSearchToolbar() {
     const inputRef = useRef(null);
     const handleBlurEffect = () => {
@@ -149,7 +170,7 @@ export function Listagem() {
             setSearchedValue("");
             //Limpar o filtro no backend
           }}
-          disabled={!(valuesFiltered.length > 0)}
+          disabled={(!(valuesFiltered.length > 0))}
         >
           <h4>Limpar Filtros</h4>
           <FilterIcon />
@@ -169,6 +190,7 @@ export function Listagem() {
               />
             ),
           }}
+          disabled={hasPesquisarAgremiacaoPermission  == false}
           autoFocus={isTextFieldVisible}
           value={searchedValue}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -198,11 +220,12 @@ export function Listagem() {
   const columns: GridColDef[] = [
     {
       field: "edit-action",
-      headerName: "Editar",
+      headerName: hasPutAgremiacaoPermission ? "Editar" : hasReadAgremiacaoPermission ? 'Ver' : "Editar",
       width: 62,
       //@ts-ignore
       renderCell: (params: GridValueGetterParams) => (
         <Button
+          disabled = { hasPutAgremiacaoPermission == false && hasReadAgremiacaoPermission == false }
           onClick={async (e: any) => {
             e.stopPropagation();
             //@ts-ignore
@@ -215,7 +238,8 @@ export function Listagem() {
             ml: -1.4,
           }}
         >
-          <EditIcon />
+          {hasPutAgremiacaoPermission ? <EditIcon /> : hasReadAgremiacaoPermission ? <RemoveRedEyeOutlined/> : <EditIcon />}
+          
         </Button>
       ),
       disableColumnMenu: true,
@@ -309,7 +333,6 @@ export function Listagem() {
             <div
               style={{
                 display: "flex",
-                
               }}
             >
               {parse(params.formattedValue)}{" "}
@@ -327,16 +350,6 @@ export function Listagem() {
   useEffect(() => {
     agremiacaoRoutes.postClearFilters();
   }, []);
-
-  const customLocaleText = {
-    footerTotalRows: `total de ${data?.itens.length} linhas`,
-  };
-  useEffect(() => {
-    console.log(valuesFiltered);
-  }, [valuesFiltered]);
-  const handleSearchChange = () => {
-    console.log("event.target.value");
-  };
 
   return (
     <Box
@@ -375,7 +388,7 @@ export function Listagem() {
               >
                 {isFilterLoading ? (
                   <Loading />
-                ) : data?.itens ? (
+                ) : hasReadListAgremiacaoPermission ? data?.itens ? (
                   <DataGrid
                     rows={
                       valuesFiltered.length == 0 ? data.itens : valuesFiltered
@@ -417,7 +430,7 @@ export function Listagem() {
                   />
                 ) : (
                   <Loading />
-                )}
+                ) : <h2 style={{display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>Você não tem permissão</h2>}
               </Box>
               <Box
                 sx={{
@@ -482,22 +495,24 @@ export function Listagem() {
                     fontWeight: "bold",
                   }}
                 >
-                  <Button
-                    // disabled
+                 <Button
+                    disabled={hasAddAgremiacaoPermission == false}
 
                     onClick={() => navigate("cadastro", { replace: true })}
                   >
                     <AddOutlined /> Novo
                   </Button>
-                  <Button
-                    // disabled
-                    onClick={() => handleClickOpen(4)}
-                  >
-                    <UploadFile /> Exportar
-                  </Button>
+                    <Button
+                      disabled={hasExportarAgremiacaoPermission  == false}
+
+                      onClick={() => handleClickOpen(4)}
+                    >
+                      <UploadFile /> Exportar
+                    </Button>
+                  
                   <Button
                     onClick={() => handleClickOpen(1)}
-                    // disabled
+                    disabled = {hasFiltrarAgremiacaoPermission == false}
                   >
                     <FilterAlt /> Filtrar
                   </Button>

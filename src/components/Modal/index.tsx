@@ -17,7 +17,6 @@ export function Modal({ title, children, width, modalId }: ModalProps) {
   return (
     <Dialog
       open={openModalId === modalId}
-      {...() => console.log(openModalId,modalId)}
       onClose={handleClose}
       aria-labelledby="form-dialog-title"
       fullWidth={true}

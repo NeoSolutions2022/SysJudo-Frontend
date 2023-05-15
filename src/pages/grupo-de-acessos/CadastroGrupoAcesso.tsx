@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useFormik, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { BlockBlobClient } from "@azure/storage-blob";
-import { useDebounce } from "../../utils/useDebounce";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 
@@ -125,8 +124,7 @@ export function CadastroGrupoAcesso() {
     }),
     onSubmit: () => {
       
-      // const valuesToPost = { ...formik.values, anotacoes: notes };
-      // console.log('val post', valuesToPost)
+      
       mutate();
     },
   });
@@ -138,7 +136,6 @@ export function CadastroGrupoAcesso() {
   }, [formik.isSubmitting]);
   useEffect(() => {
     let errorList = Object.keys(formik.errors);
-    console.log("error list", errorList);
     if (errorList.length > 0 && count > 1) {
       return emitAlertMessage("error", "Preencha os campos obrigatórios!");
       formik.handleSubmit;
@@ -152,8 +149,6 @@ export function CadastroGrupoAcesso() {
       return GrupoAcessoRoutes.updateGrupoAcesso(valuesToPost, id.toString());
     }
 
-
-    console.log("formik values", formik.values);
     return await GrupoAcessoRoutes.createGrupoAcesso(valuesToPost);
   };
 
@@ -169,7 +164,6 @@ export function CadastroGrupoAcesso() {
       navigate("/agremiacao");
     },
     onError: () => {
-      console.log(data);
       const errorMsg = id
         ? "Erro ao editar grupo de acesso"
         : "Erro ao cadastrar grupo de acesso";
@@ -183,10 +177,6 @@ export function CadastroGrupoAcesso() {
   const handleUpdateFormikRegisterValues = async () => {
     if (id === undefined) return;
     const response = await GrupoAcessoRoutes.getGrupoAcesso(id.toString());
-    // console.log(response);
-    console.log((response.permissoes))
-    // console.log('response edit', response)
-    console.log(revertTransformedPermission(response.permissoes))
     formik.setValues(response);
     setPermissoesSelecionadas(revertTransformedPermission(response.permissoes) )
    
@@ -218,12 +208,10 @@ export function CadastroGrupoAcesso() {
     async function reloadFieldValues() {
       // @ts-ignore
       const response = await GrupoAcessoRoutes.getAgremiacao(id);
-      console.log(response);
       setResponsedCadastro(response);
       formik.setValues(response);
     }
     reloadFieldValues();
-    console.log(responsedCadastro);
   }, [reloadAgremiacao]);
 
   const initialErrors = {
@@ -247,8 +235,6 @@ export function CadastroGrupoAcesso() {
         if (Object.keys(prevValue).length < 2) {
           setPrevSelectValue(permissoesSelecionadas)
           setPrevValue(formik.values);
-          // setPrevSelectValue() esquece n
-          console.log(prevValue);
         } else {
           if (JSON.stringify(formik.values) !== JSON.stringify(prevValue)) {
             setIsNotEditted(false);
@@ -267,7 +253,6 @@ export function CadastroGrupoAcesso() {
   ]);
 
   useEffect(() => {
-    console.log(formik.errors);
     setIsDisabled(Object.keys(formik.errors).length > 0);
   }, [formik.errors]);
 
@@ -412,10 +397,10 @@ export function CadastroGrupoAcesso() {
             >
               Permissões
             </h3>
-            <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr'}}>
+            <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap:2}}>
              
               {permissoesArray.map(
-                item =>  <Box sx={{ display: "grid", gridTemplateColumns: '300px 300px', placeItems: 'center' }}>
+                item =>  <Box sx={{ display: "grid", gridTemplateColumns: '250px 300px', placeItems: 'start' }}>
               <h4>{item.nome}<h6>({item.descricao})</h6></h4>
               
               <TextField

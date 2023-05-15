@@ -195,7 +195,7 @@ export function ListagemGrupoAcessos() {
       hideSortIcons: true,
     },
     { field: "nome", headerName: "Nome", width: 300 },
-    { field: "descricao", headerName: "Descrição", width: 300 },
+    { field: "descricao", headerName: "Descrição", width: 550 },
     { field: "administrador", headerName: "Tipo Administrador", width: 200, valueFormatter: item=> item.value == false ? 'Não' : 'Sim' },
     { field: "desativado", headerName: "Desativado", width: 200, valueFormatter: item=> item.value == false ? 'Não' : 'Sim' }
     
@@ -209,12 +209,6 @@ export function ListagemGrupoAcessos() {
     GrupoAcessoRoutes.postClearFilters();
   }, []);
 
-  useEffect(() => {
-    console.log(valuesFiltered);
-  }, [valuesFiltered]);
-  const handleSearchChange = () => {
-    console.log("event.target.value");
-  };
 
   return (
     <Box

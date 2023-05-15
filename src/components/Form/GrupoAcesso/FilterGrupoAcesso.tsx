@@ -59,10 +59,6 @@ export function FormFilterGrupoAcesso({
       setSecondValue("");
     }
   }, [operator]);
-  useEffect(()=>{
-    console.log(column);
-    
-  },[column])
 
   useEffect(() => {
     if (values) {
@@ -97,7 +93,6 @@ export function FormFilterGrupoAcesso({
       logicOperator: Yup.string().notRequired(), //.required('Campo obrigatório')
     }),
     onSubmit: (values: IFiltersGrupoAcesso) => {
-      console.log(values)
       const newArrayFiltersWithoutSort = [...filtersAgremiacao, values];
       setFiltersAgremiacao(
         newArrayFiltersWithoutSort.sort(
