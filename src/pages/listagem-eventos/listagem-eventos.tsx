@@ -141,6 +141,7 @@ export function ListagemEventos() {
                   flexGrow: 2,
                   position: "relative",
                   zIndex: 2,
+                  borderRadius: 1,
                 }}
               >
                 {isFilterLoading ? (
