@@ -13,17 +13,18 @@ export enum Permissions {
 
   // Módulo Administração
 
-  ReadAgremiacao = 'read:ver-agremiacao',
-  ListAgremiacao = 'read:listar-agremiacao',
-  WriteAgremiacao = 'write:add-agremiacao',
+  ReadAgremiacao = 'write:consultar-agremiacao',
+  ListAgremiacao = 'write:consultar-agremiacao',
+  WriteAgremiacao = 'write:incluir-agremiacao',
   AnotarAgremiacao = 'write:anotar-agremiacao',
-  PutAgremiacao = 'write:put-agremiacao',
-  DeleteAgremiacao = 'delete:remover-agremiacao',
-  ExportAgremiacao = 'read:exportar-agremiacao',
-  FiltrarAgremiacao = 'read:filtrar-agremiacao',
-  PesquisarAgremiacao = 'read:pesquisar-agremiacao',
-  EnviarDocumentoAgremiacao = 'write:enviar-documento-agremiacao',
+  PutAgremiacao = 'write:alterar-agremiacao',
+  DeleteAgremiacao = 'write:excluir-agremiacao',
+  ExportAgremiacao = 'write:exportar-agremiacao',
+  FiltrarAgremiacao = 'write:filtrar-agremiacao',
+  PesquisarAgremiacao = 'write:pesquisar-agremiacao',
+  EnviarDocumentoAgremiacao = 'write:anexar-agremiacao',
   RemoverDocumentoAgremiacao = 'write:remover-documento-agremiacao',
+  ReadDocumentoAgremiacao = 'write:ver-anexo-agremiacao',
 
   ReadRegistroEventos = 'read:registro-eventos',
   WriteRegistroEventos = 'write:registro-eventos',
@@ -34,6 +35,9 @@ export enum Permissions {
   DeleteGrupoAcesso = 'delete:grupo-acesso',
 
 }
+// marcar-agremiacao:w
+// todas-agremiacao:w
+
 
 export const getPermissions = () => {
   const currentAccount = getCurrentAccount()

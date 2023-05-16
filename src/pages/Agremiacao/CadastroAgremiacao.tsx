@@ -235,13 +235,6 @@ export function CadastroAgremiacao() {
   const [prevValue, setPrevValue] = useState<any>({})
   useEffect(()=>{
     
-    if (id && formik.values.documentosUri != ''){
-      const documentosUri = formik.values.documentosUri.split('&').filter((item,index) => index != 0)
-      setFileLinkFromGetAgremiacao(documentosUri)  
-   } else if(formik.values.documentosUri.length == 0){
-    setFileLinkFromGetAgremiacao([])
-   }
-
     if(id){
       if(formik.values['nome']!='' ){
         if (Object.keys(prevValue).length < 31) {
@@ -260,6 +253,16 @@ export function CadastroAgremiacao() {
     //@ts-ignore
     campos.map( item => formik.values[item] )
   ])
+  useEffect(()=>{
+    if (id && formik.values.documentosUri != ''){
+      const documentosUri = formik.values.documentosUri.split('&').filter((item,index) => index != 0)
+      setFileLinkFromGetAgremiacao(documentosUri)  
+   } else if(formik.values.documentosUri.length == 0){
+    setFileLinkFromGetAgremiacao([])
+   }
+
+  }
+  ,[])
   
   useEffect(() => {
     setIsDisabled(Object.keys(formik.errors).length > 0);
