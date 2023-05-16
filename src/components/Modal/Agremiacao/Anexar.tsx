@@ -124,6 +124,8 @@ export function ModalAnexosAgremiacao() {
         anexarArquivoAgremiacao(id, files);
 
         handleClose();
+        
+        setReloadAgremiacao((prev) => !prev);
       } catch (error) {
         handleClose();
       }

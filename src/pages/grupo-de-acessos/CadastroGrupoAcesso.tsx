@@ -40,7 +40,7 @@ import {
 import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 import "../../../node_modules/react-notifications/lib/notifications.css";
 
-import { StyledButton as Button } from "../../components/Button";
+import { StyledButton as Button, StyledButton } from "../../components/Button";
 
 import {
   CreateOutlined as CreateOutlinedIcon,
@@ -292,7 +292,14 @@ export function CadastroGrupoAcesso() {
     });
   };
 
-
+  const handleSetAllPermissoes = (value : string) => {
+    const updatedPermissoesSelecionadas : any = {};
+    permissoesArray.forEach((item) => {
+      updatedPermissoesSelecionadas[item.id] = value;
+    });
+    setPermissoesSelecionadas(updatedPermissoesSelecionadas);
+  };
+  const setPermissionsToRWD = () => handleSetAllPermissoes('RWD')
 
   return (
     <form
@@ -393,9 +400,10 @@ export function CadastroGrupoAcesso() {
             }}
           >
             <h3
-              style={{ borderBottom: "1px solid black"}}
+              style={{ borderBottom: "1px solid black", display: 'flex', justifyContent:'space-between', alignItems:'center', paddingBottom:3}}
             >
               Permissões
+              <StyledButton onClick={ setPermissionsToRWD }>Habilitar todas</StyledButton>
             </h3>
             <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap:2}}>
              
@@ -411,10 +419,8 @@ export function CadastroGrupoAcesso() {
                 value={permissoesSelecionadas[item.id] || ''}
                 onChange={event => handleChange(event, item)}
               >
-                <MenuItem value={'R'}>Leitura</MenuItem>
-                <MenuItem value={'W'}>Escrita</MenuItem>
-                <MenuItem value={'D'}>Remoção</MenuItem>
-                <MenuItem value={'RWD'}>Controle Total</MenuItem>
+                <MenuItem value={''}>Desabilitado</MenuItem>
+                <MenuItem value={'RWD'}>Habilitado</MenuItem>
               </TextField>
             </Box>
               )}

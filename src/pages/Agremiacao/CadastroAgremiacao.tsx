@@ -1006,11 +1006,8 @@ export function CadastroAgremiacao() {
             e.preventDefault();
             handleClickOpen(3);
           }}
-          disabled = { isDisabled ? true : hasAnexarAgremiacaoPermission == false ? true : hasRemoveAnexosAgremiacaoPermission == false ? true : false  }
+          disabled = { isDisabled }
 
-          
-
-          // disabled
         >
           <AttachFileOutlinedIcon />
           Anexar
