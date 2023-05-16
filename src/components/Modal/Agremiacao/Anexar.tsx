@@ -109,13 +109,33 @@ export function ModalAnexosAgremiacao() {
     currentFileToCreate,
     setCurrentFileToCreate,
     fileLinkFromGetAgremiacao,
-    setReloadAgremiacao,
     setFileLinkFromGetAgremiacao,
   } = useFormikProvider();
   const queryClient = useQueryClient();
   const { handleClose, handleClickOpen } = useModal();
   const { emitAlertMessage } = useAlertContext();
   const { anexarArquivoAgremiacao } = agremiacaoRoutes;
+  const [reloadAgremiacao, setReloadAgremiacao] = useState(false)
+  const [newFileLinkFromGetAgremiacao, setNewFileLinkFromGetAgremiacao] = useState(null)
+
+  useEffect( ()=> {
+    console.log('oi')
+
+    async function reloadFieldValues(){
+      // @ts-ignore
+      const response = await agremiacaoRoutes.getAgremiacao(id)
+      const documentosUri = response.documentosUri.split('&').filter((item : any,index: any) => index != 0)
+      setNewFileLinkFromGetAgremiacao(documentosUri)
+    }
+    setTimeout(()=> reloadFieldValues() ,1000)
+        
+  },[ reloadAgremiacao ])
+  
+
+  useEffect(()=>{
+    newFileLinkFromGetAgremiacao && setFileLinkFromGetAgremiacao(newFileLinkFromGetAgremiacao)
+    console.log(newFileLinkFromGetAgremiacao)
+  },[newFileLinkFromGetAgremiacao])
 
   async function handleSubmit() {
     if (id) {
@@ -140,11 +160,11 @@ export function ModalAnexosAgremiacao() {
         icon: "success",
         confirmButtonColor: "#3085d6",
       }).then((result) => {
-        //@ts-ignore
         setReloadAgremiacao((prev) => !prev);
       });
     }
 
+    setReloadAgremiacao((prev) => !prev);
     setCurrentFileToCreate(files);
     handleClose();
   }
@@ -172,6 +192,7 @@ export function ModalAnexosAgremiacao() {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        setReloadAgremiacao((prev) => !prev);
         try {
           agremiacaoRoutes.deleteArquivoAgremiacao(idAnexo + 1, idAgremiacao);
 
@@ -186,9 +207,6 @@ export function ModalAnexosAgremiacao() {
         } catch (error) {
           handleClose();
         }
-        // @ts-ignore
-
-        setReloadAgremiacao((prev) => !prev);
 
       }
     });

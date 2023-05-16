@@ -420,7 +420,7 @@ export function CadastroGrupoAcesso() {
                 onChange={event => handleChange(event, item)}
               >
                 <MenuItem value={''}>Desabilitado</MenuItem>
-                <MenuItem value={'RWD'}>Habilitado</MenuItem>
+                <MenuItem value={'W'}>Habilitado</MenuItem>
               </TextField>
             </Box>
               )}
