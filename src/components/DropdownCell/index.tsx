@@ -21,7 +21,11 @@ export const DropDownCell: React.FC<DropCellProps> = ({ value, id }) => {
     <S.Container>
       <S.Cell onClick={toggleDropdown}>{value}</S.Cell>
       {isDropdownIndexOpen == id && (
-        <S.DropCell onClick={resetDropdown}>{parse(value)}</S.DropCell>
+        <S.DropCell onClick={resetDropdown}>
+            
+          {value}
+            
+        </S.DropCell>
       )}
     </S.Container>
   );

@@ -11,16 +11,21 @@ export const Cell = styled.div`
 `;
 
 export const DropCell = styled.div`
+  box-sizing: border-box;
   position: absolute;
+  padding: 20px;
   z-index: 10;
   background: #ffffff;
   height: 300px;
-  min-width: 300px;
+  min-width: 400px;
+  height: fit-content;
   width: fit-content;
+  max-width: 1000px;
   word-wrap: break-word;
   word-break: break-all;
   cursor: zoom-out;
   padding: 10px;
+  color: #1d93ff;
   border-radius: 5px;
   box-shadow: 3px 3px 4px #9d9d9d;
 `;
