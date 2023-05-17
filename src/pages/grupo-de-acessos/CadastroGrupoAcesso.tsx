@@ -299,7 +299,7 @@ export function CadastroGrupoAcesso() {
     });
     setPermissoesSelecionadas(updatedPermissoesSelecionadas);
   };
-  const setPermissionsToRWD = () => handleSetAllPermissoes('RWD')
+  const setPermissionsToW = () => handleSetAllPermissoes('W')
 
   return (
     <form
@@ -403,7 +403,7 @@ export function CadastroGrupoAcesso() {
               style={{ borderBottom: "1px solid black", display: 'flex', justifyContent:'space-between', alignItems:'center', paddingBottom:3}}
             >
               Permissões
-              <StyledButton onClick={ setPermissionsToRWD }>Habilitar todas</StyledButton>
+              <StyledButton onClick={ setPermissionsToW }>Habilitar todas</StyledButton>
             </h3>
             <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap:2}}>
              
