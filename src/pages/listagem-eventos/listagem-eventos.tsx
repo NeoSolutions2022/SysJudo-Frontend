@@ -5,7 +5,7 @@ import { Box, Container, Grid } from "@mui/material";
 import { DataGrid, GridColDef, ptBR } from "@mui/x-data-grid";
 
 import { ModalFilterAgremiacao } from "../../components/Modal/Agremiacao/modalFilterAgremiacao";
-
+import { DropDownCell } from "../../components/DropdownCell";
 import { ModalExportarAgremiacao } from "../../components/Modal/Agremiacao/Exportar";
 import { useFormikProvider } from "../../hooks/useFormikProvider";
 import { Home } from "../Home";
@@ -14,6 +14,7 @@ import { parseISO, format } from "date-fns";
 import { Loading } from "../../components/Loading/Loading";
 import { listagemEventosRoutes } from "../../providers/services/api/listagem-eventos/listagem-eventos";
 import parse from "html-react-parser";
+import { shadow } from "pdfjs-dist";
 
 export function ListagemEventos() {
   document.title = "Listagem de Agremiação";
@@ -58,66 +59,15 @@ export function ListagemEventos() {
     const ano = data.getFullYear();
     const horas = String(data.getHours()).padStart(2, "0");
     let horasBR = Number(horas) - 3;
-    
+
     if (horasBR < 0) {
       horasBR += 24; // Adiciona 24 horas para ajustar para o dia anterior
     }
-  
+
     const minutos = String(data.getMinutes()).padStart(2, "0");
     const segundos = String(data.getSeconds()).padStart(2, "0");
     return `${dia}/${mes}/${ano} \u00A0 ${horasBR}:${minutos}:${segundos}`;
   }
-  interface DropdownCellProps {
-    value: string;
-    id: string;
-  }
-
-  const [isDropdownIndexOpen, setIsDropdownIndexOpen] = useState("0");
-  const resetDropdown = () => {
-    setIsDropdownIndexOpen("aaaaa");
-  };
-
-  const DropdownCell: React.FC<DropdownCellProps> = ({ value, id }) => {
-    const toggleDropdown = () => {
-      setIsDropdownIndexOpen(id);
-    };
-
-    return (
-      <div style={{}}>
-        <div
-          onClick={toggleDropdown}
-          style={{
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            maxWidth: "400px",
-            cursor: "zoom-in",
-          }}
-        >
-          {value}
-        </div>
-        {isDropdownIndexOpen == id && (
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 10,
-              background: "#f9f9f9",
-              height: "300px",
-              minWidth: "300px",
-              width: "fit-content",
-              wordWrap: "break-word",
-              wordBreak: "break-all",
-              cursor: "zoom-out",
-              padding: "10px",
-            }}
-            onClick={resetDropdown}
-          >
-            {parse(value)}
-          </div>
-        )}
-      </div>
-    );
-  };
 
   const columns: GridColDef[] = [
     {
@@ -126,7 +76,7 @@ export function ListagemEventos() {
       minWidth: 450,
       maxWidth: 600,
       renderCell: (params) => (
-        <DropdownCell
+        <DropDownCell
           value={params.value as string}
           id={params.id.toString()}
         />
