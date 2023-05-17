@@ -17,15 +17,13 @@ export const DropDownCell: React.FC<DropCellProps> = ({ value, id }) => {
     setIsDropdownIndexOpen(id);
   };
 
+  const formattedValue = value.split(";").join(";<br>");
+
   return (
     <S.Container>
       <S.Cell onClick={toggleDropdown}>{value}</S.Cell>
       {isDropdownIndexOpen == id && (
-        <S.DropCell onClick={resetDropdown}>
-            
-          {value}
-            
-        </S.DropCell>
+        <S.DropCell onClick={resetDropdown}>{parse(formattedValue)}</S.DropCell>
       )}
     </S.Container>
   );
