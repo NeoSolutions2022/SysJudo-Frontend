@@ -101,6 +101,8 @@ export function Header() {
         </S.HeaderItemComponent>   
         <S.HeaderItemComponent title='Competição'>
         </S.HeaderItemComponent>    
+        <S.HeaderItemComponent title='Finanças'>
+        </S.HeaderItemComponent>
 
     <S.HeaderItemComponent title='Segurança'>
       <button onClick={() => navigate('/listagem-eventos')}>Eventos</button>
