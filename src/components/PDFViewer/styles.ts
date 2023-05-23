@@ -28,8 +28,22 @@ export const Toolbar = styled.div`
 
 export const ButtonGroup = styled.div`
 display: flex !important;
+gap: 1rem;;
   margin-bottom: 0.5rem;
   * {
     margin-left: 1.2rem;
   }
 `
+export const ZoomGroup = styled.div`
+display: flex !important;
+gap: 1rem;
+position: absolute;
+right: 50px;
+top: 50px;
+z-index: 50;
+  margin-bottom: 0.5rem;
+  * {
+    margin-left: 1.2rem;
+  }
+`
+

@@ -576,9 +576,6 @@ export function CadastroAgremiacao() {
                     formik.touched["dataNascimento"] &&
                     Boolean(formik.errors["dataNascimento"])
                   }
-                  sx={{
-                    width: 150
-                  }}
                 />
               </Grid>
 
@@ -886,7 +883,7 @@ export function CadastroAgremiacao() {
                   error={
                     formik.touched["inscricaoEstadual"] && Boolean(formik.errors["inscricaoEstadual"])
                   }
-                  inputProps={{ maxLength: 14 }}
+                  inputProps={{ maxLength: 9 }}
                 />
               </Grid>
 
