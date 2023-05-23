@@ -5,6 +5,7 @@ import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
 import * as S from './styles'
 import { Loading } from '../Loading/Loading';
 import { Box } from '@mui/material';
+import { ZoomIn, ZoomOut } from '@mui/icons-material';
 
 type Props = {
   fileItem: Blob
@@ -16,6 +17,7 @@ function PDFViewer({ fileItem } : Props){
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [pagesQuantity, setPagesQuantity] = useState<number>(0)
   const [fileIn8Array, setFileIn8Array] = useState()
+  const [scale, setScale] = useState(1)
   const canPreviousPage = currentPage > 1
   const canNextPage = currentPage < pagesQuantity
 
@@ -35,6 +37,12 @@ function PDFViewer({ fileItem } : Props){
     setPagesQuantity(numPages)
   }
 
+  const zoomIn = () => {
+    setScale(prev => prev*1.5)
+  }
+  const zoomOut = () => {
+    setScale(prev => prev*0.5)
+  }
   
 
   return (
@@ -48,6 +56,11 @@ function PDFViewer({ fileItem } : Props){
             Próximo &raquo;
           </Button>
         </S.ButtonGroup>
+        <S.ZoomGroup>
+            <ZoomIn onClick={zoomIn} style={{color:'black' , background:'#ccc', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent: 'center', textAlign:'center',height:40, width:40, padding:8, cursor: 'pointer'}}/>
+            <ZoomOut onClick = {zoomOut} style={{color:'black' , background:'#ccc', borderRadius:'10px', display:'flex', alignItems:'center', justifyContent: 'center', textAlign:'center',height:40, width:40, padding:8, cursor: 'pointer'}}/>
+
+        </S.ZoomGroup>
         <span>
           Página {currentPage} de {pagesQuantity}
         </span>
@@ -64,6 +77,7 @@ function PDFViewer({ fileItem } : Props){
           canvasRef={canvasRef as LegacyRef<HTMLCanvasElement>}
           pageNumber={currentPage}
           renderAnnotationLayer={false}
+          scale={scale}
         />
       </Document>
     </S.Container>

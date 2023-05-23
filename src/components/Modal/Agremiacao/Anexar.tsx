@@ -3,7 +3,7 @@ import { Modal } from "../index";
 import Dropzone, { DropzoneRootProps, useDropzone } from "react-dropzone";
 import { useFormik } from "formik";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
+import { saveAs } from 'file-saver'
 import {
   Container,
   Grid,
@@ -172,7 +172,8 @@ export function ModalAnexosAgremiacao() {
   const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFiles((prevFiles) => [...prevFiles, ...acceptedFiles]);
+    const pdfFiles = acceptedFiles.filter(file => file.type === 'application/pdf');
+    setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
   }, []);
 
   const handleDeleteAnexoAgremiacao = (
@@ -227,6 +228,21 @@ export function ModalAnexosAgremiacao() {
     const hasRemoverAnexosAgremiacaoPermission = allows(Permissions.RemoverDocumentoAgremiacao);
     const hasAnexarAgremiacaoPermission = allows(Permissions.EnviarDocumentoAgremiacao)
 
+    const handleDownload = (strLink: string, fileName: string) => {
+      const fileUrl = strLink;
+      const desiredFileName = `${fileName}.pdf`;
+    
+      fetch(fileUrl)
+        .then(response => response.blob())
+        .then(blob => {
+          saveAs(blob, desiredFileName);
+        })
+        .catch(error => {
+          console.log('Ocorreu um erro ao baixar o arquivo:', error);
+        });
+    };
+    
+
   return (
     <Modal title="Anexos" modalId={3} width="md">
       <form>
@@ -241,7 +257,7 @@ export function ModalAnexosAgremiacao() {
             }}
           >
             <Dropzone onDrop={onDrop} disabled={ hasAnexarAgremiacaoPermission == false }>
-              {({ getRootProps, getInputProps, isDragActive, isFocused }) => (
+              {({ getRootProps, getInputProps, isDragActive, isFocused,  }) => (
                 <div
                   {...getRootProps<DropzoneRootProps>()}
                   style={{
@@ -338,14 +354,15 @@ export function ModalAnexosAgremiacao() {
                     }
                   />
                   <a
-                    href={item}
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
                       color: "black",
                       textDecoration: "none",
+                      cursor:'pointer'
                     }}
+                    onClick={() => handleDownload(item, extractFilenameFromLink(item))}
                   >
                     <PdfIcon />
                     <h5> {extractFilenameFromLink(item)} </h5>{" "}
