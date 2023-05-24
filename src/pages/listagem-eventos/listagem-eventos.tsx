@@ -28,6 +28,10 @@ export function ListagemEventos() {
 
   const last100Eventos = data ? data.slice(-100) : [];
 
+  console.log(last100Eventos)
+
+  console.log(data)
+
   const [valueTab, setValueTab] = useState(0);
 
   const TabPanel = (props: any) => {
@@ -147,7 +151,7 @@ export function ListagemEventos() {
                   <Loading />
                 ) : data ? (
                   <DataGrid
-                    rows={last100Eventos}
+                    rows={data}
                     columns={columns}
                     disableSelectionOnClick
                     disableColumnMenu
