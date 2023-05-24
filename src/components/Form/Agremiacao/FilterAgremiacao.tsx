@@ -335,7 +335,6 @@ export function FormFilterAgremiacao({
             id="column"
             value={column ?? formik.values["column"]}
             onChange={(e) => setColumn(e.target.value)}
-            onBlur={formik.handleBlur}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
@@ -355,7 +354,6 @@ export function FormFilterAgremiacao({
             id="operator"
             value={operator ?? formik.values["operator"]}
             onChange={handleChangeOperator}
-            onBlur={formik.handleBlur}
             sx={{ width: 150 }}
             fullWidth
             disabled={!editedFilter}
@@ -400,7 +398,6 @@ export function FormFilterAgremiacao({
             id="secondValue"
             value={secondValue}
             onChange={handleChangeSecondValue}
-            onBlur={formik.handleBlur}
             error={
               formik.touched["secondValue"] &&
               Boolean(formik.errors["secondValue"])
@@ -457,7 +454,6 @@ export function FormFilterAgremiacao({
             id="logicOperator"
             value={logicOperator ?? formik.values["logicOperator"]}
             onChange={handleChangeLogicOperator}
-            onBlur={formik.handleBlur}
             error={
               formik.touched["logicOperator"] &&
               Boolean(formik.errors["logicOperator"])
@@ -735,7 +731,6 @@ export function FormFilterAgremiacao({
             id="logicOperator"
             value={formik.values["logicOperator"]}
             onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
             error={
               formik.touched["logicOperator"] &&
               Boolean(formik.errors["logicOperator"])
