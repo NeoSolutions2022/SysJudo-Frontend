@@ -4,10 +4,26 @@
   /* box-sizing: border-box; */
 }
 
+input[type="text"],
+input[type="password"] {
+  -webkit-autocomplete: off !important;
+  -moz-autocomplete: off !important;
+  autocomplete: off !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Para Firefox */
+}
+
 
 html, body {
   height: 100%;
   background-color: #CCC;
-  
 
 } 

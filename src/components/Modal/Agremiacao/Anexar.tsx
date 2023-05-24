@@ -161,6 +161,8 @@ export function ModalAnexosAgremiacao() {
         confirmButtonColor: "#3085d6",
       }).then((result) => {
         setReloadAgremiacao((prev) => !prev);
+        handleClickOpen(3)
+
       });
     }
 
@@ -204,9 +206,13 @@ export function ModalAnexosAgremiacao() {
             title: "Arquivo excluido com sucesso",
             showConfirmButton: false,
             timer: 1500,
-          });
+          }).then((result) => handleClickOpen(3) );
+          
+          
         } catch (error) {
           handleClose();
+          handleClickOpen(3)
+
         }
 
       }

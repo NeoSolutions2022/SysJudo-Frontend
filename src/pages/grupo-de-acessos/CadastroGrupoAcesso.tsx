@@ -299,7 +299,34 @@ export function CadastroGrupoAcesso() {
     });
     setPermissoesSelecionadas(updatedPermissoesSelecionadas);
   };
+  const [isAllHabilited, setIsAllHabilited] = useState('')
+  const [isAllDesabilited, setIsAllDesabilited] = useState('')
   const setPermissionsToW = () => handleSetAllPermissoes('W')
+  const ResetPermissions = () => handleSetAllPermissoes('')
+
+  const handleChangeHabilitarTodas = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const text = e.target.value
+    if(text == '')
+      setIsAllHabilited('')
+    if(text =='W'){
+      setPermissionsToW()
+      setIsAllHabilited('W')
+      setIsAllDesabilited('')
+    } 
+  }
+  const handleChangeDesabilitarTodas = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const text = e.target.value
+    console.log(text)
+    if(text != 'W')
+    setIsAllDesabilited('')
+    if(text =='W'){
+      ResetPermissions() 
+      setIsAllDesabilited('W')
+      setIsAllHabilited('')
+    }
+  }
+
+
 
   return (
     <form
@@ -390,8 +417,7 @@ export function CadastroGrupoAcesso() {
           <Box
             sx={{
               background: "#fdfdfd",
-              minHeight: 400,
-              maxHeight: 400,
+              heigh:'50%',
               overflow: "auto",
               padding: 4,
               display: 'flex',
@@ -403,21 +429,48 @@ export function CadastroGrupoAcesso() {
               style={{ borderBottom: "1px solid black", display: 'flex', justifyContent:'space-between', alignItems:'center', paddingBottom:3}}
             >
               Permissões
-              <StyledButton onClick={ setPermissionsToW }>Habilitar todas</StyledButton>
+              {/* <StyledButton onClick={ setPermissionsToW }>Habilitar todas</StyledButton> */}
             </h3>
+
             <Box sx={{display: 'grid', gridTemplateColumns: '1fr 1fr', rowGap:2}}>
-             
+            <Box sx={{ display: "grid", gridTemplateColumns: '250px 300px', placeItems: 'start',width: '100%', }}>
+              <h4>Habilitar Todas<h6>Habilita Todas as Permissões</h6></h4>
+              
+              <TextField
+                select
+                label="Permissões *"
+                name="Permissoes"
+                onChange={event => handleChangeHabilitarTodas(event)}
+                value={isAllHabilited}
+                >
+                <MenuItem value={''}>Desabilitado</MenuItem>
+                <MenuItem value={'W'}>Habilitado</MenuItem>
+              </TextField>
+            </Box>
+            <Box sx={{ display: "grid", gridTemplateColumns: '250px 300px', placeItems: 'start',width: '100%', }}>
+              <h4>Desabilitar Todas<h6>Desabilita Todas as Permissões</h6></h4>
+              
+              <TextField
+                select
+                label="Permissões *"
+                name="Permissoes"
+                onChange={event => handleChangeDesabilitarTodas(event)}
+                value={isAllDesabilited}
+                >
+                <MenuItem value={''}>Desabilitado</MenuItem>
+                <MenuItem value={'W'}>Habilitado</MenuItem>
+              </TextField>
+            </Box>
               {permissoesArray.map(
                 item =>  <Box sx={{ display: "grid", gridTemplateColumns: '250px 300px', placeItems: 'start' }}>
               <h4>{item.nome}<h6>({item.descricao})</h6></h4>
               
               <TextField
                 select
-                label="Permissões *"
-                name="Permissoes"
-                id={`idRegiao-${item.id}`}
+                id={`${item.id}`}
                 value={permissoesSelecionadas[item.id] || ''}
                 onChange={event => handleChange(event, item)}
+                disabled={isAllDesabilited == 'W' || isAllHabilited == 'W'}
               >
                 <MenuItem value={''}>Desabilitado</MenuItem>
                 <MenuItem value={'W'}>Habilitado</MenuItem>

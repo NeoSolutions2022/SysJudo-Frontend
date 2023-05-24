@@ -27,7 +27,7 @@ import {
   StepLabel,
   Box,
 } from "@mui/material";
-import { TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
+import { MaskedTextField, TextField } from "../../components/Form/TextAreaComponent/TextAreaComponent";
 import '../../../node_modules/react-notifications/lib/notifications.css';
 
 import { StyledButton as Button } from "../../components/Button";
@@ -139,8 +139,11 @@ export function CadastroAgremiacao() {
   }
       
   },[count])
+  const removerNaoNumericos = (str : string) => str.replace(/\D/g, '');
 
   const handleRoutes = async () => {
+    formik.values['cnpj'] = removerNaoNumericos( formik.values['cnpj'] )
+    formik.values['cep'] = removerNaoNumericos( formik.values['cep'] )
     if (id) {
       const valuesToPost = {
         ...formik.values,
@@ -237,7 +240,7 @@ export function CadastroAgremiacao() {
     
     if(id){
       if(formik.values['nome']!='' ){
-        if (Object.keys(prevValue).length < 31) {
+        if (Object.keys(prevValue).length < 31 ) {
           setPrevValue(formik.values)
         }else{
           if(JSON.stringify(formik.values) !== JSON.stringify(prevValue)){
@@ -267,6 +270,8 @@ export function CadastroAgremiacao() {
   useEffect(() => {
     setIsDisabled(Object.keys(formik.errors).length > 0);
   }, [formik.errors]);
+
+  useEffect(()=>{console.log(formik.values['telefone'])},[formik.values['telefone']])
 
   const handleDeleteAgremiacao = () => {
     Swal.fire({
@@ -579,9 +584,8 @@ export function CadastroAgremiacao() {
                 />
               </Grid>
 
-              <Grid item xs={4}></Grid>
-
-              <Grid item xs={4}>
+              <Grid item xs={2}/>
+              <Grid item xs={6}>
                 <TextField
                   disabled = { isEdittingAndNotPermited }
                   select
@@ -626,24 +630,26 @@ export function CadastroAgremiacao() {
                     gap: 2,
                     alignItems: 'center'
                   }}>
-                <TextField
-                  disabled = { isEdittingAndNotPermited }
-                  type="text"
-                  label="CEP *"
-                  name="cep"
-                  id="cep"
-                  value={formik.values["cep"]}
-                  onChange={formik.handleChange}
-                  onBlur={formik.errors.cep ? formik.handleBlur : onBlurCep}
-                  error={formik.touched["cep"] && Boolean(formik.errors["cep"])}
-                  sx={{
-                    width: 150,
-                    display: "flex",
-                    flexDirection:'row'
-                  }}
-                  inputProps={{ maxLength: 8 }}
-                />
-              <Grid item xs={2}>
+                 
+              <MaskedTextField
+                disabled={isEdittingAndNotPermited}
+                mask="99.999-999"
+                label="CEP *"
+                name="cep"
+                 id="cep"
+                 value={formik.values["cep"]}
+                 onChange={formik.handleChange}
+                 onBlur={formik.errors.cep ? formik.handleBlur : onBlurCep}
+                 error={formik.touched["cep"] && Boolean(formik.errors["cep"])}
+                 sx={{
+                   width: 150,
+                   display: "flex",
+                   flexDirection:'row'
+                 }}
+                 inputProps={{ maxLength: 8 }}
+              />
+
+              <Grid item xs={3}>
                 <Link
                   href="https://buscacepinter.correios.com.br/app/endereco/index.php"
                   variant="body2"
@@ -672,6 +678,8 @@ export function CadastroAgremiacao() {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  inputProps={{ maxLength: 60 }}
+
                 />
               </Grid>
 
@@ -726,7 +734,7 @@ export function CadastroAgremiacao() {
                 </TextField>
               </Grid>
 
-              <Grid item xs={3}>
+              <Grid item xs={2}>
                 <TextField
                   className='CadastroCep'
                   disabled = { isEdittingAndNotPermited }
@@ -761,10 +769,11 @@ export function CadastroAgremiacao() {
                 >
                 </TextField>
               </Grid>
-
+              <Grid xs={2}/>
               <Grid item xs={3}>
-                <TextField
+                <MaskedTextField
                   disabled = { isEdittingAndNotPermited }
+                  mask='(99) 99999-9999'
                   type="text"
                   label="Telefone *"
                   name="telefone"
@@ -815,23 +824,20 @@ export function CadastroAgremiacao() {
                   Documentos
                 </Typography>
               </Grid>
-
-              <Grid item xs={4}>
-                <TextField
-                  disabled = { isEdittingAndNotPermited }
-                  type="text"
-                  label="CNPJ *"
-                  name="cnpj"
-                  id="cnpj"
-                  value={formik.values["cnpj"]}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={
-                    formik.touched["cnpj"] && Boolean(formik.errors["cnpj"])
-                  }
-                  
-                  inputProps={{ maxLength: 14 }}
-                />
+                
+              <Grid item xs={4}>                
+              <MaskedTextField
+                disabled={isEdittingAndNotPermited}
+                mask="99.999.999/9999-99"
+                type="text"
+                label="CNPJ *"
+                name="cnpj"
+                id="cnpj"
+                value={formik.values["cnpj"]}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched["cnpj"] && Boolean(formik.errors["cnpj"])}
+              />
               </Grid>
 
               <Grid item xs={4}>
@@ -866,14 +872,19 @@ export function CadastroAgremiacao() {
                     formik.touched["inscricaoMunicipal"] && Boolean(formik.errors["inscricaoMunicipal"])
                   }
                   
-                  inputProps={{ maxLength: 11, inputMode: 'tel', pattern: '[0-9]*' }}
+                  inputProps={{ maxLength: 11, 
+                    onKeyPress: (event) => {
+                    const charCode = event.which ? event.which : event.keyCode;
+                    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                      event.preventDefault();
+                    }} 
+                  }}
                 />
               </Grid>
 
               <Grid item xs={4}>
                 <TextField
                   disabled = { isEdittingAndNotPermited }
-                  type="text"
                   label="Inscrição Estadual "
                   name="inscricaoEstadual"
                   id="inscricaoEstadual"
@@ -883,7 +894,13 @@ export function CadastroAgremiacao() {
                   error={
                     formik.touched["inscricaoEstadual"] && Boolean(formik.errors["inscricaoEstadual"])
                   }
-                  inputProps={{ maxLength: 9 }}
+                  inputProps={{ maxLength: 13, 
+                    onKeyPress: (event) => {
+                    const charCode = event.which ? event.which : event.keyCode;
+                    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                      event.preventDefault();
+                    }}
+                  }}
                 />
               </Grid>
 
