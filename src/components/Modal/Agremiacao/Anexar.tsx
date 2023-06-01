@@ -50,6 +50,7 @@ import { BlockBlobClient  } from '@azure/storage-blob';
 import { Loading } from '../../Loading/Loading';
 import { Permissions } from '../../../core/adapters';
 import { useAuthContext } from '../../../hooks/useAuthProvider';
+import { title } from "process";
 
 
 async function handlePhotoAzure(data : string, fileName : string) {
@@ -117,6 +118,7 @@ export function ModalAnexosAgremiacao() {
   const { anexarArquivoAgremiacao } = agremiacaoRoutes;
   const [reloadAgremiacao, setReloadAgremiacao] = useState(false)
   const [newFileLinkFromGetAgremiacao, setNewFileLinkFromGetAgremiacao] = useState(null)
+  const { alertMessage } = useAlertContext()
 
   useEffect( ()=> {
     console.log('oi')
@@ -171,11 +173,21 @@ export function ModalAnexosAgremiacao() {
     handleClose();
   }
 
+  const spawAlertPdf = () => {
+    emitAlertMessage("error", 'Somente arquivos PDFs são permitidos')
+  }
+
   const [files, setFiles] = useState<File[]>([]);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const pdfFiles = acceptedFiles.filter(file => file.type === 'application/pdf');
-    setFiles((prevFiles) => [...prevFiles, ...pdfFiles]);
+    
+    if (pdfFiles.length > 0) {
+      setFiles(prevFiles => [...prevFiles, ...pdfFiles]);
+    } else {
+        spawAlertPdf()
+    }
+
   }, []);
 
   const handleDeleteAnexoAgremiacao = (
