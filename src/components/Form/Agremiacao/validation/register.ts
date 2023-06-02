@@ -41,8 +41,7 @@ export const validation = {
   estado: Yup.string().required('Estado é obrigatório'),
   pais: Yup.string().required('País é obrigatório'),
   telefone: Yup.string()
-  .matches(/^\d{11}$/, 'Número de telefone inválido')
-  .transform((value, originalValue) => originalValue.replace(/[^\d]/g, '')) // Remover caracteres especiais
+  .matches(/^\d{10}$|^\d{11}$/, 'Número de telefone inválido')
   .required('Telefone é obrigatório'),
   email: Yup.string().email('Email inválido').required('Email é obrigatório'),
   // @ts-ignore

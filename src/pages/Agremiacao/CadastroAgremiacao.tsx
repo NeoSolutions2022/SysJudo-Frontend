@@ -771,9 +771,8 @@ export function CadastroAgremiacao() {
               </Grid>
               <Grid xs={2}/>
               <Grid item xs={3}>
-                <MaskedTextField
+                <TextField
                   disabled = { isEdittingAndNotPermited }
-                  mask='(99) 99999-9999'
                   type="text"
                   label="Telefone *"
                   name="telefone"
@@ -840,7 +839,7 @@ export function CadastroAgremiacao() {
               />
               </Grid>
 
-              <Grid item xs={4}>
+              <Grid item xs={3}>
                 <TextField
                   disabled = { isEdittingAndNotPermited }
                   type="date"
@@ -854,8 +853,18 @@ export function CadastroAgremiacao() {
                 />
               </Grid>
 
-              <Grid item xs={4}>
-
+              <Grid item xs={3}>
+                <TextField
+                  disabled = { isEdittingAndNotPermited }
+                  type="date"
+                  label="Data ATA "
+                  name="dataAta"
+                  id="dataAta"
+                  value={formik.values["dataAta"]}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  inputProps={{ maxLength: 14 }}
+                />
               </Grid>
 
               <Grid item xs={4}>
@@ -904,19 +913,6 @@ export function CadastroAgremiacao() {
                 />
               </Grid>
 
-              <Grid item xs={3}>
-                <TextField
-                  disabled = { isEdittingAndNotPermited }
-                  type="date"
-                  label="Data ATA "
-                  name="dataAta"
-                  id="dataAta"
-                  value={formik.values["dataAta"]}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  inputProps={{ maxLength: 14 }}
-                />
-              </Grid>
             </Grid>
           </Grid>
 

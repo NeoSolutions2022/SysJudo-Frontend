@@ -426,6 +426,7 @@ export function Listagem() {
                     }}
                     onSelectionModelChange={handleSelectionModelChange}
                     selectionModel={selectedRowsAgremiacao}
+                    onSortModelChange={(o) => console.log(o)}
                   />
                 ) : (
                   <Loading />
