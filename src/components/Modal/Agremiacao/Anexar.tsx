@@ -174,7 +174,7 @@ export function ModalAnexosAgremiacao() {
   }
 
   const spawAlertPdf = () => {
-    emitAlertMessage("error", 'Somente arquivos PDFs são permitidos')
+    emitAlertMessage("error", 'É possível anexar somente arquivos no formato .pdf')
   }
 
   const [files, setFiles] = useState<File[]>([]);
