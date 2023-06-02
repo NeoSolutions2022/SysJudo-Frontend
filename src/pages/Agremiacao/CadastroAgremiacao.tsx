@@ -83,6 +83,8 @@ export function CadastroAgremiacao() {
 
   const isEdittingAndNotPermited = (id !== undefined && hasPutAgremiacaoPermission == false)
  
+  const [hasFotoChanged, setHasFotoChanged] = useState(false)
+
   const onBlurForm = () => {
     if (formik.errors.sigla) {
       setIsValid(false);
@@ -236,6 +238,7 @@ export function CadastroAgremiacao() {
   };
   const [isNotEditted, setIsNotEditted] = useState(false)
   const [prevValue, setPrevValue] = useState<any>({})
+  
   useEffect(()=>{
     
     if(id){
@@ -245,9 +248,10 @@ export function CadastroAgremiacao() {
         }else{
           if(JSON.stringify(formik.values) !== JSON.stringify(prevValue)){
             setIsNotEditted(false)
+
           } else{
             if (JSON.stringify(formik.values) == JSON.stringify(prevValue))
-              setIsNotEditted(true)
+            setIsNotEditted(true)
           }          
         }
       }
@@ -272,7 +276,7 @@ export function CadastroAgremiacao() {
   }, [formik.errors]);
 
   useEffect(()=>{console.log(formik.values['telefone'])},[formik.values['telefone']])
-
+  
   const handleDeleteAgremiacao = () => {
     Swal.fire({
       title: "Tem certeza que deseja excluir?",
@@ -296,7 +300,13 @@ export function CadastroAgremiacao() {
       }
     });
   };
+
+
   
+  useEffect(()=>{
+    hasFotoChanged == true && setIsNotEditted(false)
+  },[isNotEditted])
+
   return (
     <form
       onSubmit={formik.handleSubmit}
@@ -397,6 +407,8 @@ export function CadastroAgremiacao() {
                     if (!input.files?.length) return;
                     formik.setFieldValue("foto", input.files[0]);
                     fileReader.readAsDataURL(input.files[0]);
+                    setIsNotEditted(false)
+                    setHasFotoChanged(true)
                   }}
                   sx={{ display: "none" }}
                 />
@@ -429,6 +441,9 @@ export function CadastroAgremiacao() {
                     if (!input.files?.length) return;
                     formik.setFieldValue("foto", input.files[0]);
                     fileReader.readAsDataURL(input.files[0]);
+                    setIsNotEditted(false)
+                    setHasFotoChanged(true)
+
                   }}
                   sx={{ display: "none" }}
                 />
