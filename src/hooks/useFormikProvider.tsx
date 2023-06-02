@@ -28,7 +28,9 @@ export function useFormikProvider() {
     setReloadAgremiacao,
     filterWithZeroReturn,
     isFilterLoading, 
-    setIsFilterLoading
+    setIsFilterLoading,
+    ordenacaoColumnAgremiacaoToExport,
+    setOrdenacaoColumnAgremiacaoToExport
   } = context;
 
   return {
@@ -55,6 +57,8 @@ export function useFormikProvider() {
     setReloadAgremiacao,
     filterWithZeroReturn,
     isFilterLoading, 
-    setIsFilterLoading
+    setIsFilterLoading,
+    ordenacaoColumnAgremiacaoToExport,
+    setOrdenacaoColumnAgremiacaoToExport
   };
 }

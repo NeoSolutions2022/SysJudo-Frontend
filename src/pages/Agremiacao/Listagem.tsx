@@ -10,6 +10,8 @@ import {
   GridValueGetterParams,
   useGridApiRef,
   ptBR,
+  GridSortModel,
+  GridCallbackDetails,
 } from "@mui/x-data-grid";
 import {
   AddOutlined,
@@ -62,6 +64,7 @@ export function Listagem() {
     filterWithZeroReturn,
     isFilterLoading,
     setIsFilterLoading,
+    setOrdenacaoColumnAgremiacaoToExport
   } = useFormikProvider();
   const { data } = useQuery(
     ["agremiacao-list"],
@@ -351,6 +354,22 @@ export function Listagem() {
     agremiacaoRoutes.postClearFilters();
   }, []);
 
+  const [sortModel, setSortModel] = useState<GridSortModel>([
+    {
+        field: '',
+        sort: 'asc',
+    },
+]);
+  const [oi, setOi] = useState<any>({})
+  function handleSortChangeForExport(model: GridSortModel, details: GridCallbackDetails<any>){
+    if (JSON.stringify(model) !== JSON.stringify(sortModel)) {
+      setSortModel(model);
+  }
+    
+  if(model[0]){
+    setOrdenacaoColumnAgremiacaoToExport({Propriedade: model[0].field, Ascedente: model[0].sort != 'asc'})
+  } else setOrdenacaoColumnAgremiacaoToExport({Propriedade:'', Ascedente: true})
+  }
   return (
     <Box
       component="main"
@@ -426,7 +445,8 @@ export function Listagem() {
                     }}
                     onSelectionModelChange={handleSelectionModelChange}
                     selectionModel={selectedRowsAgremiacao}
-                    onSortModelChange={(o) => console.log(o)}
+                    sortModel={sortModel}
+                    onSortModelChange={handleSortChangeForExport}
                   />
                 ) : (
                   <Loading />

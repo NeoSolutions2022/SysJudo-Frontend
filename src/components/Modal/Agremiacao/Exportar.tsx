@@ -24,6 +24,7 @@ import { agremiacaoRoutes } from "../../../providers/services/api/agremiacao/agr
 import { StyledButton as Button } from "../../../components/Button";
 import { CheckBox, UploadFile, Close } from "@mui/icons-material";
 import { useEffect, useState } from "react";
+import { useFormikProvider } from '../../../hooks/useFormikProvider';
 
 function downloadFile(fileUrl: string, fileName: string) {
   
@@ -39,6 +40,7 @@ function downloadFile(fileUrl: string, fileName: string) {
 export function ModalExportarAgremiacao() {
   const { AgremiacaoExportValues } = AgremiacaoOptions;
   const { exportarAgremiacao } = agremiacaoRoutes;
+  const { ordenacaoColumnAgremiacaoToExport } = useFormikProvider()
   const { handleClose } = useModal();
   const { emitAlertMessage } = useAlertContext();
 
@@ -51,7 +53,7 @@ export function ModalExportarAgremiacao() {
   });
 
   const { isLoading, mutate } = useMutation(
-    () => exportarAgremiacao(formik.values),
+    () => exportarAgremiacao({...formik.values, ordenacao: ordenacaoColumnAgremiacaoToExport}),
     {
       onSuccess: () => {
         handleClose();
