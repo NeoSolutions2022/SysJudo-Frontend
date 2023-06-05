@@ -79,6 +79,11 @@ export function CadastroAgremiacao() {
   const hasPutAgremiacaoPermission = allows(Permissions.PutAgremiacao);
   const hasAnexarAgremiacaoPermission = allows(Permissions.EnviarDocumentoAgremiacao);
   const hasRemoveAnexosAgremiacaoPermission = allows(Permissions.RemoverDocumentoAgremiacao)
+
+  const hasSeeAnexoPermission = hasAnexarAgremiacaoPermission || hasRemoveAnexosAgremiacaoPermission
+  const hasAnotarAgremiacaoPermission = allows(Permissions.AnotarAgremiacao)
+  
+
   const hasDeleteAgremiacaoPermission = allows(Permissions.DeleteAgremiacao);
 
   const isEdittingAndNotPermited = (id !== undefined && hasPutAgremiacaoPermission == false)
@@ -1034,7 +1039,7 @@ export function CadastroAgremiacao() {
             e.preventDefault();
             handleClickOpen(3);
           }}
-          disabled = { isDisabled }
+          disabled = { (isDisabled || (id !== undefined &&  hasSeeAnexoPermission == false))}
 
         >
           <AttachFileOutlinedIcon />
@@ -1045,7 +1050,7 @@ export function CadastroAgremiacao() {
             e.preventDefault();
             handleClickOpen(2);
           }}
-          disabled = { isDisabled }
+          disabled = { isDisabled || (id !== undefined && hasAnotarAgremiacaoPermission == false)}
 
         >
           <NoteAddOutlinedIcon />

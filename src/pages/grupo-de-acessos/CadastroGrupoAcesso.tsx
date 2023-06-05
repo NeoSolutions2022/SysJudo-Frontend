@@ -286,6 +286,8 @@ export function CadastroGrupoAcesso() {
 
 
   const handleChange = (event : any, item : any) => {
+    isAllDesabilited && setIsAllDesabilited('')
+    isAllHabilited && setIsAllHabilited('')
     setPermissoesSelecionadas({
       ...permissoesSelecionadas,
       [item.id]: event.target.value
@@ -470,7 +472,7 @@ export function CadastroGrupoAcesso() {
                 id={`${item.id}`}
                 value={permissoesSelecionadas[item.id] || ''}
                 onChange={event => handleChange(event, item)}
-                disabled={isAllDesabilited == 'W' || isAllHabilited == 'W'}
+                // disabled={isAllDesabilited == 'W' || isAllHabilited == 'W'}
               >
                 <MenuItem value={''}>Desabilitado</MenuItem>
                 <MenuItem value={'W'}>Habilitado</MenuItem>
