@@ -17,6 +17,11 @@ export type FilesTypes = {
   contratoSocial?: File;
   documentacaoAtualizada?: File;
 };
+interface ordenacaoProps{
+  Propriedade: string;
+  Ascedente: boolean
+}
+
 interface FormikContextProps {
   AgremiacaoFilterFormik: any;
   AgremiacaoRegisterFormik: any;
@@ -42,6 +47,8 @@ interface FormikContextProps {
   filterWithZeroReturn: any,
   isFilterLoading: boolean,
   setIsFilterLoading: React.Dispatch<SetStateAction<boolean>>
+  ordenacaoColumnAgremiacaoToExport: ordenacaoProps
+  setOrdenacaoColumnAgremiacaoToExport:  React.Dispatch<SetStateAction<ordenacaoProps>>
 }
 
 import { agremiacaoRoutes } from "../services/api/agremiacao/agremiacao";
@@ -288,6 +295,11 @@ export function FormikProvider({ children }: FormikProviderProps) {
     // This code will be executed after filtersToPost has been updated
   }, [filtersToPost]);
 
+
+  const [ordenacaoColumnAgremiacaoToExport, setOrdenacaoColumnAgremiacaoToExport] = useState<any>({})
+
+  console.log(ordenacaoColumnAgremiacaoToExport)
+  
   return (
     <FormikContext.Provider
       value={{
@@ -314,7 +326,9 @@ export function FormikProvider({ children }: FormikProviderProps) {
         setReloadAgremiacao,
         filterWithZeroReturn,
         isFilterLoading, 
-        setIsFilterLoading
+        setIsFilterLoading,
+        ordenacaoColumnAgremiacaoToExport,
+        setOrdenacaoColumnAgremiacaoToExport
         
 
 

@@ -4,6 +4,7 @@ import type { Page } from "../../../../types/page";
 
 import api from "..";
 import { format, parse, parseISO } from "date-fns";
+import { useFormikProvider } from '../../../../hooks/useFormikProvider';
 async function getAgremiacoes(filters?: any): Promise<Page<IAgremiacao>> {
   const response = await api.get(
     "/gerencia/agremiacao?Pagina=1&TamanhoPagina=64",
@@ -114,10 +115,13 @@ async function deleteAgremiacao(id: number): Promise<void> {
 }
 
 async function exportarAgremiacao(payload: any): Promise<any> {
+  payload['Ordenacao.Propriedade'] = payload.ordenacao.Propriedade
+  payload['Ordenacao.Propriedade'] = payload['Ordenacao.Propriedade'][0].toUpperCase() + payload['Ordenacao.Propriedade'].substring(1);
+  payload['Ordenacao.Ascendente'] = payload.ordenacao.Ascedente
   const response = await api.get("/gerencia/agremiacao/exportar", {
     params: payload,
   });
-
+  
   return response.data;
 }
 
