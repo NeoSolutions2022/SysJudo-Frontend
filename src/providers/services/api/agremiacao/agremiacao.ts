@@ -4,7 +4,7 @@ import type { Page } from "../../../../types/page";
 
 import api from "..";
 import { format, parse, parseISO } from "date-fns";
-import { useFormikProvider } from '../../../../hooks/useFormikProvider';
+import { useFormikProvider } from "../../../../hooks/useFormikProvider";
 async function getAgremiacoes(filters?: any): Promise<Page<IAgremiacao>> {
   const response = await api.get(
     "/gerencia/agremiacao?Pagina=1&TamanhoPagina=64",
@@ -103,7 +103,9 @@ async function anotacoesAgremiacao(
   id: string,
   anotacao: string
 ): Promise<void> {
-  const response = await api.patch(`/gerencia/agremiacao/${id}`, {anotacoes : anotacao});
+  const response = await api.patch(`/gerencia/agremiacao/${id}`, {
+    anotacoes: anotacao,
+  });
 
   return response.data;
 }
@@ -115,13 +117,15 @@ async function deleteAgremiacao(id: number): Promise<void> {
 }
 
 async function exportarAgremiacao(payload: any): Promise<any> {
-  payload['Ordenacao.Propriedade'] = payload.ordenacao.Propriedade
-  payload['Ordenacao.Propriedade'] = payload['Ordenacao.Propriedade'][0].toUpperCase() + payload['Ordenacao.Propriedade'].substring(1);
-  payload['Ordenacao.Ascendente'] = payload.ordenacao.Ascedente
+  payload["Ordenacao.Propriedade"] = payload.ordenacao.Propriedade;
+  payload["Ordenacao.Propriedade"] =
+    payload["Ordenacao.Propriedade"][0].toUpperCase() +
+    payload["Ordenacao.Propriedade"].substring(1);
+  payload["Ordenacao.Ascendente"] = payload.ordenacao.Ascedente;
   const response = await api.get("/gerencia/agremiacao/exportar", {
     params: payload,
   });
-  
+
   return response.data;
 }
 
@@ -150,11 +154,22 @@ async function anexarArquivoAgremiacao(
 async function deleteArquivoAgremiacao(
   documentoId: number,
   id: number
-  ): Promise<void> {
-    
+): Promise<void> {
   const response = await api.patch(
     `/gerencia/agremiacao/${id}/removerdocumentos?documentoId=${documentoId}`,
-    {id, documentoId}
+    { id, documentoId }
+  );
+
+  return response.data;
+}
+
+async function inspectArquivoAgremiacao(
+  documentoId: number,
+  id: number
+): Promise<void> {
+  const response = await api.put(
+    `/gerencia/agremiacao/${id}/removerdocumentos?documentoId=${documentoId}`,
+    { id, documentoId }
   );
 
   return response.data;
@@ -171,6 +186,7 @@ export const agremiacaoRoutes = {
   exportarAgremiacao,
   anexarArquivoAgremiacao,
   deleteArquivoAgremiacao,
+  inspectArquivoAgremiacao,
   postClearFilters,
   pesquisarAgremiacao,
 };
