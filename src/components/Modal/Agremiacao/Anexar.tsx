@@ -263,19 +263,15 @@ export function ModalAnexosAgremiacao() {
   const handleDownload = (
     strLink: string,
     fileName: string,
-    idAnexo: any,
-    idAgremiacao: any
   ) => {
     const fileUrl = strLink;
     const desiredFileName = `${fileName}.pdf`;
-    console.log(fileName);
 
-    // try {
-    //   agremiacaoRoutes.inspectArquivoAgremiacao(idAnexo + 1, idAgremiacao);
-    // } catch (error) {
-    //   handleClose();
-    //   handleClickOpen(3);
-    // }
+    try {
+      agremiacaoRoutes.inspectArquivoAgremiacao(fileName);
+    } catch (error) {
+      console.log(error);
+    }
 
     fetch(fileUrl)
       .then((response) => response.blob())
@@ -423,8 +419,6 @@ export function ModalAnexosAgremiacao() {
                           handleDownload(
                             item,
                             extractFilenameFromLink(item),
-                            index,
-                            id
                           )
                         }
                       >
