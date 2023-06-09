@@ -117,11 +117,14 @@ async function deleteAgremiacao(id: number): Promise<void> {
 }
 
 async function exportarAgremiacao(payload: any): Promise<any> {
-  payload["Ordenacao.Propriedade"] = payload.ordenacao.Propriedade;
-  payload["Ordenacao.Propriedade"] =
+  console.log(payload["Ordenacao.Propriedade"])
+  if(payload["Ordenacao.Propriedade"]){
+    payload["Ordenacao.Propriedade"] = payload.ordenacao.Propriedade;
+    payload["Ordenacao.Propriedade"] =
     payload["Ordenacao.Propriedade"][0].toUpperCase() +
     payload["Ordenacao.Propriedade"].substring(1);
-  payload["Ordenacao.Ascendente"] = payload.ordenacao.Ascedente;
+    payload["Ordenacao.Ascendente"] = payload.ordenacao.Ascedente;
+  }
   const response = await api.get("/gerencia/agremiacao/exportar", {
     params: payload,
   });

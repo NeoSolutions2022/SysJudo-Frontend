@@ -59,6 +59,7 @@ import LogoCorreios from "../../assets/correios.svg";
 import "../../styles/cadastro-agremiacao.scss";
 import { useAuthContext } from '../../hooks/useAuthProvider';
 import { Permissions } from '../../core/adapters';
+import { Loading } from '../../components/Loading/Loading';
 
 export function CadastroAgremiacao() {
   const navigate = useNavigate();
@@ -1029,10 +1030,12 @@ export function CadastroAgremiacao() {
         }}
       >
         <Button color="success" type="submit"
-        disabled = {isDisabled || isNotEditted || isEdittingAndNotPermited}
-        >
+        disabled = {isDisabled || isNotEditted || isEdittingAndNotPermited || isLoading}
+        >{
+          !isLoading ?<>
           <SaveOutlinedIcon />
-          Salvar
+          Salvar 
+          </>: 'Carregando...'}
         </Button>
         <Button
           onClick={(e) => {
