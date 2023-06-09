@@ -166,12 +166,14 @@ async function deleteArquivoAgremiacao(
 }
 
 async function inspectArquivoAgremiacao(
-  fileName: string
+  nome: string
 ): Promise<void> {
   const response = await api.patch(
     `/gerencia/agremiacao/documentos/download`,
-    { fileName }
+    { nome }
   );
+
+  console.log(nome)
   
   return response.data;
 }

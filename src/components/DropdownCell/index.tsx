@@ -17,7 +17,13 @@ export const DropDownCell: React.FC<DropCellProps> = ({ value, id }) => {
     setIsDropdownIndexOpen(id);
   };
 
-  const formattedValue = value.split(";").join(";<br>");
+  let formattedValue = ""; // Declare a variável fora do bloco 'if'
+
+  if (value !== null && value !== undefined) {
+    formattedValue = value.split(";").join(";<br>"); // Atribua o valor dentro do bloco 'if'
+  } else {
+    formattedValue
+  }
 
   return (
     <S.Container>

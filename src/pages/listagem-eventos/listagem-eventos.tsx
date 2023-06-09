@@ -28,6 +28,8 @@ export function ListagemEventos() {
 
   const last100Eventos = data ? data.slice(-100) : [];
 
+  console.log(data)
+
   console.log(last100Eventos)
 
   console.log(data)
@@ -35,7 +37,7 @@ export function ListagemEventos() {
   const [valueTab, setValueTab] = useState(0);
 
   const TabPanel = (props: any) => {
-    const { children, value, index, ...other } = props;
+    const { children, value, index } = props;
 
     return value === index ? <Box>{children}</Box> : null;
   };
