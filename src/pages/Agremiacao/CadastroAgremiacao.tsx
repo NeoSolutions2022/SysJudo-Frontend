@@ -805,7 +805,7 @@ export function CadastroAgremiacao() {
                     formik.touched["telefone"] &&
                     Boolean(formik.errors["telefone"])
                   }
-                  inputProps={{ maxLength: 12 }}
+                  inputProps={{ maxLength: 11 }}
                 />
               </Grid>
 
