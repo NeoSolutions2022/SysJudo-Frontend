@@ -758,7 +758,7 @@ export function CadastroAgremiacao() {
               <Grid item xs={2}>
                 <TextField
                   className='CadastroCep'
-                  disabled = { isEdittingAndNotPermited }
+                  disabled
                   label="Estado *"
                   name="estado"
                   id="estado"
